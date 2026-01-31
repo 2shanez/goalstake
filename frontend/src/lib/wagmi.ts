@@ -17,8 +17,8 @@ export const config = getDefaultConfig({
 export const CONTRACTS = {
   // Base Sepolia (testnet)
   [baseSepolia.id]: {
-    goalStake: '0x0000000000000000000000000000000000000000' as `0x${string}`,
-    oracle: '0x0000000000000000000000000000000000000000' as `0x${string}`,
+    goalStake: '0xdC9ee5e9E99e3568D2B5eA9409222fbFeCB56373' as `0x${string}`,
+    oracle: '0x8FD83852796164bb232B31349822AC9a4841F8F7' as `0x${string}`,
     usdc: '0x036CbD53842c5426634e7929541eC2318f3dCF7e' as `0x${string}`, // Base Sepolia USDC
   },
   // Base (mainnet)
