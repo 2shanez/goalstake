@@ -15,7 +15,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-[#2EE59D] flex items-center justify-center">
-              <span className="text-black font-bold text-lg">G</span>
+              <span className="text-white font-bold text-lg">G</span>
             </div>
             <span className="text-xl font-semibold tracking-tight">GoalStake</span>
           </div>
