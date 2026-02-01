@@ -209,14 +209,14 @@ export function CreateChallenge() {
 
   if (step === 'done') {
     return (
-      <div className="bg-[#0d0d0d] border border-[#222] rounded-2xl p-8 text-center">
+      <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8 text-center">
         <div className="w-16 h-16 rounded-full bg-[#2EE59D]/10 flex items-center justify-center mx-auto mb-6">
           <svg className="w-8 h-8 text-[#2EE59D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
         <h3 className="text-2xl font-semibold mb-2">Challenge Created</h3>
-        <p className="text-[#888] mb-6">
+        <p className="text-gray-500 mb-6">
           Run {targetMiles} miles in {formatDuration()} to win.
         </p>
         <button
@@ -230,12 +230,12 @@ export function CreateChallenge() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-[#0d0d0d] border border-[#222] rounded-2xl p-6">
+    <form onSubmit={handleSubmit} className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
       {/* Target Miles */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-3">
-          <label className="text-sm text-[#888]">Target</label>
-          <span className="text-sm text-[#888]">miles</span>
+          <label className="text-sm text-gray-500">Target</label>
+          <span className="text-sm text-gray-500">miles</span>
         </div>
         <input
           type="number"
@@ -244,7 +244,7 @@ export function CreateChallenge() {
           value={targetMiles}
           onChange={(e) => setTargetMiles(e.target.value)}
           disabled={isLoading}
-          className="w-full bg-transparent text-4xl font-semibold focus:outline-none placeholder-[#333] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className="w-full bg-transparent text-4xl font-semibold focus:outline-none placeholder-gray-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           placeholder="0"
         />
         <input
@@ -254,22 +254,22 @@ export function CreateChallenge() {
           value={targetMiles}
           onChange={(e) => setTargetMiles(e.target.value)}
           disabled={isLoading}
-          className="w-full h-1 mt-4 bg-[#222] rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#2EE59D] [&::-webkit-slider-thumb]:cursor-pointer"
+          className="w-full h-1 mt-4 bg-gray-200 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#2EE59D] [&::-webkit-slider-thumb]:cursor-pointer"
         />
       </div>
 
-      <div className="h-px bg-[#222] my-6"></div>
+      <div className="h-px bg-gray-200 my-6"></div>
 
       {/* Stake Amount */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-3">
-          <label className="text-sm text-[#888]">Stake</label>
-          <span className="text-sm text-[#888]">
+          <label className="text-sm text-gray-500">Stake</label>
+          <span className="text-sm text-gray-500">
             Balance: <span className={hasBalance ? 'text-white' : 'text-red-400'}>{balanceNum.toFixed(2)} USDC</span>
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-4xl font-semibold text-[#888]">$</span>
+          <span className="text-4xl font-semibold text-gray-500">$</span>
           <input
             type="number"
             min="0"
@@ -277,7 +277,7 @@ export function CreateChallenge() {
             value={stakeAmount}
             onChange={(e) => setStakeAmount(e.target.value)}
             disabled={isLoading}
-            className="w-full bg-transparent text-4xl font-semibold focus:outline-none placeholder-[#333] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className="w-full bg-transparent text-4xl font-semibold focus:outline-none placeholder-gray-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             placeholder="0"
           />
         </div>
@@ -289,15 +289,15 @@ export function CreateChallenge() {
           value={stakeAmount}
           onChange={(e) => setStakeAmount(e.target.value)}
           disabled={isLoading}
-          className="w-full h-1 mt-4 bg-[#222] rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#2EE59D] [&::-webkit-slider-thumb]:cursor-pointer"
+          className="w-full h-1 mt-4 bg-gray-200 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#2EE59D] [&::-webkit-slider-thumb]:cursor-pointer"
         />
       </div>
 
-      <div className="h-px bg-[#222] my-6"></div>
+      <div className="h-px bg-gray-200 my-6"></div>
 
       {/* Duration */}
       <div className="mb-6">
-        <label className="text-sm text-[#888] block mb-3">Duration</label>
+        <label className="text-sm text-gray-500 block mb-3">Duration</label>
         <div className="flex gap-2 mb-4">
           {(['days', 'weeks', 'months'] as const).map((unit) => (
             <button
@@ -311,7 +311,7 @@ export function CreateChallenge() {
               className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all ${
                 durationUnit === unit
                   ? 'bg-[#2EE59D] text-black'
-                  : 'bg-[#1a1a1a] text-[#888] hover:text-white'
+                  : 'bg-gray-100 text-gray-500 hover:text-gray-900'
               }`}
             >
               {unit.charAt(0).toUpperCase() + unit.slice(1)}
@@ -323,7 +323,7 @@ export function CreateChallenge() {
             type="button"
             onClick={() => setDurationValue(Math.max(1, durationValue - 1))}
             disabled={isLoading || durationValue <= 1}
-            className="w-10 h-10 rounded-lg bg-[#1a1a1a] text-xl font-medium disabled:opacity-30"
+            className="w-10 h-10 rounded-lg bg-gray-100 text-xl font-medium disabled:opacity-30"
           >
             −
           </button>
@@ -332,18 +332,18 @@ export function CreateChallenge() {
             type="button"
             onClick={() => setDurationValue(durationValue + 1)}
             disabled={isLoading}
-            className="w-10 h-10 rounded-lg bg-[#1a1a1a] text-xl font-medium disabled:opacity-30"
+            className="w-10 h-10 rounded-lg bg-gray-100 text-xl font-medium disabled:opacity-30"
           >
             +
           </button>
         </div>
       </div>
 
-      <div className="h-px bg-[#222] my-6"></div>
+      <div className="h-px bg-gray-200 my-6"></div>
 
       {/* Strava */}
       <div className="mb-6">
-        <div className="flex items-center justify-between p-4 rounded-xl bg-[#1a1a1a]">
+        <div className="flex items-center justify-between p-4 rounded-xl bg-gray-100">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${stravaConnected ? 'bg-[#2EE59D]/10' : 'bg-orange-500/10'}`}>
               <span className="text-xl">🏃</span>
@@ -353,7 +353,7 @@ export function CreateChallenge() {
                 {stravaConnected ? 'Strava Connected' : 'Connect Strava'}
               </p>
               {stravaConnected && athleteId && (
-                <p className="text-xs text-[#888]">ID: {athleteId}</p>
+                <p className="text-xs text-gray-500">ID: {athleteId}</p>
               )}
             </div>
           </div>
@@ -376,23 +376,23 @@ export function CreateChallenge() {
 
       {/* Progress */}
       {(step === 'approving' || step === 'creating') && (
-        <div className="mb-6 p-4 rounded-xl bg-[#1a1a1a]">
+        <div className="mb-6 p-4 rounded-xl bg-gray-100">
           <div className="flex items-center gap-4">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              isApproveSuccess ? 'bg-[#2EE59D] text-black' : step === 'approving' ? 'bg-[#2EE59D]/20 text-[#2EE59D]' : 'bg-[#222] text-[#888]'
+              isApproveSuccess ? 'bg-[#2EE59D] text-black' : step === 'approving' ? 'bg-[#2EE59D]/20 text-[#2EE59D]' : 'bg-gray-200 text-gray-500'
             }`}>
               {isApproveSuccess ? '✓' : '1'}
             </div>
-            <div className="flex-1 h-0.5 bg-[#222]">
+            <div className="flex-1 h-0.5 bg-gray-200">
               <div className={`h-full bg-[#2EE59D] transition-all ${isApproveSuccess ? 'w-full' : 'w-0'}`}></div>
             </div>
             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-              isCreateSuccess ? 'bg-[#2EE59D] text-black' : step === 'creating' ? 'bg-[#2EE59D]/20 text-[#2EE59D]' : 'bg-[#222] text-[#888]'
+              isCreateSuccess ? 'bg-[#2EE59D] text-black' : step === 'creating' ? 'bg-[#2EE59D]/20 text-[#2EE59D]' : 'bg-gray-200 text-gray-500'
             }`}>
               {isCreateSuccess ? '✓' : '2'}
             </div>
           </div>
-          <p className="text-center text-sm text-[#888] mt-3">
+          <p className="text-center text-sm text-gray-500 mt-3">
             {isApprovePending ? 'Confirm approval in wallet...' :
              isApproveConfirming ? 'Approving USDC...' :
              isCreatePending ? 'Confirm transaction in wallet...' :
@@ -407,7 +407,7 @@ export function CreateChallenge() {
         disabled={isLoading || !stravaConnected || !hasBalance || !stakeAmount || stakeAmount === '0'}
         className={`w-full py-4 rounded-xl font-semibold text-lg transition-all ${
           isLoading || !stravaConnected || !hasBalance || !stakeAmount || stakeAmount === '0'
-            ? 'bg-[#222] text-[#888] cursor-not-allowed'
+            ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
             : 'bg-[#2EE59D] text-black hover:bg-[#26c987]'
         }`}
       >
