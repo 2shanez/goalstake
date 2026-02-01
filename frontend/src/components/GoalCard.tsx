@@ -218,8 +218,14 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
           <p className="text-xs text-gray-500">miles</p>
         </div>
         <div className="text-center">
-          <p className="text-2xl font-bold">{goal.durationDays}</p>
-          <p className="text-xs text-gray-500">days</p>
+          <p className="text-2xl font-bold">
+            {goal.durationDays < 1 
+              ? Math.round(goal.durationDays * 24 * 60) 
+              : goal.durationDays}
+          </p>
+          <p className="text-xs text-gray-500">
+            {goal.durationDays < 1 ? 'mins' : 'days'}
+          </p>
         </div>
         <div className="text-center">
           <p className="text-2xl font-bold text-[#2EE59D]">{goal.participants}</p>

@@ -4,6 +4,33 @@ import { GoalCard, Goal } from './GoalCard'
 
 // Hardcoded goals for MVP - later these come from contract/admin
 const FEATURED_GOALS: Goal[] = [
+  // Test Goals (for development)
+  {
+    id: 'test-1',
+    title: '🧪 Quick Test',
+    description: 'Run 0.2 miles in 2 minutes (testing)',
+    emoji: '🧪',
+    targetMiles: 0.2,
+    durationDays: 0.00139, // ~2 minutes (2/1440)
+    minStake: 1,
+    maxStake: 5,
+    participants: 0,
+    totalStaked: 0,
+    category: 'running',
+  },
+  {
+    id: 'test-2',
+    title: '🧪 5-Min Test',
+    description: 'Run 0.5 miles in 5 minutes (testing)',
+    emoji: '⚗️',
+    targetMiles: 0.5,
+    durationDays: 0.00347, // ~5 minutes (5/1440)
+    minStake: 1,
+    maxStake: 10,
+    participants: 0,
+    totalStaked: 0,
+    category: 'running',
+  },
   // Daily Goals (sorted by miles ascending)
   {
     id: '1',
@@ -90,6 +117,16 @@ const FEATURED_GOALS: Goal[] = [
 export function BrowseGoals() {
   return (
     <div className="space-y-8">
+      {/* Test Goals (Development) */}
+      <div>
+        <h3 className="text-sm font-medium text-orange-400 mb-4">🧪 Test (Dev Only)</h3>
+        <div className="grid md:grid-cols-2 gap-6">
+          {FEATURED_GOALS.filter(g => g.id.startsWith('test-')).map((goal) => (
+            <GoalCard key={goal.id} goal={goal} />
+          ))}
+        </div>
+      </div>
+
       {/* Daily Goals */}
       <div>
         <h3 className="text-sm font-medium text-gray-400 mb-4">Daily</h3>
