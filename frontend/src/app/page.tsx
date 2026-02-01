@@ -28,7 +28,9 @@ export default function Home() {
           Bet on <span className="text-[#2EE59D]">yourself</span>
         </h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Join a Goal. Stake Money. Win or lose.
+          <span className="block md:inline">Join a Goal.</span>{' '}
+          <span className="block md:inline">Stake Money.</span>{' '}
+          <span className="block md:inline">Win or lose.</span>
         </p>
       </section>
 
