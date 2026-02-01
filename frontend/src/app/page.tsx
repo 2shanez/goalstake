@@ -9,48 +9,57 @@ export default function Home() {
   const { isConnected } = useAccount()
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-black">
       {/* Header */}
-      <header className="border-b border-gray-800">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">💪</span>
-            <h1 className="text-xl font-bold">GoalStake</h1>
+      <header className="border-b border-[#222]">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-[#2EE59D] flex items-center justify-center">
+              <span className="text-black font-bold text-lg">G</span>
+            </div>
+            <span className="text-xl font-semibold tracking-tight">GoalStake</span>
           </div>
-          <ConnectButton />
+          <ConnectButton 
+            showBalance={false}
+            chainStatus="icon"
+            accountStatus="address"
+          />
         </div>
       </header>
 
       {/* Hero */}
-      <section className="max-w-6xl mx-auto px-4 py-16 text-center">
-        <h2 className="text-4xl md:text-6xl font-bold mb-4">
-          Bet on Your Goals
-        </h2>
-        <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
-          Stake money on your fitness goals. Hit them, keep your stake + bonus from losers. 
-          Miss them, lose it. No willpower required — just consequences.
-        </p>
-        
-        {!isConnected && (
-          <div className="flex justify-center">
-            <ConnectButton />
-          </div>
-        )}
-      </section>
+      {!isConnected && (
+        <section className="max-w-6xl mx-auto px-6 py-24 text-center">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+            Bet on <span className="text-[#2EE59D]">yourself</span>
+          </h1>
+          <p className="text-xl text-[#888] max-w-2xl mx-auto mb-12">
+            Stake money on your fitness goals. Hit them, keep your stake. Miss them, lose it. 
+            No willpower required — just consequences.
+          </p>
+          <ConnectButton />
+        </section>
+      )}
 
       {/* Main Content */}
       {isConnected && (
-        <section className="max-w-6xl mx-auto px-4 pb-16">
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Create Challenge */}
-            <div>
-              <h3 className="text-2xl font-bold mb-6">Create Challenge</h3>
+        <section className="max-w-6xl mx-auto px-6 py-12">
+          <div className="grid lg:grid-cols-5 gap-8">
+            {/* Create Challenge - Takes more space */}
+            <div className="lg:col-span-3">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-2 h-2 rounded-full bg-[#2EE59D]"></div>
+                <h2 className="text-lg font-medium text-[#888]">New Challenge</h2>
+              </div>
               <CreateChallenge />
             </div>
 
             {/* My Challenges */}
-            <div>
-              <h3 className="text-2xl font-bold mb-6">My Challenges</h3>
+            <div className="lg:col-span-2">
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-2 h-2 rounded-full bg-[#2EE59D]"></div>
+                <h2 className="text-lg font-medium text-[#888]">My Challenges</h2>
+              </div>
               <MyChallenges />
             </div>
           </div>
@@ -58,38 +67,34 @@ export default function Home() {
       )}
 
       {/* How It Works */}
-      <section className="border-t border-gray-800 bg-gray-900/50">
-        <div className="max-w-6xl mx-auto px-4 py-16">
-          <h3 className="text-2xl font-bold mb-8 text-center">How It Works</h3>
+      <section className="border-t border-[#222] mt-12">
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <h3 className="text-sm font-medium text-[#888] uppercase tracking-wider mb-12 text-center">How it works</h3>
           <div className="grid md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl mb-4">🎯</div>
-              <h4 className="font-bold mb-2">Set a Goal</h4>
-              <p className="text-gray-400 text-sm">Choose your running target (miles per week)</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl mb-4">💰</div>
-              <h4 className="font-bold mb-2">Stake USDC</h4>
-              <p className="text-gray-400 text-sm">Put your money where your mouth is</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl mb-4">🏃</div>
-              <h4 className="font-bold mb-2">Connect Strava</h4>
-              <p className="text-gray-400 text-sm">We verify your runs automatically</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl mb-4">🏆</div>
-              <h4 className="font-bold mb-2">Win or Lose</h4>
-              <p className="text-gray-400 text-sm">Hit your goal = keep stake + bonus</p>
-            </div>
+            {[
+              { step: '01', title: 'Set a goal', desc: 'Choose your running target' },
+              { step: '02', title: 'Stake USDC', desc: 'Put money on the line' },
+              { step: '03', title: 'Connect Strava', desc: 'We verify automatically' },
+              { step: '04', title: 'Win or lose', desc: 'Hit goal = keep stake + bonus' },
+            ].map((item) => (
+              <div key={item.step} className="text-center">
+                <div className="text-[#2EE59D] font-mono text-sm mb-3">{item.step}</div>
+                <h4 className="font-semibold mb-2">{item.title}</h4>
+                <p className="text-sm text-[#888]">{item.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-800 py-8">
-        <div className="max-w-6xl mx-auto px-4 text-center text-gray-500">
-          <p>Built with Chainlink Functions on Base</p>
+      <footer className="border-t border-[#222] py-8">
+        <div className="max-w-6xl mx-auto px-6 flex justify-between items-center text-sm text-[#888]">
+          <span>Built on Base with Chainlink</span>
+          <div className="flex gap-6">
+            <a href="#" className="hover:text-white transition-colors">Docs</a>
+            <a href="#" className="hover:text-white transition-colors">GitHub</a>
+          </div>
         </div>
       </footer>
     </main>
