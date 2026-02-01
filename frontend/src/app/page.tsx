@@ -56,9 +56,9 @@ export default function Home() {
       )}
 
       {/* How It Works */}
-      <section className="border-t border-gray-200 mt-12">
-        <div className="max-w-6xl mx-auto px-6 py-20">
-          <h3 className="text-2xl font-bold text-gray-900 mb-12 text-center">How it works</h3>
+      <section className="border-t border-gray-200 mt-8">
+        <div className="max-w-6xl mx-auto px-6 py-10">
+          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">How it works</h3>
           <div className="grid md:grid-cols-4 gap-8">
             {[
               { step: '01', emoji: '🎯', title: 'Join a goal', desc: 'Pick a challenge that fits' },
