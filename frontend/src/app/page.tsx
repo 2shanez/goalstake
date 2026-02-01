@@ -13,16 +13,7 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2EE59D] to-[#1DB877] flex items-center justify-center shadow-lg shadow-[#2EE59D]/25">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="9" stroke="white" strokeWidth="2"/>
-                <circle cx="12" cy="12" r="5" stroke="white" strokeWidth="2"/>
-                <circle cx="12" cy="12" r="1.5" fill="white"/>
-              </svg>
-            </div>
-            <span className="text-xl font-semibold tracking-tight">GoalStake</span>
-          </div>
+          <span className="text-2xl font-bold text-[#2EE59D]">GoalStake</span>
           <ConnectButton 
             showBalance={false}
             chainStatus="icon"
