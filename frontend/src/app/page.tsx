@@ -4,21 +4,25 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
 import { BrowseGoals } from '@/components/BrowseGoals'
 import { MyChallenges } from '@/components/MyChallenges'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 export default function Home() {
   const { isConnected } = useAccount()
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       {/* Header */}
-      <header className="border-b border-gray-200">
+      <header className="border-b border-[var(--border)]">
         <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 md:py-4 flex justify-between items-center">
           <span className="text-[1.75rem] font-bold text-[#2EE59D]">GoalStake</span>
-          <ConnectButton 
-            showBalance={false}
-            chainStatus="icon"
-            accountStatus="address"
-          />
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <ConnectButton 
+              showBalance={false}
+              chainStatus="icon"
+              accountStatus="address"
+            />
+          </div>
         </div>
       </header>
 
@@ -34,12 +38,12 @@ export default function Home() {
 
       {/* Divider */}
       <div className="max-w-6xl mx-auto px-6">
-        <div className="border-t border-gray-200"></div>
+        <div className="border-t border-[var(--border)]"></div>
       </div>
 
       {/* How It Works */}
       <section className="max-w-6xl mx-auto px-6 py-12">
-        <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">How it works</h3>
+        <h3 className="text-2xl font-bold mb-8 text-center">How it works</h3>
         <div className="grid md:grid-cols-4 gap-8">
           {[
             { step: '01', emoji: '🎯', title: 'Join a goal', desc: 'Pick a challenge that fits' },
@@ -50,8 +54,8 @@ export default function Home() {
             <div key={item.step} className="text-center">
               <div className="text-3xl mb-2">{item.emoji}</div>
               <div className="text-[#2EE59D] font-mono text-xs mb-2">{item.step}</div>
-              <h4 className="font-semibold text-gray-900 mb-2">{item.title}</h4>
-              <p className="text-sm text-gray-500 whitespace-pre-line">{item.desc}</p>
+              <h4 className="font-semibold mb-2">{item.title}</h4>
+              <p className="text-sm text-[var(--text-secondary)] whitespace-pre-line">{item.desc}</p>
             </div>
           ))}
         </div>
@@ -59,7 +63,7 @@ export default function Home() {
 
       {/* Divider */}
       <div className="max-w-6xl mx-auto px-6">
-        <div className="border-t border-gray-200"></div>
+        <div className="border-t border-[var(--border)]"></div>
       </div>
 
       {/* Browse Goals */}
@@ -69,7 +73,7 @@ export default function Home() {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2EE59D] opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2EE59D]"></span>
           </div>
-          <h2 className="text-lg font-medium text-gray-500">Active Goals</h2>
+          <h2 className="text-lg font-medium text-[var(--text-secondary)]">Active Goals</h2>
         </div>
         <BrowseGoals />
       </section>
@@ -79,7 +83,7 @@ export default function Home() {
         <section className="max-w-6xl mx-auto px-6 pb-12">
           <div className="flex items-center gap-2 mb-6">
             <div className="w-2 h-2 rounded-full bg-[#2EE59D]"></div>
-            <h2 className="text-lg font-medium text-gray-500">My Goals</h2>
+            <h2 className="text-lg font-medium text-[var(--text-secondary)]">My Goals</h2>
           </div>
           <MyChallenges />
         </section>
