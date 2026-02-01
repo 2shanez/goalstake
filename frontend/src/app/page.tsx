@@ -40,7 +40,10 @@ export default function Home() {
       {/* Browse Goals */}
       <section className="max-w-6xl mx-auto px-6 pb-12">
         <div className="flex items-center gap-2 mb-6">
-          <div className="w-2 h-2 rounded-full bg-[#2EE59D]"></div>
+          <div className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2EE59D] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2EE59D]"></span>
+          </div>
           <h2 className="text-lg font-medium text-gray-500">Active Goals</h2>
         </div>
         <BrowseGoals />
