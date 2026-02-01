@@ -76,6 +76,9 @@ This creates:
 - **Sustainable revenue** — scales with TVL and challenge duration
 - **Aligned incentives** — platform benefits from more stakes locked longer
 
+**Fee Policy:**
+0% platform fee at launch. Future fees (if any) will be introduced transparently as the protocol scales.
+
 ---
 
 ## Why Crypto?
