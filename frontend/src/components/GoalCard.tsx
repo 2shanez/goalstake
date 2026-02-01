@@ -153,7 +153,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
         args: [
           parseUnits(goal.targetMiles.toString(), 18),
           stakeAmountWei,
-          BigInt(goal.durationDays * 24 * 60 * 60),
+          BigInt(Math.round(goal.durationDays * 24 * 60 * 60)),
         ],
       })
     }
@@ -170,7 +170,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
       args: [
         parseUnits(goal.targetMiles.toString(), 18),
         stakeAmountWei,
-        BigInt(goal.durationDays * 24 * 60 * 60),
+        BigInt(Math.round(goal.durationDays * 24 * 60 * 60)),
       ],
     })
   }
