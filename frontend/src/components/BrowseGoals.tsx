@@ -4,22 +4,9 @@ import { GoalCard, Goal } from './GoalCard'
 
 // Hardcoded goals for MVP - later these come from contract/admin
 const FEATURED_GOALS: Goal[] = [
-  // Daily Goals
+  // Daily Goals (sorted by miles ascending)
   {
     id: '1',
-    title: 'Daily 3',
-    description: 'Run 3 miles today',
-    emoji: '☀️',
-    targetMiles: 3,
-    durationDays: 1,
-    minStake: 5,
-    maxStake: 50,
-    participants: 312,
-    totalStaked: 4680,
-    category: 'running',
-  },
-  {
-    id: '2',
     title: 'Morning Mile',
     description: 'Run 1 mile to start your day',
     emoji: '🌅',
@@ -31,22 +18,22 @@ const FEATURED_GOALS: Goal[] = [
     totalStaked: 2445,
     category: 'running',
   },
-  // Weekly Goals
   {
-    id: '3', 
-    title: 'Weekly 15',
-    description: 'Run 15 miles this week',
-    emoji: '⚡',
-    targetMiles: 15,
-    durationDays: 7,
-    minStake: 10,
-    maxStake: 100,
-    participants: 156,
-    totalStaked: 5460,
+    id: '2',
+    title: 'Daily 3',
+    description: 'Run 3 miles today',
+    emoji: '☀️',
+    targetMiles: 3,
+    durationDays: 1,
+    minStake: 5,
+    maxStake: 50,
+    participants: 312,
+    totalStaked: 4680,
     category: 'running',
   },
+  // Weekly Goals (sorted by miles ascending)
   {
-    id: '4',
+    id: '3',
     title: 'Weekend Warrior',
     description: 'Run 10 miles this weekend',
     emoji: '💪',
@@ -56,6 +43,19 @@ const FEATURED_GOALS: Goal[] = [
     maxStake: 75,
     participants: 234,
     totalStaked: 3510,
+    category: 'running',
+  },
+  {
+    id: '4', 
+    title: 'Weekly 15',
+    description: 'Run 15 miles this week',
+    emoji: '⚡',
+    targetMiles: 15,
+    durationDays: 7,
+    minStake: 10,
+    maxStake: 100,
+    participants: 156,
+    totalStaked: 5460,
     category: 'running',
   },
   // Monthly Goals
