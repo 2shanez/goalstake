@@ -178,10 +178,11 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
       console.log('Token response:', res.status)
       
       if (!res.ok) {
-        const errorText = await res.text()
-        console.error('Token fetch failed:', errorText)
-        alert('Could not retrieve Strava token. Please reconnect Strava.')
-        setStep('idle')
+        // Token expired or missing - clear cookies and reconnect
+        document.cookie = 'strava_athlete_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+        document.cookie = 'strava_access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+        // Redirect to Strava OAuth
+        handleStravaConnect()
         return
       }
       const { token } = await res.json()
