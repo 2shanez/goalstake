@@ -7,7 +7,7 @@ const FEATURED_GOALS: Goal[] = [
   // Test Goals
   {
     id: 'test-1',
-    onChainId: 11,
+    onChainId: 12,
     title: 'Quick Test',
     description: 'Run 0.2 miles in 2 minutes',
     emoji: '🧪',
