@@ -224,37 +224,6 @@ export function BrowseGoals({ filter = 'All' }: BrowseGoalsProps) {
         </div>
       )}
 
-      {/* Stats Footer */}
-      <div className="mt-10 pt-8 border-t border-[var(--border)]">
-        <div className="flex justify-center gap-12">
-          <div className="text-center group">
-            <div className="flex items-baseline justify-center gap-1">
-              <p className="text-3xl font-bold text-[var(--foreground)] tabular-nums">{FEATURED_GOALS.length}</p>
-            </div>
-            <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Active Goals</p>
-          </div>
-          <div className="text-center group">
-            <div className="flex items-baseline justify-center gap-1">
-              <span className="text-lg text-[var(--text-secondary)]">$</span>
-              <p className="text-3xl font-bold text-[#2EE59D] tabular-nums">{totalStaked}</p>
-            </div>
-            <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total Staked</p>
-          </div>
-          <div className="text-center group">
-            <div className="flex items-baseline justify-center gap-1">
-              <p className="text-3xl font-bold text-[var(--foreground)] tabular-nums">{totalParticipants}</p>
-            </div>
-            <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Participants</p>
-          </div>
-        </div>
-        
-        {/* Call to action when empty */}
-        {totalParticipants === 0 && (
-          <p className="text-center text-sm text-[var(--text-secondary)] mt-4">
-            Be the first to stake on a goal ✨
-          </p>
-        )}
       </div>
-    </div>
   )
 }

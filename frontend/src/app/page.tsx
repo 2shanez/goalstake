@@ -149,6 +149,29 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Stats Bar - Full Width */}
+      <section className="border-t border-[var(--border)] py-10 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex justify-center gap-12">
+            <div className="text-center">
+              <p className="text-3xl font-bold tabular-nums">8</p>
+              <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Active Goals</p>
+            </div>
+            <div className="text-center">
+              <p className="text-3xl font-bold text-[#2EE59D] tabular-nums">$0</p>
+              <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total Staked</p>
+            </div>
+            <div className="text-center">
+              <p className="text-3xl font-bold tabular-nums">0</p>
+              <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Participants</p>
+            </div>
+          </div>
+          <p className="text-center text-sm text-[var(--text-secondary)] mt-4">
+            Be the first to stake on a goal ✨
+          </p>
+        </div>
+      </section>
+
       {/* How It Works - Compact horizontal */}
       <section id="how-it-works" className="py-16 px-6 bg-[var(--surface)] border-t border-[var(--border)]">
         <div className="max-w-6xl mx-auto">
