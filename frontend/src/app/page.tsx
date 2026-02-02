@@ -51,32 +51,8 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Trust Bar - Kalshi style */}
-      <div className="fixed top-[57px] left-0 right-0 z-40 bg-gray-50/80 backdrop-blur-sm border-b border-gray-200/50 py-2">
-        <div className="max-w-6xl mx-auto flex justify-center gap-8 text-sm text-gray-600">
-          <span className="flex items-center gap-2 hover:text-gray-900 transition-colors cursor-default">
-            <svg className="w-4 h-4 text-[#2EE59D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-            $0 Platform Fees
-          </span>
-          <span className="flex items-center gap-2 hover:text-gray-900 transition-colors cursor-default">
-            <svg className="w-4 h-4 text-[#2EE59D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            100% Auto-Verified
-          </span>
-          <span className="flex items-center gap-2 hidden sm:flex hover:text-gray-900 transition-colors cursor-default">
-            <svg className="w-4 h-4 text-[#2EE59D]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-            </svg>
-            2x More Likely to Succeed
-          </span>
-        </div>
-      </div>
-
       {/* Hero - Compact with animation */}
-      <section className={`pt-32 pb-12 px-6 relative transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+      <section className={`pt-24 pb-12 px-6 relative transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
         <div className="max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100/80 text-xs text-gray-600 mb-6 backdrop-blur-sm border border-gray-200/50">
             <span className="relative flex h-2 w-2">
@@ -116,7 +92,7 @@ export default function Home() {
       </section>
 
       {/* Category Filter Pills - Sticky */}
-      <div id="goals" className="sticky top-[97px] z-30 bg-white/80 backdrop-blur-md border-b border-gray-200/50 py-3">
+      <div id="goals" className="sticky top-[57px] z-30 bg-white/80 backdrop-blur-md border-b border-gray-200/50 py-3">
         <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
           <div className="flex gap-2 p-1 bg-gray-100/80 rounded-full">
             {categories.map(cat => (
