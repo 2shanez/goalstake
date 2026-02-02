@@ -211,6 +211,16 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
       handleStravaConnect()
       return
     }
+    
+    const stakeNum = parseFloat(stakeAmount)
+    if (stakeNum < goal.minStake) {
+      alert(`Minimum stake is $${goal.minStake}`)
+      return
+    }
+    if (stakeNum > goal.maxStake) {
+      alert(`Maximum stake is $${goal.maxStake}`)
+      return
+    }
 
     if (!hasBalance) {
       alert(`Insufficient USDC balance. You need ${stakeAmount} USDC.`)
