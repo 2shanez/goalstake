@@ -39,6 +39,38 @@ No middleman. No refunds. No excuses.
 
 ---
 
+## The Innovation
+
+**Programmable consequences for real-world behavior.**
+
+That's the primitive GoalStake introduces.
+
+Before now, you could:
+- Bet on sports (someone else's behavior)
+- Bet on prices (market behavior)
+- "Commit" to personal goals (honor system, no enforcement)
+
+With GoalStake:
+- You program automatic, trustless consequences for *your own* verified actions
+
+**The machine decides.** No disputes. No "I forgot to log it." No referee. The oracle fetches your data, the contract evaluates the outcome, the money moves. This pattern — verifiable real-world outcomes triggering on-chain settlement — is new.
+
+The innovation isn't "fitness app with crypto." It's **verifiable real-world outcomes as a smart contract primitive.**
+
+This unlocks consequences for any behavior with a data source:
+
+| Domain | Data Source | Consequence |
+|--------|-------------|-------------|
+| Fitness | Strava, Apple Health | Stake on miles, workouts |
+| Learning | Coursera, Duolingo | Stake on course completion |
+| Productivity | GitHub, Linear | Stake on shipping code |
+| Health | Oura, Whoop | Stake on sleep, recovery |
+| Sobriety | Wearables, biomarkers | Stake on streaks |
+
+GoalStake is the first product built on this primitive. It won't be the last.
+
+---
+
 ## How It Works
 
 ### Smart Contract Architecture
