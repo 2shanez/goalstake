@@ -48,10 +48,10 @@ export default function Home() {
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="#goals" className="px-8 py-4 bg-[#2EE59D] text-black font-semibold rounded-xl hover:bg-[#26c987] transition-all hover:scale-105">
-              Browse Goals
+              Get Started
             </a>
             <a href="#how-it-works" className="px-8 py-4 bg-[var(--surface)] border border-[var(--border)] rounded-xl hover:bg-[var(--surface-hover)] transition-all">
-              How it works
+              Learn More
             </a>
           </div>
         </div>
@@ -62,15 +62,15 @@ export default function Home() {
         <div className="max-w-4xl mx-auto grid grid-cols-3 gap-8 text-center">
           <div>
             <p className="text-3xl md:text-4xl font-bold text-[#2EE59D]">$0</p>
-            <p className="text-sm text-[var(--text-secondary)] mt-1">Platform Fee</p>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">Platform Fees</p>
           </div>
           <div>
             <p className="text-3xl md:text-4xl font-bold">100%</p>
-            <p className="text-sm text-[var(--text-secondary)] mt-1">On-chain Verified</p>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">Auto-Verified</p>
           </div>
           <div>
             <p className="text-3xl md:text-4xl font-bold text-[#2EE59D]">2x</p>
-            <p className="text-sm text-[var(--text-secondary)] mt-1">Motivation Boost</p>
+            <p className="text-sm text-[var(--text-secondary)] mt-1">More Likely to Succeed</p>
           </div>
         </div>
       </section>
@@ -79,35 +79,35 @@ export default function Home() {
       <section id="how-it-works" className="py-24 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-lg text-[#2EE59D] font-semibold mb-3">How it works</p>
-            <h2 className="text-3xl md:text-5xl font-bold">Four steps to<br />financial commitment</h2>
+            <h2 className="text-4xl md:text-6xl font-bold mb-4">How It Works</h2>
+            <p className="text-xl text-[var(--text-secondary)]">Get started in 4 simple steps</p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { 
                 step: '01', 
-                icon: '🎯', 
-                title: 'Join a goal', 
-                desc: 'Pick a challenge that matches your level.' 
+                icon: '👤', 
+                title: 'Sign up', 
+                desc: 'Create an account with email or Google. No crypto knowledge needed.' 
               },
               { 
                 step: '02', 
-                icon: '💰', 
-                title: 'Stake USDC', 
-                desc: 'Put real money on the line. Choose your stake amount.' 
+                icon: '🎯', 
+                title: 'Pick a goal', 
+                desc: 'Choose a challenge that matches your level.' 
               },
               { 
                 step: '03', 
-                icon: '📲', 
-                title: 'Connect your data', 
-                desc: 'Link your account. We verify your progress automatically.' 
+                icon: '💵', 
+                title: 'Put money on it', 
+                desc: 'Stake real money. Choose an amount you're comfortable with.' 
               },
               { 
                 step: '04', 
                 icon: '🏆', 
-                title: 'Win or lose', 
-                desc: 'Hit your goal = keep stake + bonus. Miss = distributed to winners.' 
+                title: 'Hit your goal', 
+                desc: 'Succeed = keep your money + bonus. Miss = lose your stake.' 
               },
             ].map((item) => (
               <div 
@@ -128,8 +128,8 @@ export default function Home() {
       <section className="py-24 px-6 bg-[var(--surface)]/50 border-y border-[var(--border)]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-lg text-[#2EE59D] font-semibold mb-3">Why it works</p>
-            <h2 className="text-3xl md:text-5xl font-bold">Built for commitment,<br />not willpower</h2>
+            <h2 className="text-4xl md:text-6xl font-bold mb-4">Why It Works</h2>
+            <p className="text-xl text-[var(--text-secondary)]">Built for commitment, not willpower</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-6">
@@ -169,9 +169,9 @@ export default function Home() {
       {/* Browse Goals */}
       <section id="goals" className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-10">
-            <div className="flex items-center gap-4">
-              <h2 className="text-3xl md:text-4xl font-bold">Active Goals</h2>
+          <div className="mb-10">
+            <div className="flex items-center gap-4 mb-3">
+              <h2 className="text-4xl md:text-5xl font-bold">Active Goals</h2>
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#2EE59D]/10 border border-[#2EE59D]/20">
                 <div className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2EE59D] opacity-75"></span>
@@ -180,6 +180,7 @@ export default function Home() {
                 <span className="text-sm font-medium text-[#2EE59D]">Live</span>
               </div>
             </div>
+            <p className="text-xl text-[var(--text-secondary)]">Browse open challenges and put your money where your mouth is.</p>
           </div>
           <BrowseGoals />
         </div>
@@ -191,7 +192,7 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-24 px-6 bg-gradient-to-b from-[var(--surface)]/50 to-transparent border-t border-[var(--border)]">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
+          <h2 className="text-4xl md:text-6xl font-bold mb-6">
             Ready to bet on<br /><span className="text-[#2EE59D]">yourself?</span>
           </h2>
           <p className="text-xl text-[var(--text-secondary)] mb-10">
