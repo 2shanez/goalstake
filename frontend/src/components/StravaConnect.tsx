@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract } from 'wagmi'
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract, useSwitchChain, useChainId } from 'wagmi'
 import { baseSepolia } from 'wagmi/chains'
 import { CONTRACTS } from '@/lib/wagmi'
 
@@ -27,9 +27,13 @@ const automationAbi = [
 
 export function StravaConnect() {
   const { address, isConnected } = useAccount()
+  const chainId = useChainId()
+  const { switchChain, isPending: isSwitching } = useSwitchChain()
   const [stravaConnected, setStravaConnected] = useState(false)
   const [athleteName, setAthleteName] = useState<string | null>(null)
   const [isStoring, setIsStoring] = useState(false)
+  
+  const isWrongNetwork = chainId !== baseSepolia.id
   
   const { writeContract, data: hash, error: writeError } = useWriteContract()
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
@@ -119,6 +123,22 @@ export function StravaConnect() {
 
   // Connected to Strava but not stored on-chain yet
   if (stravaConnected) {
+    // Wrong network - need to switch first
+    if (isWrongNetwork) {
+      return (
+        <button
+          onClick={() => switchChain({ chainId: baseSepolia.id })}
+          disabled={isSwitching}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-sm font-medium hover:bg-yellow-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          title="Switch to Base Sepolia to continue"
+        >
+          <span className="text-yellow-600">
+            {isSwitching ? 'Switching...' : '⚠️ Switch to Base Sepolia'}
+          </span>
+        </button>
+      )
+    }
+    
     return (
       <button
         onClick={handleStoreToken}
