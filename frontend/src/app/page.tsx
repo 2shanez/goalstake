@@ -20,14 +20,26 @@ export default function Home() {
     setMounted(true)
   }, [])
 
-  const scrollToGoals = (e: React.MouseEvent) => {
+  const scrollToSection = (e: React.MouseEvent, sectionId: string) => {
     e.preventDefault()
-    document.getElementById('goals')?.scrollIntoView({ behavior: 'smooth' })
+    const element = document.getElementById(sectionId)
+    if (element) {
+      const headerOffset = 70
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+      window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+    }
   }
 
   const handleGetStarted = () => {
     if (isConnected) {
-      document.getElementById('goals')?.scrollIntoView({ behavior: 'smooth' })
+      const element = document.getElementById('goals')
+      if (element) {
+        const headerOffset = 70
+        const elementPosition = element.getBoundingClientRect().top
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+      }
     } else {
       login()
     }
@@ -52,11 +64,11 @@ export default function Home() {
             goalstake
           </a>
           <div className="flex items-center gap-6">
-            <a href="#how-it-works" className="text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors hidden sm:block relative group">
+            <a href="#how-it-works" onClick={(e) => scrollToSection(e, 'how-it-works')} className="text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors hidden sm:block relative group cursor-pointer">
               How it works
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#2EE59D] group-hover:w-full transition-all duration-300" />
             </a>
-            <a href="#goals" onClick={scrollToGoals} className="text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors hidden sm:block relative group">
+            <a href="#goals" onClick={(e) => scrollToSection(e, 'goals')} className="text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors hidden sm:block relative group cursor-pointer">
               Goals
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#2EE59D] group-hover:w-full transition-all duration-300" />
             </a>
@@ -220,7 +232,7 @@ export default function Home() {
           </p>
           <a 
             href="#goals" 
-            onClick={scrollToGoals}
+            onClick={(e) => scrollToSection(e, 'goals')}
             className="inline-flex items-center gap-2 px-8 py-4 bg-[#2EE59D] text-black font-bold rounded-xl 
               hover:bg-white hover:shadow-xl hover:shadow-[#2EE59D]/25 hover:-translate-y-1
               active:translate-y-0
