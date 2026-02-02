@@ -176,7 +176,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               { icon: '🧠', title: 'Loss Aversion', desc: 'We work 2x harder to avoid losing money than to gain it.' },
-              { icon: '🔗', title: 'Trustless Verification', desc: 'Chainlink oracles verify Strava data automatically.' },
+              { icon: '🔗', title: 'Trustless Verification', desc: 'Chainlink oracles verify your progress automatically.' },
               { icon: '💸', title: 'Real Consequences', desc: 'Miss your goal = stake goes to winners. No excuses.' },
             ].map((item, i) => (
               <div 
