@@ -14,7 +14,7 @@ export default function Home() {
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[var(--background)]/80 border-b border-[var(--border)]">
         <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-          <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-xl font-bold text-[#2EE59D] hover:opacity-80 transition-opacity cursor-pointer">goalstake</a>
+          <a href="/" onClick={(e) => { e.preventDefault(); window.history.pushState({}, '', '/'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-xl font-bold text-[#2EE59D] hover:opacity-80 transition-opacity cursor-pointer">goalstake</a>
           <div className="flex items-center gap-4">
             <a href="#how-it-works" className="text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors hidden sm:block">How it works</a>
             <a href="#goals" className="text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors hidden sm:block">Goals</a>
@@ -209,7 +209,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-6">
-              <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-xl font-bold text-[#2EE59D] hover:opacity-80 transition-opacity cursor-pointer">goalstake</a>
+              <a href="/" onClick={(e) => { e.preventDefault(); window.history.pushState({}, '', '/'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-xl font-bold text-[#2EE59D] hover:opacity-80 transition-opacity cursor-pointer">goalstake</a>
               <span className="text-sm text-[var(--text-secondary)]">The Commitment Market</span>
             </div>
             
