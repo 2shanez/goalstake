@@ -189,18 +189,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* My Goals */}
-      {isConnected && (
-        <section className="pb-24 px-6">
-          <div className="max-w-6xl mx-auto">
-            <div className="mb-8">
-              <p className="text-[#2EE59D] font-medium mb-2">Your Commitments</p>
-              <h2 className="text-3xl font-bold">My Goals</h2>
-            </div>
-            <MyChallenges />
-          </div>
-        </section>
-      )}
+      {/* My Goals - Hidden from landing page, will show in dashboard */}
+      {/* TODO: Move to /dashboard route once user accounts are implemented */}
 
       {/* CTA Section */}
       <section className="py-24 px-6 bg-gradient-to-b from-[var(--surface)]/50 to-transparent border-t border-[var(--border)]">
