@@ -1,9 +1,10 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { GoalCard, Goal } from './GoalCard'
 
 const FEATURED_GOALS: Goal[] = [
-  // Test Goals - $1-$10
+  // Test Goals
   {
     id: 'test-1',
     onChainId: 0,
@@ -33,7 +34,7 @@ const FEATURED_GOALS: Goal[] = [
     category: 'Test',
   },
 
-  // Daily Goals - $5-$50
+  // Daily Goals
   {
     id: '1',
     onChainId: 2,
@@ -63,7 +64,7 @@ const FEATURED_GOALS: Goal[] = [
     category: 'Daily',
   },
 
-  // Weekly Goals - $10-$100
+  // Weekly Goals
   {
     id: '3',
     onChainId: 4,
@@ -93,7 +94,7 @@ const FEATURED_GOALS: Goal[] = [
     category: 'Weekly',
   },
 
-  // Monthly Goals - $20-$200
+  // Monthly Goals
   {
     id: '5',
     onChainId: 6,
@@ -124,10 +125,9 @@ const FEATURED_GOALS: Goal[] = [
   },
 ]
 
-// Coming soon goals to fill the grid
 const COMING_SOON = [
-  { title: 'Cycling Goals', emoji: '🚴', category: 'Coming Soon' },
-  { title: 'Step Counter', emoji: '👟', category: 'Coming Soon' },
+  { title: 'Cycling Goals', emoji: '🚴', desc: 'Track your rides' },
+  { title: 'Step Counter', emoji: '👟', desc: 'Daily step challenges' },
 ]
 
 interface BrowseGoalsProps {
@@ -135,59 +135,103 @@ interface BrowseGoalsProps {
 }
 
 export function BrowseGoals({ filter = 'All' }: BrowseGoalsProps) {
+  const [mounted, setMounted] = useState(false)
+  
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const filteredGoals = filter === 'All' 
     ? FEATURED_GOALS 
     : FEATURED_GOALS.filter(g => g.category === filter)
 
   const showComingSoon = filter === 'All'
 
+  // Calculate totals
+  const totalParticipants = FEATURED_GOALS.reduce((sum, g) => sum + g.participants, 0)
+  const totalStaked = FEATURED_GOALS.reduce((sum, g) => sum + g.totalStaked, 0)
+
   return (
     <div>
-      {/* Goals Grid */}
+      {/* Goals Grid with stagger animation */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {filteredGoals.map((goal) => (
-          <GoalCard key={goal.id} goal={goal} />
+        {filteredGoals.map((goal, index) => (
+          <div
+            key={goal.id}
+            className={`transition-all duration-500 ${
+              mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
+            style={{ transitionDelay: `${index * 50}ms` }}
+          >
+            <GoalCard goal={goal} />
+          </div>
         ))}
         
         {/* Coming Soon Placeholders */}
         {showComingSoon && COMING_SOON.map((item, i) => (
           <div 
             key={`coming-${i}`}
-            className="bg-gray-50 border border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center min-h-[200px] group hover:border-gray-300 transition-colors"
+            className={`transition-all duration-500 ${
+              mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
+            style={{ transitionDelay: `${(filteredGoals.length + i) * 50}ms` }}
           >
-            <span className="text-3xl mb-3 grayscale group-hover:grayscale-0 transition-all">{item.emoji}</span>
-            <p className="font-semibold text-sm text-gray-400 mb-1">{item.title}</p>
-            <span className="text-[10px] text-gray-400 uppercase tracking-wide">Coming Soon</span>
-            <button className="mt-3 text-xs text-[#2EE59D] font-medium hover:underline opacity-0 group-hover:opacity-100 transition-opacity">
-              Get notified →
-            </button>
+            <div className="h-full bg-gradient-to-br from-gray-50 to-gray-100/50 border border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center min-h-[240px] group hover:border-gray-300 hover:from-gray-100 hover:to-gray-50 transition-all duration-300">
+              <div className="relative">
+                <span className="text-4xl grayscale group-hover:grayscale-0 transition-all duration-300">{item.emoji}</span>
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-gray-300 rounded-full animate-pulse" />
+              </div>
+              <p className="font-semibold text-sm text-gray-500 mt-4 mb-1">{item.title}</p>
+              <p className="text-xs text-gray-400 mb-4">{item.desc}</p>
+              <button className="px-4 py-1.5 text-xs font-medium text-gray-500 bg-white border border-gray-200 rounded-full hover:border-[#2EE59D] hover:text-[#2EE59D] transition-colors">
+                Notify me
+              </button>
+            </div>
           </div>
         ))}
       </div>
 
       {/* Empty State */}
       {filteredGoals.length === 0 && (
-        <div className="text-center py-16">
-          <div className="text-4xl mb-4">🏃</div>
-          <p className="text-gray-500 mb-2">No {filter.toLowerCase()} goals available yet</p>
+        <div className="text-center py-16 animate-in fade-in duration-300">
+          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl">🏃</span>
+          </div>
+          <p className="text-gray-600 font-medium mb-2">No {filter.toLowerCase()} goals yet</p>
           <p className="text-sm text-gray-400">Check back soon or try a different category</p>
         </div>
       )}
 
       {/* Stats Footer */}
-      <div className="mt-8 pt-6 border-t border-gray-100 flex justify-center gap-8 text-center">
-        <div>
-          <p className="text-2xl font-bold text-gray-900">{FEATURED_GOALS.length}</p>
-          <p className="text-xs text-gray-500">Active Goals</p>
+      <div className="mt-10 pt-8 border-t border-gray-100">
+        <div className="flex justify-center gap-12">
+          <div className="text-center group">
+            <div className="flex items-baseline justify-center gap-1">
+              <p className="text-3xl font-bold text-gray-900 tabular-nums">{FEATURED_GOALS.length}</p>
+            </div>
+            <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Active Goals</p>
+          </div>
+          <div className="text-center group">
+            <div className="flex items-baseline justify-center gap-1">
+              <span className="text-lg text-gray-400">$</span>
+              <p className="text-3xl font-bold text-[#2EE59D] tabular-nums">{totalStaked}</p>
+            </div>
+            <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Total Staked</p>
+          </div>
+          <div className="text-center group">
+            <div className="flex items-baseline justify-center gap-1">
+              <p className="text-3xl font-bold text-gray-900 tabular-nums">{totalParticipants}</p>
+            </div>
+            <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Participants</p>
+          </div>
         </div>
-        <div>
-          <p className="text-2xl font-bold text-[#2EE59D]">$0</p>
-          <p className="text-xs text-gray-500">Total Staked</p>
-        </div>
-        <div>
-          <p className="text-2xl font-bold text-gray-900">0</p>
-          <p className="text-xs text-gray-500">Participants</p>
-        </div>
+        
+        {/* Call to action when empty */}
+        {totalParticipants === 0 && (
+          <p className="text-center text-sm text-gray-400 mt-4">
+            Be the first to stake on a goal ✨
+          </p>
+        )}
       </div>
     </div>
   )
