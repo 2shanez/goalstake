@@ -136,10 +136,20 @@ interface BrowseGoalsProps {
 
 export function BrowseGoals({ filter = 'All' }: BrowseGoalsProps) {
   const [mounted, setMounted] = useState(false)
+  const [notified, setNotified] = useState<string[]>([])
   
   useEffect(() => {
     setMounted(true)
+    // Load notified items from localStorage
+    const saved = localStorage.getItem('goalstake_notified')
+    if (saved) setNotified(JSON.parse(saved))
   }, [])
+
+  const handleNotify = (title: string) => {
+    const updated = [...notified, title]
+    setNotified(updated)
+    localStorage.setItem('goalstake_notified', JSON.stringify(updated))
+  }
 
   const filteredGoals = filter === 'All' 
     ? FEATURED_GOALS 
@@ -183,9 +193,21 @@ export function BrowseGoals({ filter = 'All' }: BrowseGoalsProps) {
               </div>
               <p className="font-semibold text-sm text-[var(--text-secondary)] mt-4 mb-1">{item.title}</p>
               <p className="text-xs text-[var(--text-secondary)] mb-4">{item.desc}</p>
-              <button className="px-4 py-1.5 text-xs font-medium text-[var(--text-secondary)] bg-[var(--background)] border border-[var(--border)] rounded-full hover:border-[#2EE59D] hover:text-[#2EE59D] transition-colors">
-                Notify me
-              </button>
+              {notified.includes(item.title) ? (
+                <span className="px-4 py-1.5 text-xs font-medium text-[#2EE59D] bg-[#2EE59D]/10 border border-[#2EE59D]/30 rounded-full flex items-center gap-1">
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  You'll be notified
+                </span>
+              ) : (
+                <button 
+                  onClick={() => handleNotify(item.title)}
+                  className="px-4 py-1.5 text-xs font-medium text-[var(--text-secondary)] bg-[var(--background)] border border-[var(--border)] rounded-full hover:border-[#2EE59D] hover:text-[#2EE59D] transition-colors"
+                >
+                  Notify me
+                </button>
+              )}
             </div>
           </div>
         ))}
