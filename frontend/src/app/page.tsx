@@ -279,6 +279,8 @@ export default function Home() {
           <div className="text-sm text-[var(--text-secondary)]">
             Built on{' '}
             <a href="https://base.org" target="_blank" rel="noopener noreferrer" className="text-[#2EE59D] hover:underline">Base</a>
+            {' '}×{' '}
+            <a href="https://chain.link" target="_blank" rel="noopener noreferrer" className="text-[#2EE59D] hover:underline">Chainlink</a>
           </div>
         </div>
       </footer>
