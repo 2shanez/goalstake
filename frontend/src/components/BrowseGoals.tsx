@@ -2,18 +2,22 @@
 
 import { GoalCard, Goal } from './GoalCard'
 
-// Hardcoded goals for MVP - later these come from contract/admin
+// Tiered minimum stakes:
+// - Test (< 1 day): $1
+// - Daily/Weekly (1-7 days): $5
+// - Monthly (8+ days): $10
+
 const FEATURED_GOALS: Goal[] = [
-  // Test Goals (for development)
+  // Test Goals (for development) - $1 min
   {
     id: 'test-1',
     title: '🧪 Quick Test',
     description: 'Run 0.2 miles in 2 minutes (testing)',
     emoji: '🧪',
     targetMiles: 0.2,
-    durationDays: 0.00139, // ~2 minutes (2/1440)
+    durationDays: 0.00139, // ~2 minutes
     minStake: 1,
-    maxStake: 5,
+    maxStake: 10,
     participants: 0,
     totalStaked: 0,
     category: 'running',
@@ -24,14 +28,15 @@ const FEATURED_GOALS: Goal[] = [
     description: 'Run 0.5 miles in 5 minutes (testing)',
     emoji: '⚗️',
     targetMiles: 0.5,
-    durationDays: 0.00347, // ~5 minutes (5/1440)
+    durationDays: 0.00347, // ~5 minutes
     minStake: 1,
     maxStake: 10,
     participants: 0,
     totalStaked: 0,
     category: 'running',
   },
-  // Daily Goals (sorted by miles ascending)
+
+  // Daily Goals - $5 min
   {
     id: '1',
     title: 'Daily Mile',
@@ -40,7 +45,7 @@ const FEATURED_GOALS: Goal[] = [
     targetMiles: 1,
     durationDays: 1,
     minStake: 5,
-    maxStake: 25,
+    maxStake: 50,
     participants: 847,
     totalStaked: 4235,
     category: 'running',
@@ -53,12 +58,13 @@ const FEATURED_GOALS: Goal[] = [
     targetMiles: 3,
     durationDays: 1,
     minStake: 5,
-    maxStake: 50,
+    maxStake: 100,
     participants: 423,
     totalStaked: 3175,
     category: 'running',
   },
-  // Weekly Goals (sorted by miles ascending)
+
+  // Weekly Goals - $5 min
   {
     id: '3',
     title: 'Weekend Warrior',
@@ -66,7 +72,7 @@ const FEATURED_GOALS: Goal[] = [
     emoji: '💪',
     targetMiles: 10,
     durationDays: 3,
-    minStake: 10,
+    minStake: 5,
     maxStake: 100,
     participants: 312,
     totalStaked: 6240,
@@ -79,13 +85,14 @@ const FEATURED_GOALS: Goal[] = [
     emoji: '⚡',
     targetMiles: 15,
     durationDays: 7,
-    minStake: 15,
+    minStake: 5,
     maxStake: 150,
     participants: 198,
     totalStaked: 5940,
     category: 'running',
   },
-  // Monthly Goals
+
+  // Monthly Goals - $10 min
   {
     id: '5',
     title: 'February 50',
@@ -93,7 +100,7 @@ const FEATURED_GOALS: Goal[] = [
     emoji: '🏃',
     targetMiles: 50,
     durationDays: 28,
-    minStake: 25,
+    minStake: 10,
     maxStake: 250,
     participants: 156,
     totalStaked: 11700,
@@ -106,7 +113,7 @@ const FEATURED_GOALS: Goal[] = [
     emoji: '🏅',
     targetMiles: 100,
     durationDays: 30,
-    minStake: 50,
+    minStake: 10,
     maxStake: 500,
     participants: 67,
     totalStaked: 8710,
@@ -119,7 +126,10 @@ export function BrowseGoals() {
     <div className="space-y-8">
       {/* Test Goals (Development) */}
       <div>
-        <h3 className="text-sm font-medium text-orange-400 mb-4">🧪 Test (Dev Only)</h3>
+        <div className="flex items-center gap-2 mb-4">
+          <h3 className="text-sm font-medium text-orange-400">🧪 Test (Dev Only)</h3>
+          <span className="text-xs text-[var(--text-secondary)]">$1 min</span>
+        </div>
         <div className="grid md:grid-cols-2 gap-6">
           {FEATURED_GOALS.filter(g => g.id.startsWith('test-')).map((goal) => (
             <GoalCard key={goal.id} goal={goal} />
@@ -129,7 +139,10 @@ export function BrowseGoals() {
 
       {/* Daily Goals */}
       <div>
-        <h3 className="text-sm font-medium text-[var(--text-secondary)] mb-4">Daily</h3>
+        <div className="flex items-center gap-2 mb-4">
+          <h3 className="text-sm font-medium text-[var(--text-secondary)]">Daily</h3>
+          <span className="text-xs text-[#2EE59D]">$5 min</span>
+        </div>
         <div className="grid md:grid-cols-2 gap-6">
           {FEATURED_GOALS.filter(g => g.durationDays === 1).map((goal) => (
             <GoalCard key={goal.id} goal={goal} />
@@ -139,7 +152,10 @@ export function BrowseGoals() {
 
       {/* Weekly Goals */}
       <div>
-        <h3 className="text-sm font-medium text-[var(--text-secondary)] mb-4">Weekly</h3>
+        <div className="flex items-center gap-2 mb-4">
+          <h3 className="text-sm font-medium text-[var(--text-secondary)]">Weekly</h3>
+          <span className="text-xs text-[#2EE59D]">$5 min</span>
+        </div>
         <div className="grid md:grid-cols-2 gap-6">
           {FEATURED_GOALS.filter(g => g.durationDays >= 3 && g.durationDays <= 7).map((goal) => (
             <GoalCard key={goal.id} goal={goal} />
@@ -149,7 +165,10 @@ export function BrowseGoals() {
 
       {/* Monthly Goals */}
       <div>
-        <h3 className="text-sm font-medium text-[var(--text-secondary)] mb-4">Monthly</h3>
+        <div className="flex items-center gap-2 mb-4">
+          <h3 className="text-sm font-medium text-[var(--text-secondary)]">Monthly</h3>
+          <span className="text-xs text-[#2EE59D]">$10 min</span>
+        </div>
         <div className="grid md:grid-cols-2 gap-6">
           {FEATURED_GOALS.filter(g => g.durationDays >= 28).map((goal) => (
             <GoalCard key={goal.id} goal={goal} />
