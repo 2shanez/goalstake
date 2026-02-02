@@ -127,9 +127,9 @@ export function BrowseGoals() {
     <div className="space-y-8">
       {/* Test Goals (Development) */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <h3 className="text-sm font-medium text-orange-400">🧪 Test (Dev Only)</h3>
-          <span className="text-xs text-[var(--text-secondary)]">$1 min</span>
+        <div className="flex items-center gap-3 mb-4">
+          <h3 className="text-xl font-semibold text-orange-400">🧪 Test (Dev Only)</h3>
+          <span className="text-base text-[var(--text-secondary)]">$1 min</span>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
           {FEATURED_GOALS.filter(g => g.id.startsWith('test-')).map((goal) => (
@@ -140,9 +140,9 @@ export function BrowseGoals() {
 
       {/* Daily Goals */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <h3 className="text-sm font-medium text-[var(--text-secondary)]">Daily</h3>
-          <span className="text-xs text-[#2EE59D]">$5 min</span>
+        <div className="flex items-center gap-3 mb-4">
+          <h3 className="text-xl font-semibold">Daily</h3>
+          <span className="text-base font-medium text-[#2EE59D]">$5 min</span>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
           {FEATURED_GOALS.filter(g => g.durationDays === 1).map((goal) => (
@@ -153,9 +153,9 @@ export function BrowseGoals() {
 
       {/* Weekly Goals */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <h3 className="text-sm font-medium text-[var(--text-secondary)]">Weekly</h3>
-          <span className="text-xs text-[#2EE59D]">$10 min</span>
+        <div className="flex items-center gap-3 mb-4">
+          <h3 className="text-xl font-semibold">Weekly</h3>
+          <span className="text-base font-medium text-[#2EE59D]">$10 min</span>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
           {FEATURED_GOALS.filter(g => g.durationDays >= 3 && g.durationDays <= 7).map((goal) => (
@@ -166,9 +166,9 @@ export function BrowseGoals() {
 
       {/* Monthly Goals */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
-          <h3 className="text-sm font-medium text-[var(--text-secondary)]">Monthly</h3>
-          <span className="text-xs text-[#2EE59D]">$20 min</span>
+        <div className="flex items-center gap-3 mb-4">
+          <h3 className="text-xl font-semibold">Monthly</h3>
+          <span className="text-base font-medium text-[#2EE59D]">$20 min</span>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
           {FEATURED_GOALS.filter(g => g.durationDays >= 28).map((goal) => (
