@@ -1,12 +1,14 @@
 'use client'
 
-import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { usePrivy } from '@privy-io/react-auth'
 import { useAccount } from 'wagmi'
 import { BrowseGoals } from '@/components/BrowseGoals'
 import { MyChallenges } from '@/components/MyChallenges'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { ConnectButton } from '@/components/ConnectButton'
 
 export default function Home() {
+  const { authenticated } = usePrivy()
   const { isConnected } = useAccount()
 
   return (
@@ -17,11 +19,7 @@ export default function Home() {
           <span className="text-[1.75rem] font-bold text-[#2EE59D]">goalstake</span>
           <div className="flex items-center gap-3">
             <ThemeToggle />
-            <ConnectButton 
-              showBalance={false}
-              chainStatus="icon"
-              accountStatus="address"
-            />
+            <ConnectButton />
           </div>
         </div>
       </header>
@@ -32,7 +30,7 @@ export default function Home() {
           Bet on <span className="text-[#2EE59D]">yourself</span>
         </h1>
         <p className="text-xl md:text-2xl text-[var(--text-secondary)] dark:text-gray-300 max-w-2xl mx-auto font-medium">
-          The Accountability Market.
+          The Commitment Market.
         </p>
       </section>
 
@@ -79,7 +77,7 @@ export default function Home() {
       </section>
 
       {/* My Goals */}
-      {isConnected && (
+      {(authenticated || isConnected) && (
         <section className="max-w-6xl mx-auto px-6 pb-12">
           <div className="flex items-center gap-2 mb-6">
             <div className="w-2 h-2 rounded-full bg-[#2EE59D]"></div>
