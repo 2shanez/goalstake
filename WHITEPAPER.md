@@ -94,9 +94,28 @@ User Stakes USDC
 ### Economic Model
 
 **For Users:**
-- **Winners**: Receive stake back + equal share of loser pool
-- **Losers**: Stake distributed evenly to winners
+- **Winners**: Receive stake back + proportional share of loser pool (based on stake size)
+- **Losers**: Stake distributed to winners weighted by their stakes
 - **Fee**: 0% — platform never touches user stakes
+
+**Stake-Weighted Payouts:**
+Winners receive bonus proportional to their stake. If you stake more, you earn more from the loser pool.
+
+```
+Your Bonus = (Your Stake / Total Winner Stakes) × Loser Pool
+```
+
+Example: If you stake $100 and total winner stakes are $500, you get 20% of the loser pool.
+
+**Tiered Stakes (10x ratio):**
+| Goal Type | Min | Max |
+|-----------|-----|-----|
+| Test | $1 | $10 |
+| Daily | $5 | $50 |
+| Weekly | $10 | $100 |
+| Monthly | $20 | $200 |
+
+This ensures fair reward distribution while preventing whale domination.
 
 **Platform Revenue:**
 - All staked USDC is deposited into yield protocols (Aave, Compound, etc.)
