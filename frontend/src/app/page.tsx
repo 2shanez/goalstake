@@ -99,7 +99,7 @@ export default function Home() {
                 step: '02', 
                 icon: '💰', 
                 title: 'Stake USDC', 
-                desc: 'Put real money on the line. $1 minimum, no maximum.' 
+                desc: 'Put real money on the line. Choose your stake amount.' 
               },
               { 
                 step: '03', 
