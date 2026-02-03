@@ -79,6 +79,28 @@ const GOALSTAKE_ABI = [
     outputs: [{ type: 'uint8' }],
     stateMutability: 'view',
   },
+  {
+    name: 'getParticipant',
+    type: 'function',
+    inputs: [
+      { name: 'goalId', type: 'uint256' },
+      { name: 'user', type: 'address' },
+    ],
+    outputs: [
+      {
+        type: 'tuple',
+        components: [
+          { name: 'user', type: 'address' },
+          { name: 'stake', type: 'uint256' },
+          { name: 'actualMiles', type: 'uint256' },
+          { name: 'verified', type: 'bool' },
+          { name: 'succeeded', type: 'bool' },
+          { name: 'claimed', type: 'bool' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
 ] as const
 
 export interface Goal {
@@ -135,6 +157,20 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const entryOpen = isEntryOpen === undefined ? true : isEntryOpen as boolean
   const phase = goalPhase as number | undefined
   
+  // Check if user has already joined this goal
+  const { data: participantData, refetch: refetchParticipant } = useReadContract({
+    address: contracts.goalStake,
+    abi: GOALSTAKE_ABI,
+    functionName: 'getParticipant',
+    args: goal.onChainId !== undefined && address ? [BigInt(goal.onChainId), address] : undefined,
+    query: { enabled: goal.onChainId !== undefined && !!address },
+  })
+
+  // Parse participant data
+  const participant = participantData as { user: string; stake: bigint; actualMiles: bigint; verified: boolean; succeeded: boolean; claimed: boolean } | undefined
+  const hasJoined = participant && participant.stake > 0n
+  const userStake = participant ? Number(formatUnits(participant.stake, 6)) : 0
+
   // Check if user has token stored on-chain for Chainlink
   const { data: hasTokenOnChain, refetch: refetchToken } = useReadContract({
     address: contracts.oracle,
@@ -300,6 +336,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   // Handle join success
   if (isJoinSuccess && step === 'joining') {
     setStep('done')
+    refetchParticipant()
     onJoined?.()
   }
 
@@ -411,17 +448,25 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
           <button
             onClick={(e) => {
               e.stopPropagation()
-              if (goal.onChainId === undefined || !entryOpen) return
+              if (goal.onChainId === undefined || !entryOpen || hasJoined) return
               isConnected ? setExpanded(true) : login()
             }}
-            disabled={goal.onChainId === undefined || !entryOpen}
+            disabled={goal.onChainId === undefined || !entryOpen || hasJoined}
             className={`w-full py-2.5 text-sm font-bold rounded-lg transition-all duration-150 ${
-              goal.onChainId === undefined || !entryOpen
+              hasJoined
+                ? 'bg-[#2EE59D]/20 text-[#2EE59D] cursor-default border border-[#2EE59D]/30'
+                : goal.onChainId === undefined || !entryOpen
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 : 'bg-[#2EE59D] text-black hover:bg-[#26c987] active:scale-[0.98] shadow-sm hover:shadow-md'
             }`}
           >
-            {goal.onChainId === undefined ? `Coming Soon` : !entryOpen ? 'Entry Closed' : `Join Promise · $${goal.minStake}+`}
+            {hasJoined 
+              ? `Joined ✓ · $${userStake}` 
+              : goal.onChainId === undefined 
+              ? `Coming Soon` 
+              : !entryOpen 
+              ? 'Entry Closed' 
+              : `Join Promise · $${goal.minStake}+`}
           </button>
         )}
       </div>
