@@ -126,7 +126,6 @@ const FEATURED_GOALS: Goal[] = [
 ]
 
 const COMING_SOON = [
-  { title: 'Cycling Goals', emoji: '🚴', desc: 'Track your rides' },
   { title: 'Step Counter', emoji: '👟', desc: 'Daily step challenges' },
 ]
 
