@@ -189,10 +189,12 @@ GoalStake isn't competing in these markets. We're creating **The Commitment Mark
 ## Roadmap
 
 ### Phase 1: Foundation (Current)
-- [x] Core staking contract
-- [x] Strava integration
+- [x] Core staking contract (GoalStakeV2 deployed)
+- [x] Strava integration (OAuth + on-chain token storage)
 - [x] Chainlink Functions verification
-- [ ] Chainlink Automation for triggers
+- [x] Chainlink Automation for triggers
+- [x] Anti-cheat filter (manual entries blocked)
+- [x] Privy wallet integration (email/Google login)
 - [ ] First 100 users
 
 ### Phase 2: Growth
@@ -241,7 +243,7 @@ Building in public. Shipping fast. Automating everything.
 
 ### Contracts (Base Sepolia)
 
-- **GoalStake**: `0x36842e04C5b1CBD0cD0bdF4E44c27EB42EBF3eAC`
+- **GoalStakeV2**: `0x615f7165f0ae886319cc0dc2754fe85b14c51b53`
 - **Automation**: `0x8E69bf57b08992204317584b5e906c1B6e6E609E`
 - **USDC**: `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
 
