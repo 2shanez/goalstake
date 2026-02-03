@@ -411,17 +411,17 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
           <button
             onClick={(e) => {
               e.stopPropagation()
-              if (!entryOpen) return
+              if (goal.onChainId === undefined || !entryOpen) return
               isConnected ? setExpanded(true) : login()
             }}
-            disabled={!entryOpen}
+            disabled={goal.onChainId === undefined || !entryOpen}
             className={`w-full py-2.5 text-sm font-bold rounded-lg transition-all duration-150 ${
-              !entryOpen
+              goal.onChainId === undefined || !entryOpen
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                 : 'bg-[#2EE59D] text-black hover:bg-[#26c987] active:scale-[0.98] shadow-sm hover:shadow-md'
             }`}
           >
-            {!entryOpen ? 'Entry Closed' : `Join Promise · $${goal.minStake}+`}
+            {goal.onChainId === undefined ? `Coming Soon` : !entryOpen ? 'Entry Closed' : `Join Promise · $${goal.minStake}+`}
           </button>
         )}
       </div>
