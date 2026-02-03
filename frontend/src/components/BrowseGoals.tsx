@@ -141,14 +141,14 @@ export function BrowseGoals({ filter = 'All' }: BrowseGoalsProps) {
   useEffect(() => {
     setMounted(true)
     // Load notified items from localStorage
-    const saved = localStorage.getItem('goalstake_notified')
+    const saved = localStorage.getItem('vaada_notified')
     if (saved) setNotified(JSON.parse(saved))
   }, [])
 
   const handleNotify = (title: string) => {
     const updated = [...notified, title]
     setNotified(updated)
-    localStorage.setItem('goalstake_notified', JSON.stringify(updated))
+    localStorage.setItem('vaada_notified', JSON.stringify(updated))
   }
 
   const filteredGoals = filter === 'All' 

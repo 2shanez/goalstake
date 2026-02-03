@@ -61,7 +61,7 @@ export default function Home() {
             onClick={(e) => { e.preventDefault(); window.history.pushState({}, '', '/'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} 
             className="text-xl font-bold text-[#2EE59D] hover:scale-105 transition-transform cursor-pointer"
           >
-            goalstake
+            vaada
           </a>
           <div className="flex items-center gap-6">
             <a href="#how-it-works" onClick={(e) => scrollToSection(e, 'how-it-works')} className="text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors hidden sm:block relative group cursor-pointer">
@@ -272,7 +272,7 @@ export default function Home() {
       <footer className="border-t border-[var(--border)] py-8 px-6 bg-[var(--background)]">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4">
-            <span className="font-bold text-[#2EE59D] text-lg">goalstake</span>
+            <span className="font-bold text-[#2EE59D] text-lg">vaada</span>
             <span className="text-sm text-[var(--text-secondary)]">The Commitment Market</span>
           </div>
           

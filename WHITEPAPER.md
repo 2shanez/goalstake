@@ -1,4 +1,4 @@
-# GoalStake: The Commitment Market
+# Vaada: The Commitment Market
 
 **Version 1.0 — February 2026**
 
@@ -6,9 +6,11 @@
 
 ## Abstract
 
-GoalStake is a decentralized commitment protocol that allows users to stake money on personal goals. Users commit USDC to fitness challenges verified by Strava data through Chainlink oracles. Hit your goal, keep your stake plus earn from those who didn't. Miss it, your stake goes to the winners.
+Vaada is a decentralized commitment protocol that allows users to stake money on personal goals. Users commit USDC to fitness challenges verified by Strava data through Chainlink oracles. Hit your goal, keep your stake plus earn from those who didn't. Miss it, your stake goes to the winners.
 
 This is the "put your money where your mouth is" protocol.
+
+*"Vaada" means "promise" in Hindi.*
 
 ---
 
@@ -22,13 +24,13 @@ This is the "put your money where your mouth is" protocol.
 
 The missing ingredient isn't information or access — it's **commitment with real stakes**.
 
-Behavioral economics shows loss aversion is 2x stronger than gain motivation. People work harder to avoid losing $100 than to gain $100. GoalStake weaponizes this.
+Behavioral economics shows loss aversion is 2x stronger than gain motivation. People work harder to avoid losing $100 than to gain $100. Vaada weaponizes this.
 
 ---
 
 ## The Solution
 
-GoalStake creates **financial commitment** for personal goals:
+Vaada creates **financial commitment** for personal goals:
 
 1. **Stake** — Commit USDC to a fitness goal (e.g., "Run 10 miles this week")
 2. **Perform** — Complete your activity on Strava
@@ -43,14 +45,14 @@ No middleman. No refunds. No excuses.
 
 **Programmable consequences for real-world behavior.**
 
-That's the primitive GoalStake introduces.
+That's the primitive Vaada introduces.
 
 Before now, you could:
 - Bet on sports (someone else's behavior)
 - Bet on prices (market behavior)
 - "Commit" to personal goals (honor system, no enforcement)
 
-With GoalStake:
+With Vaada:
 - You program automatic, trustless consequences for *your own* verified actions
 
 **The machine decides.** No disputes. No "I forgot to log it." No referee. The oracle fetches your data, the contract evaluates the outcome, the money moves. This pattern — verifiable real-world outcomes triggering on-chain settlement — is new.
@@ -67,7 +69,7 @@ This unlocks consequences for any behavior with a data source:
 | Health | Oura, Whoop | Stake on sleep, recovery |
 | Sobriety | Wearables, biomarkers | Stake on streaks |
 
-GoalStake is the first product built on this primitive. It won't be the last.
+Vaada is the first product built on this primitive. It won't be the last.
 
 ---
 
@@ -78,7 +80,7 @@ GoalStake is the first product built on this primitive. It won't be the last.
 ```
 User Stakes USDC
        ↓
-   GoalStake.sol (holds funds, tracks challenges)
+   VaadaStake.sol (holds funds, tracks challenges)
        ↓
    Deadline Reached
        ↓
@@ -134,8 +136,8 @@ This creates:
 
 ## Why Crypto?
 
-| Traditional Apps | GoalStake |
-|------------------|-----------|
+| Traditional Apps | Vaada |
+|------------------|-------|
 | "Challenges" with no stakes | Real money on the line |
 | Trust the company | Trust the code |
 | Refunds available | No refunds, no excuses |
@@ -156,7 +158,7 @@ Crypto enables:
 
 Commitment isn't a feature — it's a **market**.
 
-Every coach, gym buddy, AA sponsor, and accountability partner proves demand exists. People pay for someone to hold them to their word. GoalStake makes that programmable.
+Every coach, gym buddy, AA sponsor, and accountability partner proves demand exists. People pay for someone to hold them to their word. Vaada makes that programmable.
 
 **Market signals:**
 - $15B+ spent on personal coaching annually
@@ -170,7 +172,7 @@ Every coach, gym buddy, AA sponsor, and accountability partner proves demand exi
 - Habit/productivity apps: **$12B**
 - Corporate wellness: **$56B**
 
-GoalStake isn't competing in these markets. We're creating **The Commitment Market** — a new category where commitment meets capital.
+Vaada isn't competing in these markets. We're creating **The Commitment Market** — a new category where commitment meets capital.
 
 ### Competitive Landscape
 
@@ -182,7 +184,7 @@ GoalStake isn't competing in these markets. We're creating **The Commitment Mark
 | Strava | Social fitness | No financial stakes |
 | Polymarket | Predict others | Can't bet on yourself |
 
-**GoalStake's edge**: Bet on yourself + crypto-native + automated verification.
+**Vaada's edge**: Bet on yourself + crypto-native + automated verification.
 
 ---
 
@@ -213,7 +215,7 @@ GoalStake isn't competing in these markets. We're creating **The Commitment Mark
 
 ## Expansion Verticals
 
-GoalStake starts with fitness but the model applies to any verifiable commitment:
+Vaada starts with fitness but the model applies to any verifiable commitment:
 
 | Vertical | Verification Source |
 |----------|---------------------|
@@ -302,7 +304,7 @@ The infrastructure is ready. The psychology is proven. The market is waiting.
 
 ## The Vision
 
-GoalStake becomes the **commitment layer for the internet**.
+Vaada becomes the **commitment layer for the internet**.
 
 Every commitment — fitness, learning, work, habits — can have financial stakes attached. Not as punishment, but as **commitment devices** that help people become who they want to be.
 
@@ -312,10 +314,10 @@ We're not building a fitness app. We're building **The Commitment Market**.
 
 ## Links
 
-- **Website**: https://goalstake.co
-- **GitHub**: https://github.com/2shanez/goalstake
-- **Twitter**: [@GoalStake](https://twitter.com/goalstake)
-- **Contact**: shane@goalstake.co
+- **Website**: https://vaada.io
+- **GitHub**: https://github.com/2shanez/vaada
+- **Twitter**: [@vaaborhood](https://twitter.com/vaaborhood)
+- **Contact**: shane@vaada.io
 
 ---
 

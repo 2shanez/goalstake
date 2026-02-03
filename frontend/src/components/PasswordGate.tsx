@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 
-const SITE_PASSWORD = 'goalstake2026' // Change this to whatever you want
+const SITE_PASSWORD = 'vaada2026' // Change this to whatever you want
 
 export function PasswordGate({ children }: { children: React.ReactNode }) {
   const [authorized, setAuthorized] = useState(false)
@@ -13,7 +13,7 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setMounted(true)
     // Check if already authorized
-    const saved = localStorage.getItem('goalstake_auth')
+    const saved = localStorage.getItem('vaada_auth')
     if (saved === 'true') {
       setAuthorized(true)
     }
@@ -22,7 +22,7 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (password === SITE_PASSWORD) {
-      localStorage.setItem('goalstake_auth', 'true')
+      localStorage.setItem('vaada_auth', 'true')
       setAuthorized(true)
       setError(false)
     } else {
@@ -43,7 +43,7 @@ export function PasswordGate({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-[var(--background)] flex items-center justify-center px-6">
       <div className="max-w-sm w-full">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-[#2EE59D] mb-2">goalstake</h1>
+          <h1 className="text-2xl font-bold text-[#2EE59D] mb-2">vaada</h1>
           <p className="text-[var(--text-secondary)] text-sm">Private beta access</p>
         </div>
         
