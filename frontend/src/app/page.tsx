@@ -188,7 +188,7 @@ export default function Home() {
               { step: '01', icon: '👤', title: 'Sign up', desc: 'Email or Google. No crypto needed.' },
               { step: '02', icon: '🤝', title: 'Make a promise', desc: 'Choose your commitment.' },
               { step: '03', icon: '💵', title: 'Stake money', desc: 'Put real money on the line.' },
-              { step: '04', icon: '🏆', title: 'Keep it', desc: 'Win = keep stake + bonus.' },
+              { step: '04', icon: '🏆', title: 'Keep it', desc: 'Keep stake + earn from those who don\'t.' },
             ].map((item, i) => (
               <div 
                 key={item.step} 
