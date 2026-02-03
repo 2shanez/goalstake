@@ -65,6 +65,20 @@ const GOALSTAKE_ABI = [
     ],
     outputs: [],
   },
+  {
+    name: 'isEntryOpen',
+    type: 'function',
+    inputs: [{ name: 'goalId', type: 'uint256' }],
+    outputs: [{ type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    name: 'getGoalPhase',
+    type: 'function',
+    inputs: [{ name: 'goalId', type: 'uint256' }],
+    outputs: [{ type: 'uint8' }],
+    stateMutability: 'view',
+  },
 ] as const
 
 export interface Goal {
@@ -99,6 +113,27 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const [stakeAmount, setStakeAmount] = useState(goal.minStake.toString())
   const [step, setStep] = useState<'idle' | 'approving' | 'joining' | 'storing-token' | 'done'>('idle')
   const stravaConnected = isStravaConnected()
+  
+  // Check if entry is still open (V3)
+  const { data: isEntryOpen } = useReadContract({
+    address: contracts.goalStake,
+    abi: GOALSTAKE_ABI,
+    functionName: 'isEntryOpen',
+    args: goal.onChainId !== undefined ? [BigInt(goal.onChainId)] : undefined,
+    query: { enabled: goal.onChainId !== undefined },
+  })
+
+  // Get goal phase (V3): 0=Entry, 1=Competition, 2=AwaitingSettlement, 3=Settled
+  const { data: goalPhase } = useReadContract({
+    address: contracts.goalStake,
+    abi: GOALSTAKE_ABI,
+    functionName: 'getGoalPhase',
+    args: goal.onChainId !== undefined ? [BigInt(goal.onChainId)] : undefined,
+    query: { enabled: goal.onChainId !== undefined },
+  })
+
+  const entryOpen = isEntryOpen === undefined ? true : isEntryOpen as boolean
+  const phase = goalPhase as number | undefined
   
   // Check if user has token stored on-chain for Chainlink
   const { data: hasTokenOnChain, refetch: refetchToken } = useReadContract({
@@ -315,12 +350,25 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
     >
       {/* Card Content */}
       <div className="p-4">
-        {/* Header Row: Category + Duration + Emoji */}
+        {/* Header Row: Category + Phase + Duration + Emoji */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${catStyle.bg} ${catStyle.text}`}>
               {goal.category.toUpperCase()}
             </span>
+            {phase !== undefined && (
+              <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
+                phase === 0 ? 'bg-green-50 text-green-600' :
+                phase === 1 ? 'bg-yellow-50 text-yellow-600' :
+                phase === 2 ? 'bg-orange-50 text-orange-600' :
+                'bg-gray-50 text-gray-600'
+              }`}>
+                {phase === 0 ? '🟢 ENTRY OPEN' :
+                 phase === 1 ? '🏃 IN PROGRESS' :
+                 phase === 2 ? '⏳ VERIFYING' :
+                 '✓ SETTLED'}
+              </span>
+            )}
             <span className="text-[10px] text-[var(--text-secondary)] font-medium">{durationText}</span>
           </div>
           <span className="text-2xl group-hover:scale-110 transition-transform">{goal.emoji}</span>
@@ -363,13 +411,17 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
           <button
             onClick={(e) => {
               e.stopPropagation()
+              if (!entryOpen) return
               isConnected ? setExpanded(true) : login()
             }}
-            className="w-full py-2.5 bg-[#2EE59D] text-black text-sm font-bold rounded-lg 
-              hover:bg-[#26c987] active:scale-[0.98] transition-all duration-150
-              shadow-sm hover:shadow-md"
+            disabled={!entryOpen}
+            className={`w-full py-2.5 text-sm font-bold rounded-lg transition-all duration-150 ${
+              !entryOpen
+                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                : 'bg-[#2EE59D] text-black hover:bg-[#26c987] active:scale-[0.98] shadow-sm hover:shadow-md'
+            }`}
           >
-            Join Goal · ${goal.minStake}+
+            {!entryOpen ? 'Entry Closed' : `Join Promise · $${goal.minStake}+`}
           </button>
         )}
       </div>

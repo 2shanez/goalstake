@@ -114,15 +114,15 @@ function NotifyModal({
 }
 
 const FEATURED_GOALS: Goal[] = [
-  // Test Goals
+  // Test Goals (V3 - IDs start at 0)
   {
     id: 'test-1',
-    onChainId: 13,
+    onChainId: 0,  // V3 goal 0
     title: 'Quick Test',
-    description: 'Run 0.2 miles in 2 minutes',
+    description: 'Run 0.32 miles in 5 minutes',
     emoji: '🧪',
-    targetMiles: 0.2,
-    durationDays: 0.00139,
+    targetMiles: 0.32,
+    durationDays: 0.00347,
     minStake: 1,
     maxStake: 10,
     participants: 0,
@@ -131,7 +131,7 @@ const FEATURED_GOALS: Goal[] = [
   },
   {
     id: 'test-2',
-    onChainId: 1,
+    onChainId: undefined,  // Not created on V3 yet
     title: '5-Min Test',
     description: 'Run 0.5 miles in 5 minutes',
     emoji: '⚗️',
@@ -147,7 +147,7 @@ const FEATURED_GOALS: Goal[] = [
   // Daily Goals
   {
     id: '1',
-    onChainId: 10,
+    onChainId: undefined,  // Not created on V3 yet
     title: 'Daily Mile',
     description: 'Run 1 mile today',
     emoji: '🌅',
@@ -161,7 +161,7 @@ const FEATURED_GOALS: Goal[] = [
   },
   {
     id: '2',
-    onChainId: 3,
+    onChainId: undefined,  // Not created on V3 yet
     title: 'Daily 3',
     description: 'Run 3 miles today',
     emoji: '☀️',
@@ -177,7 +177,7 @@ const FEATURED_GOALS: Goal[] = [
   // Weekly Goals
   {
     id: '3',
-    onChainId: 4,
+    onChainId: undefined,  // Not created on V3 yet
     title: 'Weekend Warrior',
     description: 'Run 10 miles this weekend',
     emoji: '💪',
@@ -191,7 +191,7 @@ const FEATURED_GOALS: Goal[] = [
   },
   {
     id: '4', 
-    onChainId: 5,
+    onChainId: undefined,  // Not created on V3 yet
     title: 'Weekly 15',
     description: 'Run 15 miles this week',
     emoji: '⚡',
@@ -207,7 +207,7 @@ const FEATURED_GOALS: Goal[] = [
   // Monthly Goals
   {
     id: '5',
-    onChainId: 6,
+    onChainId: undefined,  // Not created on V3 yet
     title: 'February 50',
     description: 'Run 50 miles this month',
     emoji: '🏃',
@@ -221,7 +221,7 @@ const FEATURED_GOALS: Goal[] = [
   },
   {
     id: '6',
-    onChainId: 7,
+    onChainId: undefined,  // Not created on V3 yet
     title: 'Marathon Prep',
     description: 'Hit 100 miles in 30 days',
     emoji: '🏅',
