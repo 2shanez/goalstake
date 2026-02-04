@@ -32,12 +32,13 @@ export function StravaConnect() {
   const [stravaConnected, setStravaConnected] = useState(false)
   const [athleteName, setAthleteName] = useState<string | null>(null)
   const [isStoring, setIsStoring] = useState(false)
-  
+  const [tokenNeedsRefresh, setTokenNeedsRefresh] = useState(false)
+
   const isWrongNetwork = chainId !== baseSepolia.id
-  
+
   const { writeContract, data: hash, error: writeError } = useWriteContract()
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
-  
+
   // Check if user already has token stored on-chain
   const { data: hasTokenOnChain, refetch: refetchHasToken } = useReadContract({
     address: CONTRACTS[baseSepolia.id].oracle,
@@ -46,6 +47,28 @@ export function StravaConnect() {
     args: address ? [address] : undefined,
     query: { enabled: !!address },
   })
+
+  // Check if token needs refresh (every 5 minutes)
+  useEffect(() => {
+    if (!hasTokenOnChain) return
+
+    const checkTokenExpiry = async () => {
+      try {
+        const res = await fetch('/api/strava/update-onchain')
+        if (res.ok) {
+          const data = await res.json()
+          setTokenNeedsRefresh(data.needsRefresh || false)
+        }
+      } catch (err) {
+        console.error('Failed to check token expiry:', err)
+      }
+    }
+
+    checkTokenExpiry()
+    const interval = setInterval(checkTokenExpiry, 5 * 60 * 1000) // Check every 5 minutes
+
+    return () => clearInterval(interval)
+  }, [hasTokenOnChain])
 
   // Check for Strava connection on mount
   useEffect(() => {
@@ -76,6 +99,7 @@ export function StravaConnect() {
     if (isSuccess) {
       refetchHasToken()
       setIsStoring(false)
+      setTokenNeedsRefresh(false)
     }
   }, [isSuccess, refetchHasToken])
 
@@ -89,11 +113,11 @@ export function StravaConnect() {
   const handleStoreToken = async () => {
     setIsStoring(true)
     try {
-      // Fetch token from our API
-      const res = await fetch('/api/strava/token')
+      // Fetch token from our API (auto-refreshes if needed)
+      const res = await fetch('/api/strava/update-onchain')
       if (!res.ok) throw new Error('Failed to get token')
       const { token } = await res.json()
-      
+
       // Store on-chain
       writeContract({
         address: CONTRACTS[baseSepolia.id].oracle,
@@ -107,10 +131,68 @@ export function StravaConnect() {
     }
   }
 
+  const handleRefreshToken = async () => {
+    setIsStoring(true)
+    try {
+      // Get fresh token
+      const res = await fetch('/api/strava/update-onchain')
+      if (!res.ok) throw new Error('Failed to refresh token')
+      const { token } = await res.json()
+
+      // Update on-chain
+      writeContract({
+        address: CONTRACTS[baseSepolia.id].oracle,
+        abi: automationAbi,
+        functionName: 'storeToken',
+        args: [token],
+      })
+      setTokenNeedsRefresh(false)
+    } catch (err) {
+      console.error('Error refreshing token:', err)
+      setIsStoring(false)
+    }
+  }
+
   if (!isConnected) return null
 
   // Already stored on-chain - fully verified
   if (hasTokenOnChain) {
+    // Token needs refresh
+    if (tokenNeedsRefresh) {
+      // Wrong network - need to switch first
+      if (isWrongNetwork) {
+        return (
+          <button
+            onClick={() => switchChain({ chainId: baseSepolia.id })}
+            disabled={isSwitching}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-sm font-medium hover:bg-yellow-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            title="Switch to Base Sepolia to refresh token"
+          >
+            <span className="text-yellow-600">
+              {isSwitching ? 'Switching...' : '⚠️ Switch to Base Sepolia'}
+            </span>
+          </button>
+        )
+      }
+
+      return (
+        <button
+          onClick={handleRefreshToken}
+          disabled={isStoring || isConfirming}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-sm font-medium hover:bg-yellow-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          title="Your Strava token expired. Click to refresh and update on-chain."
+        >
+          <svg className="w-4 h-4 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          <span className="text-yellow-600">
+            {isConfirming ? 'Confirming...' : isStoring ? 'Refreshing...' : 'Refresh Strava Token'}
+          </span>
+        </button>
+      )
+    }
+
+    // Token is fresh - show verified
     return (
       <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2EE59D]/10 border border-[#2EE59D]/20">
         <svg className="w-4 h-4 text-[#2EE59D]" fill="currentColor" viewBox="0 0 20 20">

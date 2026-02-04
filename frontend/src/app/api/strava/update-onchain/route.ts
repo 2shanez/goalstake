@@ -21,9 +21,8 @@ async function refreshToken(refreshToken: string) {
   return await tokenResponse.json()
 }
 
-// Returns the Strava access token for on-chain storage
-// ⚠️ TESTNET ONLY - In production, use Chainlink DON secrets
-// Automatically refreshes the token if expired or expiring soon
+// Returns a fresh Strava access token for updating on-chain storage
+// This endpoint handles auto-refresh if needed
 export async function GET(request: NextRequest) {
   const accessToken = request.cookies.get('strava_access_token')?.value
   const expiresAt = request.cookies.get('strava_expires_at')?.value
@@ -33,14 +32,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'No Strava token found' }, { status: 401 })
   }
 
-  // Check if token is expired or will expire in the next 5 minutes
+  // Check if token is expired or will expire in the next hour
+  // Use a longer buffer for on-chain updates to ensure token is fresh
   const expiryTime = expiresAt ? parseInt(expiresAt) : 0
   const now = Math.floor(Date.now() / 1000)
-  const bufferSeconds = 5 * 60 // 5 minutes buffer
+  const bufferSeconds = 60 * 60 // 1 hour buffer for on-chain updates
 
-  // Token is valid - return it
-  if (expiryTime === 0 || expiryTime >= now + bufferSeconds) {
-    return NextResponse.json({ token: accessToken })
+  // Token is still fresh - return it
+  if (expiryTime > 0 && expiryTime >= now + bufferSeconds) {
+    return NextResponse.json({
+      token: accessToken,
+      expiresAt: expiryTime,
+      needsRefresh: false
+    })
   }
 
   // Token expired or expiring soon - refresh it
@@ -54,6 +58,8 @@ export async function GET(request: NextRequest) {
     // Update cookies with new tokens
     const response = NextResponse.json({
       token: tokenData.access_token,
+      expiresAt: tokenData.expires_at,
+      needsRefresh: true,
       refreshed: true
     })
 

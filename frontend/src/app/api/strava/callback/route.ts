@@ -37,11 +37,12 @@ export async function GET(request: NextRequest) {
     }
 
     const tokenData = await tokenResponse.json()
-    
+
     // tokenData contains:
     // - access_token: string
     // - refresh_token: string
-    // - expires_at: number
+    // - expires_at: number (Unix timestamp)
+    // - expires_in: number (seconds)
     // - athlete: { id, firstname, lastname, ... }
 
     // For MVP, we'll pass the token back to the frontend via URL params
@@ -50,7 +51,7 @@ export async function GET(request: NextRequest) {
     redirectUrl.searchParams.set('strava', 'success')
     redirectUrl.searchParams.set('athlete_id', tokenData.athlete.id.toString())
     redirectUrl.searchParams.set('athlete_name', `${tokenData.athlete.firstname} ${tokenData.athlete.lastname}`)
-    
+
     // Store token in a cookie (httpOnly for security)
     const response = NextResponse.redirect(redirectUrl)
     response.cookies.set('strava_access_token', tokenData.access_token, {
@@ -64,6 +65,12 @@ export async function GET(request: NextRequest) {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 days
+    })
+    response.cookies.set('strava_expires_at', tokenData.expires_at.toString(), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: tokenData.expires_in || 21600,
     })
     response.cookies.set('strava_athlete_id', tokenData.athlete.id.toString(), {
       httpOnly: false, // Allow JS to read this
