@@ -103,6 +103,27 @@ export function StravaConnect() {
     }
   }, [isSuccess, refetchHasToken])
 
+  const handleDisconnect = async () => {
+    try {
+      await fetch('/api/strava/disconnect', { method: 'POST' })
+      // Clear cookie-based state
+      setStravaConnected(false)
+      setAthleteName(null)
+      setTokenNeedsRefresh(false)
+    } catch (err) {
+      console.error('Error disconnecting Strava:', err)
+    }
+  }
+
+  const handleReconnect = async () => {
+    await handleDisconnect()
+    // Redirect to Strava OAuth
+    const redirectUri = `${window.location.origin}/api/strava/callback`
+    const scope = 'read,activity:read_all'
+    const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${STRAVA_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}`
+    window.location.href = stravaAuthUrl
+  }
+
   const handleConnectStrava = () => {
     const redirectUri = `${window.location.origin}/api/strava/callback`
     const scope = 'read,activity:read_all'
@@ -192,13 +213,22 @@ export function StravaConnect() {
       )
     }
 
-    // Token is fresh - show verified
+    // Token is fresh - show verified with reconnect option
     return (
-      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2EE59D]/10 border border-[#2EE59D]/20">
-        <svg className="w-4 h-4 text-[#2EE59D]" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-        </svg>
-        <span className="text-sm font-medium text-[#2EE59D]">Strava Verified</span>
+      <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#2EE59D]/10 border border-[#2EE59D]/20">
+          <svg className="w-4 h-4 text-[#2EE59D]" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+          <span className="text-sm font-medium text-[#2EE59D]">Strava Verified</span>
+        </div>
+        <button
+          onClick={handleReconnect}
+          className="text-xs text-zinc-500 hover:text-[#FC4C02] transition-colors underline underline-offset-2"
+          title="Disconnect and reconnect your Strava account"
+        >
+          Reconnect
+        </button>
       </div>
     )
   }
