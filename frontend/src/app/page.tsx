@@ -120,13 +120,13 @@ export default function Home() {
 
       {/* Category Filter Pills - Sticky */}
       <div id="promises" className="sticky top-[57px] z-30 bg-[var(--background)]/80 backdrop-blur-md border-b border-[var(--border)] py-3">
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-          <div className="flex gap-2 p-1 bg-[var(--surface)] rounded-full">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
+          <div className="flex gap-1.5 sm:gap-2 p-1 bg-[var(--surface)] rounded-full overflow-x-auto hide-scrollbar">
             {categories.map(cat => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200
+                className={`px-3 sm:px-4 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap
                   ${activeCategory === cat 
                     ? 'bg-[var(--background)] text-[var(--foreground)] shadow-sm' 
                     : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'}`}
@@ -135,7 +135,7 @@ export default function Home() {
               </button>
             ))}
           </div>
-          <div className="text-sm text-[var(--text-secondary)] hidden sm:flex items-center gap-2">
+          <div className="text-xs sm:text-sm text-[var(--text-secondary)] hidden sm:flex items-center gap-2 flex-shrink-0">
             <span className="w-2 h-2 rounded-full bg-[#2EE59D] animate-pulse" />
             8 promises live
           </div>
@@ -143,30 +143,30 @@ export default function Home() {
       </div>
 
       {/* Promises Grid */}
-      <section className="py-8 px-6 relative">
+      <section className="py-6 sm:py-8 px-4 sm:px-6 relative">
         <div className="max-w-6xl mx-auto">
           <BrowseGoals filter={activeCategory} />
         </div>
       </section>
 
       {/* Stats Bar - Full Width */}
-      <section className="border-t border-[var(--border)] py-10 px-6">
+      <section className="border-t border-[var(--border)] py-8 sm:py-10 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="flex justify-center gap-12">
+          <div className="flex justify-center gap-6 sm:gap-12">
             <div className="text-center">
-              <p className="text-3xl font-bold tabular-nums">8</p>
-              <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Active Promises</p>
+              <p className="text-2xl sm:text-3xl font-bold tabular-nums">8</p>
+              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Active Promises</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-[#2EE59D] tabular-nums">$0</p>
-              <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total Staked</p>
+              <p className="text-2xl sm:text-3xl font-bold text-[#2EE59D] tabular-nums">$0</p>
+              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total Staked</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold tabular-nums">0</p>
-              <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Participants</p>
+              <p className="text-2xl sm:text-3xl font-bold tabular-nums">0</p>
+              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Participants</p>
             </div>
           </div>
-          <p className="text-center text-sm text-[var(--text-secondary)] mt-4">
+          <p className="text-center text-xs sm:text-sm text-[var(--text-secondary)] mt-4">
             Be the first to stake on a promise ✨
           </p>
         </div>
@@ -180,7 +180,7 @@ export default function Home() {
             <h2 className="text-2xl font-bold mt-2">How It Works</h2>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 relative">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 relative">
             {/* Connecting line */}
             <div className="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-0.5 bg-gradient-to-r from-transparent via-[var(--border)] to-transparent" />
             
@@ -239,7 +239,7 @@ export default function Home() {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-20 px-6 bg-gray-900 text-white relative overflow-hidden">
+      <section className="py-12 sm:py-20 px-4 sm:px-6 bg-gray-900 text-white relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#2EE59D]/20 rounded-full blur-3xl" />
@@ -247,18 +247,18 @@ export default function Home() {
         </div>
         
         <div className="max-w-3xl mx-auto text-center relative">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
             Ready to stake your word?
           </h2>
-          <p className="text-gray-400 mb-8 text-lg">
+          <p className="text-gray-400 mb-6 sm:mb-8 text-base sm:text-lg">
             Join the commitment market. Put money on your promises.
           </p>
           <button 
             onClick={handleGetStarted}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#2EE59D] text-black font-bold rounded-xl 
+            className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-[#2EE59D] text-black font-bold rounded-xl 
               hover:bg-white hover:shadow-xl hover:shadow-[#2EE59D]/25 hover:-translate-y-1
               active:translate-y-0
-              transition-all duration-200 text-lg"
+              transition-all duration-200 text-base sm:text-lg"
           >
             Get Started
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

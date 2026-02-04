@@ -295,7 +295,7 @@ export function BrowseGoals({ filter = 'All' }: BrowseGoalsProps) {
   return (
     <div>
       {/* Goals Grid with stagger animation */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {filteredGoals.map((goal, index) => (
           <div
             key={goal.id}
