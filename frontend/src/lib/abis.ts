@@ -1,0 +1,148 @@
+// Shared ABIs for Vaada contracts
+
+export const USDC_ABI = [
+  {
+    name: 'approve',
+    type: 'function',
+    inputs: [
+      { name: 'spender', type: 'address' },
+      { name: 'amount', type: 'uint256' },
+    ],
+    outputs: [{ type: 'bool' }],
+  },
+  {
+    name: 'allowance',
+    type: 'function',
+    inputs: [
+      { name: 'owner', type: 'address' },
+      { name: 'spender', type: 'address' },
+    ],
+    outputs: [{ type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    name: 'balanceOf',
+    type: 'function',
+    inputs: [{ name: 'account', type: 'address' }],
+    outputs: [{ type: 'uint256' }],
+    stateMutability: 'view',
+  },
+] as const
+
+export const GOALSTAKE_ABI = [
+  {
+    name: 'joinGoal',
+    type: 'function',
+    inputs: [
+      { name: 'goalId', type: 'uint256' },
+      { name: 'stake', type: 'uint256' },
+    ],
+    outputs: [],
+  },
+  {
+    name: 'isEntryOpen',
+    type: 'function',
+    inputs: [{ name: 'goalId', type: 'uint256' }],
+    outputs: [{ type: 'bool' }],
+    stateMutability: 'view',
+  },
+  {
+    name: 'getGoalPhase',
+    type: 'function',
+    inputs: [{ name: 'goalId', type: 'uint256' }],
+    outputs: [{ type: 'uint8' }],
+    stateMutability: 'view',
+  },
+  {
+    name: 'getParticipant',
+    type: 'function',
+    inputs: [
+      { name: 'goalId', type: 'uint256' },
+      { name: 'user', type: 'address' },
+    ],
+    outputs: [
+      {
+        type: 'tuple',
+        components: [
+          { name: 'user', type: 'address' },
+          { name: 'stake', type: 'uint256' },
+          { name: 'actualMiles', type: 'uint256' },
+          { name: 'verified', type: 'bool' },
+          { name: 'succeeded', type: 'bool' },
+          { name: 'claimed', type: 'bool' },
+        ],
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    name: 'claimPayout',
+    type: 'function',
+    inputs: [{ name: 'goalId', type: 'uint256' }],
+    outputs: [],
+  },
+] as const
+
+export const AUTOMATION_ABI = [
+  {
+    name: 'storeToken',
+    type: 'function',
+    stateMutability: 'nonpayable',
+    inputs: [{ name: 'token', type: 'string' }],
+    outputs: [],
+  },
+  {
+    name: 'hasToken',
+    type: 'function',
+    stateMutability: 'view',
+    inputs: [{ name: 'user', type: 'address' }],
+    outputs: [{ type: 'bool' }],
+  },
+] as const
+
+// Types
+export interface Participant {
+  user: string
+  stake: bigint
+  actualMiles: bigint
+  verified: boolean
+  succeeded: boolean
+  claimed: boolean
+}
+
+export interface Goal {
+  id: string
+  onChainId?: number
+  title: string
+  description: string
+  emoji: string
+  targetMiles: number
+  durationDays: number
+  minStake: number
+  maxStake: number
+  participants: number
+  totalStaked: number
+  category: string
+}
+
+// Goal phases
+export enum GoalPhase {
+  Entry = 0,
+  Competition = 1,
+  AwaitingSettlement = 2,
+  Settled = 3,
+}
+
+export const PHASE_LABELS: Record<GoalPhase, { label: string; emoji: string; color: string }> = {
+  [GoalPhase.Entry]: { label: 'ENTRY OPEN', emoji: '🟢', color: 'bg-green-50 text-green-600' },
+  [GoalPhase.Competition]: { label: 'IN PROGRESS', emoji: '🏃', color: 'bg-yellow-50 text-yellow-600' },
+  [GoalPhase.AwaitingSettlement]: { label: 'VERIFYING', emoji: '⏳', color: 'bg-orange-50 text-orange-600' },
+  [GoalPhase.Settled]: { label: 'SETTLED', emoji: '✓', color: 'bg-gray-50 text-gray-600' },
+}
+
+export const CATEGORY_STYLES: Record<string, { bg: string; text: string }> = {
+  Test: { bg: 'bg-orange-50', text: 'text-orange-600' },
+  Daily: { bg: 'bg-blue-50', text: 'text-blue-600' },
+  Weekly: { bg: 'bg-purple-50', text: 'text-purple-600' },
+  Monthly: { bg: 'bg-emerald-50', text: 'text-emerald-600' },
+}
