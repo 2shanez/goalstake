@@ -116,6 +116,20 @@ function NotifyModal({
 const FEATURED_GOALS: Goal[] = [
   // Test Goals (V3 - IDs start at 0)
   {
+    id: 'test-win',
+    onChainId: 9,  // V3 goal 9 - WIN Test
+    title: 'WIN Test',
+    description: 'Run 0.1 miles — test the win path',
+    emoji: '🏆',
+    targetMiles: 0.1,
+    durationDays: 0.0625,  // ~90 min
+    minStake: 1,
+    maxStake: 5,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Test',
+  },
+  {
     id: 'test-e2e',
     onChainId: 8,  // V3 goal 8 - E2E Test
     title: 'E2E Test',
