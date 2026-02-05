@@ -298,46 +298,47 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
         {/* Timeline */}
         {!isSettled && (
           <div className="py-4 border-t border-[var(--border)]/50">
-            <div className="space-y-3">
+            <div className="flex items-start">
               {[
                 { 
-                  label: 'Entry open', 
+                  label: 'Entry', 
                   desc: goalDetails.entryDeadline 
-                    ? `Closes in ${formatTimeLeft(goalDetails.entryDeadline)}` 
-                    : 'Join before entry closes'
+                    ? formatTimeLeft(goalDetails.entryDeadline)
+                    : 'Open'
                 },
                 { 
-                  label: 'Competition', 
+                  label: 'Compete', 
                   desc: goalDetails.deadline 
-                    ? `Complete by ${formatTimeLeft(goalDetails.deadline)}` 
-                    : `${durationText} to hit your goal`
+                    ? formatTimeLeft(goalDetails.deadline)
+                    : durationText
                 },
                 { 
-                  label: 'Verification', 
-                  desc: 'Auto-checked via Strava' 
+                  label: 'Verify', 
+                  desc: 'Strava' 
                 },
                 { 
                   label: 'Payout', 
-                  desc: 'Winners split the pool' 
+                  desc: 'Auto' 
                 },
               ].map((step, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <div className="flex flex-col items-center">
-                    <div className={`w-3 h-3 rounded-full flex-shrink-0 mt-0.5 ${
+                <div key={i} className="flex-1 flex flex-col items-center">
+                  <div className="flex items-center w-full mb-1.5">
+                    {i > 0 && (
+                      <div className={`flex-1 h-[2px] ${i <= currentPhaseStep ? 'bg-[#2EE59D]' : 'bg-[var(--border)]'}`} />
+                    )}
+                    <div className={`w-3 h-3 rounded-full flex-shrink-0 ${
                       i < currentPhaseStep ? 'bg-[#2EE59D]' :
                       i === currentPhaseStep ? 'bg-[#2EE59D] ring-4 ring-[#2EE59D]/20' :
                       'bg-[var(--border)]'
                     }`} />
                     {i < 3 && (
-                      <div className={`w-[2px] h-4 mt-1 ${i < currentPhaseStep ? 'bg-[#2EE59D]' : 'bg-[var(--border)]'}`} />
+                      <div className={`flex-1 h-[2px] ${i < currentPhaseStep ? 'bg-[#2EE59D]' : 'bg-[var(--border)]'}`} />
                     )}
                   </div>
-                  <div className="-mt-0.5">
-                    <p className={`text-xs font-semibold ${i <= currentPhaseStep ? 'text-[var(--foreground)]' : 'text-[var(--text-secondary)]'}`}>
-                      {step.label}
-                    </p>
-                    <p className="text-[10px] text-[var(--text-secondary)]">{step.desc}</p>
-                  </div>
+                  <p className={`text-[10px] font-semibold ${i <= currentPhaseStep ? 'text-[var(--foreground)]' : 'text-[var(--text-secondary)]'}`}>
+                    {step.label}
+                  </p>
+                  <p className="text-[9px] text-[var(--text-secondary)]">{step.desc}</p>
                 </div>
               ))}
             </div>
