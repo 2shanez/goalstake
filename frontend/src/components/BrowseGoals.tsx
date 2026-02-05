@@ -244,7 +244,7 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
     ? FEATURED_GOALS.filter(g => filter === 'All' || g.onChainId !== undefined)
     : FEATURED_GOALS.filter(g => g.category === filter)
 
-  const showComingSoon = filter === 'Active' || filter === 'All'
+  const showComingSoon = false // Hidden for now
 
   // Calculate totals
   const totalParticipants = FEATURED_GOALS.reduce((sum, g) => sum + g.participants, 0)
