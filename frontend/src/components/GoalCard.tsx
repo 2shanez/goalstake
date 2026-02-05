@@ -401,19 +401,19 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
           <div className="relative flex items-center">
             <button 
               onClick={(e) => { e.stopPropagation(); if (participants > 0) setShowPlayers(!showPlayers) }}
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#1a1a2e] py-1 px-3 hover:bg-[#252547] transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full bg-[var(--surface)] border border-[var(--border)] py-1 px-3 hover:border-[#2EE59D]/50 transition-colors"
             >
-              <span className="text-[11px] font-medium text-white">
+              <span className="text-[11px] font-medium text-[var(--foreground)]">
                 {participants === 0 ? '0' : participants.toLocaleString()} {participants === 1 ? 'player' : 'players'}
               </span>
-              <span className={`text-white/50 text-xs transition-transform ${showPlayers ? 'rotate-90' : ''}`}>›</span>
+              <span className={`text-[var(--text-secondary)] text-xs transition-transform ${showPlayers ? 'rotate-90' : ''}`}>›</span>
             </button>
           
           {showPlayers && playerList.length > 0 && (
-            <div className="absolute right-0 top-full mt-1 z-10 bg-[#1a1a2e] border border-[var(--border)] rounded-xl p-2 min-w-[200px] shadow-xl">
+            <div className="absolute right-0 top-full mt-1 z-10 bg-[var(--surface)] border border-[var(--border)] rounded-xl p-2 min-w-[200px] shadow-xl">
               {playerList.map((p, i) => (
-                <div key={i} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-white/5">
-                  <span className="text-[11px] text-white/80 font-mono">
+                <div key={i} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-[var(--background)]">
+                  <span className="text-[11px] text-[var(--text-secondary)] font-mono">
                     {p.address.slice(0, 6)}...{p.address.slice(-4)}
                   </span>
                   <span className="text-[11px] font-medium text-[#2EE59D]">${p.stake}</span>
