@@ -162,7 +162,11 @@ export default function Home() {
             </div>
             <div className="text-center">
               <p className="text-2xl sm:text-3xl font-bold tabular-nums">1</p>
-              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Participants</p>
+              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total Participants</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl sm:text-3xl font-bold tabular-nums">7</p>
+              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total Promises</p>
             </div>
           </div>
           <p className="text-center text-xs sm:text-sm text-[var(--text-secondary)] mt-4">
