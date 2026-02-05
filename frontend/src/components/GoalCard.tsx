@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSwitchChain } from 'wagmi'
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSwitchChain, useReadContracts } from 'wagmi'
 import { usePrivy } from '@privy-io/react-auth'
-import { parseUnits } from 'viem'
+import { parseUnits, formatUnits } from 'viem'
 import { baseSepolia } from 'wagmi/chains'
 import { isStravaConnected, getStravaAuthUrl } from '@/lib/strava'
 import { useContracts, useNetworkCheck, useUSDC, useGoalState, useGoalDetails, useParticipant, useStravaToken } from '@/lib/hooks'
@@ -52,6 +52,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
 
   // Local state
   const [expanded, setExpanded] = useState(false)
+  const [showPlayers, setShowPlayers] = useState(false)
   const [stakeAmount, setStakeAmount] = useState(goal.minStake.toString())
   const [step, setStep] = useState<Step>('idle')
   const stravaConnected = isStravaConnected()
@@ -210,6 +211,52 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const pooled = goalDetails.totalStaked || 0
   const participants = goalDetails.participantCount || 0
 
+  // Fetch participant addresses from on-chain array
+  const participantIndexCalls = goal.onChainId !== undefined && participants > 0
+    ? Array.from({ length: participants }, (_, i) => ({
+        address: contracts.goalStake as `0x${string}`,
+        abi: [{
+          name: 'goalParticipants',
+          type: 'function',
+          inputs: [{ name: 'goalId', type: 'uint256' }, { name: '', type: 'uint256' }],
+          outputs: [{ type: 'address' }],
+          stateMutability: 'view',
+        }] as const,
+        functionName: 'goalParticipants' as const,
+        args: [BigInt(goal.onChainId!), BigInt(i)],
+      }))
+    : []
+
+  const { data: participantAddrsData } = useReadContracts({
+    contracts: participantIndexCalls,
+    query: { enabled: participantIndexCalls.length > 0 },
+  })
+
+  // Read each participant's stake
+  const playerAddresses = (participantAddrsData?.map(r => r.result as string).filter(Boolean)) || []
+  
+  const participantDetailCalls = goal.onChainId !== undefined && playerAddresses.length > 0
+    ? playerAddresses.map(addr => ({
+        address: contracts.goalStake as `0x${string}`,
+        abi: GOALSTAKE_ABI as any,
+        functionName: 'getParticipant' as const,
+        args: [BigInt(goal.onChainId!), addr],
+      }))
+    : []
+
+  const { data: participantDetailsData } = useReadContracts({
+    contracts: participantDetailCalls as any,
+    query: { enabled: participantDetailCalls.length > 0 },
+  })
+
+  const playerList = playerAddresses.map((addr, i) => {
+    const detail = participantDetailsData?.[i]?.result as any
+    return {
+      address: addr,
+      stake: detail ? Number(formatUnits(detail.stake || BigInt(0), 6)) : 0,
+    }
+  })
+
   // Phase timeline
   const getPhaseStep = () => {
     if (isSettled) return 3
@@ -354,13 +401,29 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
         </div>
 
         {/* Players pill */}
-        <div className="flex justify-end mb-3">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-[#1a1a2e] py-1 px-3">
+        <div className="flex justify-end mb-3 relative">
+          <button 
+            onClick={(e) => { e.stopPropagation(); if (participants > 0) setShowPlayers(!showPlayers) }}
+            className="inline-flex items-center gap-1.5 rounded-full bg-[#1a1a2e] py-1 px-3 hover:bg-[#252547] transition-colors"
+          >
             <span className="text-[11px] font-medium text-white">
               {participants === 0 ? '0' : participants.toLocaleString()} {participants === 1 ? 'player' : 'players'}
             </span>
-            <span className="text-white/50 text-xs">›</span>
-          </div>
+            <span className={`text-white/50 text-xs transition-transform ${showPlayers ? 'rotate-90' : ''}`}>›</span>
+          </button>
+          
+          {showPlayers && playerList.length > 0 && (
+            <div className="absolute right-0 top-full mt-1 z-10 bg-[#1a1a2e] border border-[var(--border)] rounded-xl p-2 min-w-[200px] shadow-xl">
+              {playerList.map((p, i) => (
+                <div key={i} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-white/5">
+                  <span className="text-[11px] text-white/80 font-mono">
+                    {p.address.slice(0, 6)}...{p.address.slice(-4)}
+                  </span>
+                  <span className="text-[11px] font-medium text-[#2EE59D]">${p.stake}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Action Button (collapsed) */}
