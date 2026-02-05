@@ -26,9 +26,8 @@ export default function Home() {
     const element = document.getElementById(sectionId)
     if (element) {
       const headerOffset = 70
-      const elementPosition = element.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.scrollY - headerOffset
-      window.scrollTo({ top: offsetPosition, behavior: 'smooth' })
+      const top = element.offsetTop - headerOffset
+      window.scrollTo({ top, behavior: 'smooth' })
     }
   }
 
