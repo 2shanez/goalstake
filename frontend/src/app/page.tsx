@@ -119,8 +119,10 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Scroll anchor (outside sticky so offsetTop is correct) */}
+      <div id="promises" />
       {/* Category Filter Pills - Sticky */}
-      <div id="promises" className="sticky top-[57px] z-30 bg-[var(--background)]/80 backdrop-blur-md border-b border-[var(--border)] py-3">
+      <div className="sticky top-[57px] z-30 bg-[var(--background)]/80 backdrop-blur-md border-b border-[var(--border)] py-3">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between gap-3">
           <div className="flex gap-1.5 sm:gap-2 p-1 bg-[var(--surface)] rounded-full overflow-x-auto hide-scrollbar">
             {categories.map(cat => (
