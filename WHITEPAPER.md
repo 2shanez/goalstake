@@ -132,6 +132,38 @@ This creates:
 **Fee Policy:**
 0% platform fee at launch. Future fees (if any) will be introduced transparently as the protocol scales.
 
+### Platform Cost Structure
+
+Operating Vaada requires Chainlink (oracle verification) and Base (gas) costs per goal settlement:
+
+| Component | Cost per Goal |
+|-----------|--------------|
+| Chainlink Functions | ~$0.10–0.50 |
+| Chainlink Automation | ~$0.05–0.20 |
+| Base gas | ~$0.01–0.05 |
+| **Total per verification** | **~$0.15–0.75** |
+
+**Scaling projections:**
+
+| Users | Verifications/mo | Chainlink Cost | Hosting | Total |
+|-------|-----------------|----------------|---------|-------|
+| 10 | 40 | ~$20 | Free | ~$20 |
+| 100 | 400 | ~$200 | Free | ~$200 |
+| 1,000 | 4,000 | ~$2,000 | $20 | ~$2,020 |
+| 10,000 | 40,000 | ~$20,000 | $20 | ~$20,020 |
+
+**Unit economics at scale (1,000 users):**
+- Average stake: $20, failure rate: 30%
+- Platform fee (5% of failed stakes): ~$1.80 revenue per participant per goal
+- 1,000 users × 4 goals/month = **~$7,200/mo revenue** vs **~$2,000/mo cost**
+- **Gross margin: ~72%**
+
+**Key cost advantages:**
+- Verification is per-goal, not per-user — more participants per goal = lower cost per user
+- Base L2 gas stays cheap regardless of scale
+- Chainlink enterprise pricing available at volume
+- Vercel free tier covers hosting through early growth
+
 ---
 
 ## Why Crypto?
