@@ -145,13 +145,13 @@ export function usePlatformStats() {
   // Build array of getGoal calls
   const goalCalls = Array.from({ length: count }, (_, i) => ({
     address: contracts.goalStake as `0x${string}`,
-    abi: GOALSTAKE_ABI,
-    functionName: 'getGoal' as const,
+    abi: GOALSTAKE_ABI as any,
+    functionName: 'getGoal',
     args: [BigInt(i)],
   }))
 
   const { data: goalsData } = useReadContracts({
-    contracts: goalCalls,
+    contracts: goalCalls as any,
     query: { enabled: count > 0, refetchInterval: 30000 },
   })
 
