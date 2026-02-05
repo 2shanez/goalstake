@@ -114,23 +114,7 @@ function NotifyModal({
 }
 
 const FEATURED_GOALS: Goal[] = [
-  // Test Goals (V3 - IDs start at 0)
-  {
-    id: 'test-win',
-    onChainId: 9,  // V3 goal 9 - WIN Test
-    title: 'WIN Test',
-    description: 'Run 0.1 miles — test the win path',
-    emoji: '🏆',
-    targetMiles: 0.1,
-    durationDays: 0.0625,  // ~90 min
-    minStake: 1,
-    maxStake: 5,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Test',
-  },
-  // E2E Test and Quick Test removed (settled/expired)
-  // 5-Min Test removed (not created on-chain)
+  // Test goals removed (WIN Test, E2E Test, Quick Test all completed)
 
   // Daily Goals
   {
