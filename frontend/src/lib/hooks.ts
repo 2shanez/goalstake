@@ -128,6 +128,29 @@ export function useStravaToken() {
   }
 }
 
+// On-chain goal details (timestamps)
+export function useGoalDetails(goalId?: number) {
+  const contracts = useContracts()
+
+  const { data: goalData } = useReadContract({
+    address: contracts.goalStake,
+    abi: GOALSTAKE_ABI as any,
+    functionName: 'getGoal',
+    args: goalId !== undefined ? [BigInt(goalId)] : undefined,
+    query: { enabled: goalId !== undefined },
+  })
+
+  const goal = goalData as any
+
+  return {
+    entryDeadline: goal ? Number(goal.entryDeadline) : undefined,
+    deadline: goal ? Number(goal.deadline) : undefined,
+    totalStaked: goal ? Number(formatUnits(goal.totalStaked, 6)) : 0,
+    participantCount: goal ? Number(goal.participantCount) : 0,
+    settled: goal?.settled as boolean | undefined,
+  }
+}
+
 // Platform-wide stats (total staked, participants, active goals)
 export function usePlatformStats() {
   const contracts = useContracts()

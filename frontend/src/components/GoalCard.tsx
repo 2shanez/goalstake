@@ -6,7 +6,7 @@ import { usePrivy } from '@privy-io/react-auth'
 import { parseUnits } from 'viem'
 import { baseSepolia } from 'wagmi/chains'
 import { isStravaConnected, getStravaAuthUrl } from '@/lib/strava'
-import { useContracts, useNetworkCheck, useUSDC, useGoalState, useParticipant, useStravaToken } from '@/lib/hooks'
+import { useContracts, useNetworkCheck, useUSDC, useGoalState, useGoalDetails, useParticipant, useStravaToken } from '@/lib/hooks'
 import { USDC_ABI, GOALSTAKE_ABI, AUTOMATION_ABI, PHASE_LABELS, CATEGORY_STYLES, GoalPhase, type Goal } from '@/lib/abis'
 
 // Re-export Goal type for other components
@@ -18,6 +18,16 @@ interface GoalCardProps {
 }
 
 type Step = 'idle' | 'approving' | 'joining' | 'storing-token' | 'done'
+
+function formatTimeLeft(timestamp: number): string {
+  const now = Math.floor(Date.now() / 1000)
+  const diff = timestamp - now
+  if (diff <= 0) return 'Passed'
+  if (diff < 60) return `${diff}s`
+  if (diff < 3600) return `${Math.floor(diff / 60)}m`
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h ${Math.floor((diff % 3600) / 60)}m`
+  return `${Math.floor(diff / 86400)}d ${Math.floor((diff % 86400) / 3600)}h`
+}
 
 export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const { address, isConnected } = useAccount()
@@ -31,7 +41,15 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const { entryOpen, phase } = useGoalState(goal.onChainId)
   const { participant: participantData, hasJoined, userStake, refetch: refetchParticipant } = useParticipant(goal.onChainId)
   const { hasTokenOnChain, refetch: refetchToken } = useStravaToken()
+  const goalDetails = useGoalDetails(goal.onChainId)
   
+  // Tick every 60s to update countdowns
+  const [, setTick] = useState(0)
+  useEffect(() => {
+    const interval = setInterval(() => setTick(t => t + 1), 60000)
+    return () => clearInterval(interval)
+  }, [])
+
   // Local state
   const [expanded, setExpanded] = useState(false)
   const [stakeAmount, setStakeAmount] = useState(goal.minStake.toString())
@@ -237,7 +255,19 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
         <h3 className="font-bold text-sm text-[var(--foreground)] mb-1 group-hover:text-[#2EE59D] transition-colors">
           {goal.title}
         </h3>
-        <p className="text-xs text-[var(--text-secondary)] mb-4 line-clamp-2">{goal.description}</p>
+        <p className="text-xs text-[var(--text-secondary)] mb-2 line-clamp-2">{goal.description}</p>
+
+        {/* Deadlines */}
+        {goalDetails.entryDeadline && !isSettled && (
+          <div className="flex gap-3 mb-4 text-[10px] text-[var(--text-secondary)]">
+            {entryOpen && goalDetails.entryDeadline && (
+              <span>🟢 Entry closes in <strong className="text-[var(--foreground)]">{formatTimeLeft(goalDetails.entryDeadline)}</strong></span>
+            )}
+            {goalDetails.deadline && (
+              <span>⏰ Ends in <strong className="text-[var(--foreground)]">{formatTimeLeft(goalDetails.deadline)}</strong></span>
+            )}
+          </div>
+        )}
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-2 mb-4">
