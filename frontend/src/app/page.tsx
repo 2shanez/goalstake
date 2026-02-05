@@ -63,14 +63,8 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] scroll-smooth overflow-x-hidden">
-      {/* Subtle Background Pattern - hidden on mobile for performance */}
-      <div className="hidden sm:block fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#2EE59D]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-[#2EE59D]/3 rounded-full blur-3xl" />
-      </div>
-
-      {/* Header */}
+    <>
+      {/* Header - outside main to avoid overflow clipping on iOS */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] sm:bg-[var(--background)]/80 sm:backdrop-blur-md border-b border-[var(--border)]">
         <div className="max-w-6xl mx-auto px-6 py-3 flex justify-between items-center">
           <a 
@@ -97,6 +91,13 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+      <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] scroll-smooth overflow-x-hidden">
+        {/* Subtle Background Pattern - hidden on mobile for performance */}
+        <div className="hidden sm:block fixed inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#2EE59D]/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-[#2EE59D]/3 rounded-full blur-3xl" />
+        </div>
 
       {/* Hero - Compact with animation */}
       <section className={`pt-24 pb-12 px-6 relative transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
@@ -314,5 +315,6 @@ export default function Home() {
         </div>
       </footer>
     </main>
+    </>
   )
 }
