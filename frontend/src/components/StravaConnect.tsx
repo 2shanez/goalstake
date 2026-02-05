@@ -213,7 +213,7 @@ export function StravaConnect() {
       )
     }
 
-    // Token is fresh - show verified badge with checkmark
+    // Token is fresh - show verified badge with Strava logo + checkmark
     return (
       <button
         onClick={handleReconnect}
@@ -222,6 +222,9 @@ export function StravaConnect() {
       >
         <svg className="w-4 h-4 text-[#2EE59D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+        </svg>
+        <svg className="w-4 h-4 text-[#FC4C02]" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.599h4.172L10.463 0l-7 13.828h4.169" />
         </svg>
         <span className="text-[var(--foreground)]">Strava</span>
       </button>
