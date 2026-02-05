@@ -29,7 +29,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   // Custom hooks for contract state
   const { balance, balanceNum, allowance, refetchAllowance } = useUSDC(contracts.goalStake)
   const { entryOpen, phase } = useGoalState(goal.onChainId)
-  const { hasJoined, userStake, refetch: refetchParticipant } = useParticipant(goal.onChainId)
+  const { participant: participantData, hasJoined, userStake, refetch: refetchParticipant } = useParticipant(goal.onChainId)
   const { hasTokenOnChain, refetch: refetchToken } = useStravaToken()
   
   // Local state
@@ -48,7 +48,14 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const { writeContract: writeStoreToken, data: storeTokenHash, isPending: isStorePending } = useWriteContract()
   const { isLoading: isStoreConfirming, isSuccess: isStoreSuccess } = useWaitForTransactionReceipt({ hash: storeTokenHash })
 
+  const { writeContract: writeClaim, data: claimHash, isPending: isClaimPending } = useWriteContract()
+  const { isLoading: isClaimConfirming, isSuccess: isClaimSuccess } = useWaitForTransactionReceipt({ hash: claimHash })
+
   // Derived state
+  const isSettled = phase === GoalPhase.Settled
+  const userWon = participantData?.succeeded === true
+  const userClaimed = participantData?.claimed === true
+  const canClaim = isSettled && hasJoined && userWon && !userClaimed
   const stakeAmountWei = parseUnits(stakeAmount || '0', 6)
   const hasAllowance = allowance != null && allowance >= stakeAmountWei
   const hasBalance = balance != null && balance >= stakeAmountWei
@@ -258,31 +265,63 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
           </div>
         </div>
 
-        {/* Join Button (collapsed) */}
+        {/* Action Button (collapsed) */}
         {!expanded && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              if (goal.onChainId === undefined || !entryOpen || hasJoined) return
-              isConnected ? setExpanded(true) : login()
-            }}
-            disabled={goal.onChainId === undefined || !entryOpen || hasJoined}
-            className={`w-full py-2.5 text-sm font-bold rounded-lg transition-all duration-150 ${
-              hasJoined
-                ? 'bg-[#2EE59D]/20 text-[#2EE59D] cursor-default border border-[#2EE59D]/30'
-                : goal.onChainId === undefined || !entryOpen
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-[#2EE59D] text-black hover:bg-[#26c987] active:scale-[0.98] shadow-sm hover:shadow-md'
-            }`}
-          >
-            {hasJoined 
-              ? `Joined ✓ · $${userStake}` 
-              : goal.onChainId === undefined 
-              ? 'Coming Soon' 
-              : !entryOpen 
-              ? 'Entry Closed' 
-              : `Join Promise · $${goal.minStake}+`}
-          </button>
+          canClaim ? (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                writeClaim({
+                  address: contracts.goalStake,
+                  abi: GOALSTAKE_ABI,
+                  functionName: 'claimPayout',
+                  args: [BigInt(goal.onChainId!)],
+                })
+              }}
+              disabled={isClaimPending || isClaimConfirming}
+              className="w-full py-2.5 text-sm font-bold rounded-lg transition-all duration-150 bg-[#2EE59D] text-black hover:bg-[#26c987] active:scale-[0.98] shadow-sm hover:shadow-md"
+            >
+              {isClaimConfirming ? 'Claiming...' : isClaimPending ? 'Confirm in wallet...' : isClaimSuccess ? 'Claimed! 🎉' : 'Claim Winnings 💰'}
+            </button>
+          ) : userClaimed ? (
+            <button
+              disabled
+              className="w-full py-2.5 text-sm font-bold rounded-lg bg-[#2EE59D]/20 text-[#2EE59D] cursor-default border border-[#2EE59D]/30"
+            >
+              Claimed ✓ · ${userStake}
+            </button>
+          ) : isSettled && hasJoined && !userWon ? (
+            <button
+              disabled
+              className="w-full py-2.5 text-sm font-bold rounded-lg bg-red-500/10 text-red-400 cursor-default border border-red-500/20"
+            >
+              Missed target ✗
+            </button>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                if (goal.onChainId === undefined || !entryOpen || hasJoined) return
+                isConnected ? setExpanded(true) : login()
+              }}
+              disabled={goal.onChainId === undefined || !entryOpen || hasJoined}
+              className={`w-full py-2.5 text-sm font-bold rounded-lg transition-all duration-150 ${
+                hasJoined
+                  ? 'bg-[#2EE59D]/20 text-[#2EE59D] cursor-default border border-[#2EE59D]/30'
+                  : goal.onChainId === undefined || !entryOpen
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-[#2EE59D] text-black hover:bg-[#26c987] active:scale-[0.98] shadow-sm hover:shadow-md'
+              }`}
+            >
+              {hasJoined 
+                ? `Joined ✓ · $${userStake}` 
+                : goal.onChainId === undefined 
+                ? 'Coming Soon' 
+                : !entryOpen 
+                ? 'Entry Closed' 
+                : `Join Promise · $${goal.minStake}+`}
+            </button>
+          )
         )}
       </div>
 
