@@ -183,9 +183,6 @@ export default function Home() {
               <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total {platformStats.totalGoals === 1 ? 'Promise' : 'Promises'}</p>
             </div>
           </div>
-          <p className="text-center text-xs sm:text-sm text-[var(--text-secondary)] mt-4">
-            Join the commitment market ✨
-          </p>
         </div>
       </section>
 
