@@ -298,7 +298,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
       }`}
     >
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-[var(--background)] to-[var(--surface)] px-5 pt-6 pb-5">
+      <div className="relative bg-gradient-to-br from-[var(--background)] to-[var(--surface)] px-5 pt-6 pb-5 rounded-t-2xl">
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-2">
             <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-full ${catStyle.bg} ${catStyle.text}`}>
