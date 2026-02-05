@@ -246,7 +246,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
                 {phaseInfo.emoji} {phaseInfo.label}
               </span>
             )}
-            <span className="text-[10px] text-[var(--text-secondary)] font-medium">{durationText}</span>
+            {/* Duration shown via deadline timestamps instead */}
           </div>
           <span className="text-2xl group-hover:scale-110 transition-transform">{goal.emoji}</span>
         </div>
