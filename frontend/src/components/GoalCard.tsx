@@ -412,7 +412,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
                   ? 'Coming Soon' 
                   : !entryOpen 
                   ? 'Entry Closed' 
-                  : `Stake $${goal.minStake}+ →`}
+                  : `Stake $${goal.minStake}+`}
               </button>
             )}
           </div>
@@ -603,7 +603,7 @@ function ActionButton({ stravaConnected, hasTokenOnChain, hasBalance, isLoading,
     }
     if (!hasBalance) return 'Insufficient USDC'
     if (isLoading) return 'Processing...'
-    return `Stake $${stakeAmount} →`
+    return `Stake $${stakeAmount}`
   }
 
   const getStyle = () => {
