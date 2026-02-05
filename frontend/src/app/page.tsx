@@ -100,7 +100,7 @@ export default function Home() {
         </div>
 
       {/* Hero - Compact with animation */}
-      <section className={`pt-24 pb-12 px-6 relative transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+      <section className={`pt-24 pb-8 px-6 relative transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
         <div className="max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--surface)] text-xs text-[var(--text-secondary)] mb-6 border border-[var(--border)]">
             <span className="relative flex h-2 w-2">
@@ -174,7 +174,7 @@ export default function Home() {
       </section>
 
       {/* Stats Bar - Full Width */}
-      <section ref={statsView.ref} className={`border-t border-[var(--border)] py-8 sm:py-10 px-4 sm:px-6 transition-all duration-700 ${statsView.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+      <section ref={statsView.ref} className={`border-t border-[var(--border)] py-6 sm:py-8 px-4 sm:px-6 transition-all duration-700 ${statsView.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-center gap-6 sm:gap-12">
             <div className="text-center">
@@ -198,9 +198,9 @@ export default function Home() {
       </section>
 
       {/* How It Works - Compact horizontal */}
-      <section ref={howView.ref} id="how-it-works" className={`py-16 px-6 bg-[var(--surface)] border-t border-[var(--border)] transition-all duration-700 ${howView.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+      <section ref={howView.ref} id="how-it-works" className={`py-12 px-6 bg-[var(--surface)] border-t border-[var(--border)] transition-all duration-700 ${howView.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <span className="text-xs font-semibold text-[#2EE59D] uppercase tracking-wider">Simple Process</span>
             <h2 className="text-2xl font-bold mt-2">How It Works</h2>
           </div>
@@ -235,9 +235,9 @@ export default function Home() {
       </section>
 
       {/* Why It Works - Compact */}
-      <section ref={whyView.ref} className={`py-16 px-6 transition-all duration-700 ${whyView.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+      <section ref={whyView.ref} className={`py-12 px-6 transition-all duration-700 ${whyView.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <span className="text-xs font-semibold text-[#2EE59D] uppercase tracking-wider">The Science</span>
             <h2 className="text-2xl font-bold mt-2">Why It Works</h2>
           </div>
@@ -264,7 +264,7 @@ export default function Home() {
       </section>
 
       {/* Footer CTA */}
-      <section ref={ctaView.ref} className={`py-12 sm:py-20 px-4 sm:px-6 bg-[var(--surface)] relative overflow-hidden transition-all duration-700 ${ctaView.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
+      <section ref={ctaView.ref} className={`py-10 sm:py-16 px-4 sm:px-6 bg-[var(--surface)] relative overflow-hidden transition-all duration-700 ${ctaView.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
         {/* Background decoration - hidden on mobile for performance */}
         <div className="hidden sm:block absolute inset-0 opacity-30">
           <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#2EE59D]/20 rounded-full blur-3xl" />
