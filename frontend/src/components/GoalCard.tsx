@@ -264,7 +264,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
               <span>🟢 Entry closes in <strong className="text-[var(--foreground)]">{formatTimeLeft(goalDetails.entryDeadline)}</strong></span>
             )}
             {goalDetails.deadline && (
-              <span>⏰ Ends in <strong className="text-[var(--foreground)]">{formatTimeLeft(goalDetails.deadline)}</strong></span>
+              <span>⏰ Deadline in <strong className="text-[var(--foreground)]">{formatTimeLeft(goalDetails.deadline)}</strong></span>
             )}
           </div>
         )}
