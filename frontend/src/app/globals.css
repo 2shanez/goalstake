@@ -40,7 +40,8 @@ html {
 
 /* Mobile scroll performance */
 @media (max-width: 640px) {
-  * {
+  /* GPU acceleration for scrolling - but NOT on fixed elements (breaks positioning) */
+  *:not(.fixed):not(header) {
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
   }
