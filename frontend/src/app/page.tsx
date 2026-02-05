@@ -85,8 +85,8 @@ export default function Home() {
             </a>
             <StravaConnect />
             <FundWalletButton />
-            <ThemeToggle />
             <PrivyConnectButton />
+            <ThemeToggle />
           </div>
         </div>
       </header>
