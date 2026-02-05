@@ -9,7 +9,7 @@ import { PrivyConnectButton } from '@/components/PrivyConnectButton'
 import { StravaConnect } from '@/components/StravaConnect'
 import { usePlatformStats } from '@/lib/hooks'
 
-const categories = ['All', 'Daily', 'Weekly', 'Monthly'] as const
+const categories = ['Active', 'Daily', 'Weekly', 'Monthly'] as const
 type Category = typeof categories[number]
 
 export default function Home() {

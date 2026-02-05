@@ -212,10 +212,10 @@ const COMING_SOON = [
 ]
 
 interface BrowseGoalsProps {
-  filter?: 'All' | 'Test' | 'Daily' | 'Weekly' | 'Monthly'
+  filter?: 'Active' | 'All' | 'Test' | 'Daily' | 'Weekly' | 'Monthly'
 }
 
-export function BrowseGoals({ filter = 'All' }: BrowseGoalsProps) {
+export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
   const [mounted, setMounted] = useState(false)
   const [notified, setNotified] = useState<string[]>([])
   const [modalFeature, setModalFeature] = useState<string | null>(null)
@@ -240,11 +240,11 @@ export function BrowseGoals({ filter = 'All' }: BrowseGoalsProps) {
     setModalFeature(null)
   }
 
-  const filteredGoals = filter === 'All' 
+  const filteredGoals = filter === 'Active' || filter === 'All' 
     ? FEATURED_GOALS 
     : FEATURED_GOALS.filter(g => g.category === filter)
 
-  const showComingSoon = filter === 'All'
+  const showComingSoon = filter === 'Active' || filter === 'All'
 
   // Calculate totals
   const totalParticipants = FEATURED_GOALS.reduce((sum, g) => sum + g.participants, 0)
