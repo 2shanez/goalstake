@@ -250,7 +250,7 @@ export default function Home() {
         
         <div className="max-w-3xl mx-auto text-center relative">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4">
-            Ready to stake your word?
+            Ready to bet on yourself?
           </h2>
           <p className="text-gray-400 mb-6 sm:mb-8 text-base sm:text-lg">
             Join the commitment market. Put money on your promises.
