@@ -160,7 +160,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-center gap-6 sm:gap-12">
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-[#2EE59D] tabular-nums">${platformStats.totalStaked}</p>
+              <p className="text-2xl sm:text-3xl font-bold tabular-nums">${platformStats.totalStaked}</p>
               <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total Staked</p>
             </div>
             <div className="text-center">
@@ -168,7 +168,7 @@ export default function Home() {
               <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total {platformStats.totalParticipants === 1 ? 'Participant' : 'Participants'}</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-[#2EE59D] tabular-nums">{platformStats.activeGoals}</p>
+              <p className="text-2xl sm:text-3xl font-bold tabular-nums">{platformStats.activeGoals}</p>
               <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Active {platformStats.activeGoals === 1 ? 'Promise' : 'Promises'}</p>
             </div>
             <div className="text-center">
