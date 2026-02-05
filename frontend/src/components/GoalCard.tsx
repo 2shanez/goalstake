@@ -259,12 +259,12 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
 
         {/* Deadlines */}
         {goalDetails.entryDeadline && !isSettled && (
-          <div className="flex gap-3 mb-4 text-[10px] text-[var(--text-secondary)]">
+          <div className="flex flex-col gap-1 mb-4 text-[10px] text-[var(--text-secondary)]">
             {entryOpen && goalDetails.entryDeadline && (
-              <span>🟢 Entry closes in <strong className="text-[var(--foreground)]">{formatTimeLeft(goalDetails.entryDeadline)}</strong></span>
+              <span className="whitespace-nowrap">🟢 Entry closes in <strong className="text-[var(--foreground)]">{formatTimeLeft(goalDetails.entryDeadline)}</strong></span>
             )}
             {goalDetails.deadline && (
-              <span>⏰ Deadline in <strong className="text-[var(--foreground)]">{formatTimeLeft(goalDetails.deadline)}</strong></span>
+              <span className="whitespace-nowrap">⏰ Deadline in <strong className="text-[var(--foreground)]">{formatTimeLeft(goalDetails.deadline)}</strong></span>
             )}
           </div>
         )}
