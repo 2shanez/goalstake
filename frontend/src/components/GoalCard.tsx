@@ -335,8 +335,8 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
             <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-medium">min stake</p>
           </div>
           <div className="flex-1 bg-[var(--surface)] rounded-xl px-3 py-2.5 text-center border border-[var(--border)]/50">
-            <p className="text-xl font-bold text-[var(--foreground)]">{participants}</p>
-            <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-medium">{participants === 1 ? 'player' : 'players'}</p>
+            <p className="text-xl font-bold text-[#2EE59D]">${goal.maxStake}</p>
+            <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-medium">max stake</p>
           </div>
         </div>
       </div>
