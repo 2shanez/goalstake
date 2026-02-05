@@ -1,11 +1,20 @@
 'use client'
 
+import { useState } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
 import { useAccount } from 'wagmi'
 
 export function PrivyConnectButton() {
   const { ready, authenticated, login, logout, user } = usePrivy()
   const { address } = useAccount()
+  const [copied, setCopied] = useState(false)
+
+  const copyAddress = async () => {
+    if (!address) return
+    await navigator.clipboard.writeText(address)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   if (!ready) {
     return (
@@ -36,9 +45,27 @@ export function PrivyConnectButton() {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-sm">
-        {displayAddress}
-      </span>
+      <button
+        onClick={copyAddress}
+        title={address || 'No address'}
+        className="px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-sm hover:border-[#2EE59D]/50 transition-all flex items-center gap-1.5"
+      >
+        {copied ? (
+          <>
+            <svg className="w-3.5 h-3.5 text-[#2EE59D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            <span className="text-[#2EE59D]">Copied!</span>
+          </>
+        ) : (
+          <>
+            <svg className="w-3.5 h-3.5 text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            {displayAddress}
+          </>
+        )}
+      </button>
       <button
         onClick={logout}
         className="px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-sm hover:bg-[var(--surface-hover)] transition-colors"
