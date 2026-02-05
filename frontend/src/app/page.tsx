@@ -16,7 +16,7 @@ export default function Home() {
   const { isConnected } = useAccount()
   const platformStats = usePlatformStats()
   const { login } = usePrivy()
-  const [activeCategory, setActiveCategory] = useState<Category>('All')
+  const [activeCategory, setActiveCategory] = useState<Category>('Active')
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
