@@ -282,9 +282,15 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
         </div>
 
         {/* Participants + Pool */}
-        <div className="flex justify-between text-[10px] text-[var(--text-secondary)] mb-4">
-          <span>{(goalDetails.participantCount || 0) === 0 ? 'Be the first to join' : `${goalDetails.participantCount} joined`}</span>
-          <span>${goalDetails.totalStaked || 0} pooled</span>
+        <div className="flex justify-between items-center mb-4 px-3 py-2 rounded-lg bg-[var(--background)]/50 border border-[var(--border)]/50">
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs">👥</span>
+            <span className="text-xs font-medium text-[var(--foreground)]">{(goalDetails.participantCount || 0) === 0 ? 'Be the first' : `${goalDetails.participantCount} joined`}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs font-semibold text-[#2EE59D]">${goalDetails.totalStaked || 0}</span>
+            <span className="text-[10px] text-[var(--text-secondary)]">pooled</span>
+          </div>
         </div>
 
         {/* Action Button (collapsed) */}
