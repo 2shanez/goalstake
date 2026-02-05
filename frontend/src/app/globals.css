@@ -38,14 +38,8 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Mobile scroll performance */
+/* Mobile scroll performance - use will-change sparingly */
 @media (max-width: 640px) {
-  /* GPU acceleration for scrolling - but NOT on fixed elements (breaks positioning) */
-  *:not(.fixed):not(header) {
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-  }
-  
   .fixed, .sticky {
     will-change: transform;
   }
