@@ -3,10 +3,12 @@
 import { useState } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
 import { useAccount } from 'wagmi'
+import { useUSDC } from '@/lib/hooks'
 
 export function PrivyConnectButton() {
   const { ready, authenticated, login, logout, user } = usePrivy()
   const { address } = useAccount()
+  const { balanceNum } = useUSDC()
   const [copied, setCopied] = useState(false)
 
   const copyAddress = async () => {
@@ -63,6 +65,7 @@ export function PrivyConnectButton() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
             {displayAddress}
+            <span className="text-[#2EE59D] font-medium">${balanceNum.toFixed(2)}</span>
           </>
         )}
       </button>
