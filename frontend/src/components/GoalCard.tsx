@@ -290,7 +290,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   }
 
   return (
-    <div className={`group bg-[var(--surface)] border rounded-2xl transition-all duration-200 overflow-hidden
+    <div className={`group bg-[var(--surface)] border rounded-2xl transition-all duration-200
       ${expanded 
         ? 'border-[#2EE59D] shadow-lg shadow-[#2EE59D]/10' 
         : 'border-[var(--border)] hover:border-[var(--text-secondary)]/30 hover:shadow-lg'
@@ -410,7 +410,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
             </button>
           
           {showPlayers && playerList.length > 0 && (
-            <div className="absolute right-0 top-full mt-1 z-10 bg-[var(--surface)] border border-[var(--border)] rounded-xl p-2 min-w-[200px] shadow-xl">
+            <div className="absolute right-0 top-full mt-1 z-50 bg-[var(--surface)] border border-[var(--border)] rounded-xl p-2 min-w-[200px] shadow-xl">
               {playerList.map((p, i) => (
                 <div key={i} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-[var(--background)]">
                   <span className="text-[11px] text-[var(--text-secondary)] font-mono">
