@@ -129,48 +129,8 @@ const FEATURED_GOALS: Goal[] = [
     totalStaked: 0,
     category: 'Test',
   },
-  {
-    id: 'test-e2e',
-    onChainId: 8,  // V3 goal 8 - E2E Test
-    title: 'E2E Test',
-    description: 'Run 0.2 miles - quick test',
-    emoji: '🚀',
-    targetMiles: 0.2,
-    durationDays: 0.00694,  // ~10 min
-    minStake: 1,
-    maxStake: 5,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Test',
-  },
-  {
-    id: 'test-1',
-    onChainId: 6,  // V3 goal 6 (30 min entry, 60 min total)
-    title: 'Quick Test',
-    description: 'Run 0.32 miles in 10 minutes',
-    emoji: '🧪',
-    targetMiles: 0.32,
-    durationDays: 0.00694,  // ~10 min
-    minStake: 1,
-    maxStake: 10,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Test',
-  },
-  {
-    id: 'test-2',
-    onChainId: undefined,  // Not created on V3 yet
-    title: '5-Min Test',
-    description: 'Run 0.5 miles in 5 minutes',
-    emoji: '⚗️',
-    targetMiles: 0.5,
-    durationDays: 0.00347,
-    minStake: 1,
-    maxStake: 10,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Test',
-  },
+  // E2E Test and Quick Test removed (settled/expired)
+  // 5-Min Test removed (not created on-chain)
 
   // Daily Goals
   {

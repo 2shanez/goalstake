@@ -140,7 +140,7 @@ export default function Home() {
           </div>
           <div className="text-xs sm:text-sm text-[var(--text-secondary)] hidden sm:flex items-center gap-2 flex-shrink-0">
             <span className="w-2 h-2 rounded-full bg-[#2EE59D] animate-pulse" />
-            8 promises live
+            7 promises live
           </div>
         </div>
       </div>
@@ -157,20 +157,16 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-center gap-6 sm:gap-12">
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold tabular-nums">8</p>
-              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Active Promises</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-[#2EE59D] tabular-nums">$0</p>
+              <p className="text-2xl sm:text-3xl font-bold text-[#2EE59D] tabular-nums">$1</p>
               <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total Staked</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold tabular-nums">0</p>
+              <p className="text-2xl sm:text-3xl font-bold tabular-nums">1</p>
               <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Participants</p>
             </div>
           </div>
           <p className="text-center text-xs sm:text-sm text-[var(--text-secondary)] mt-4">
-            Be the first to stake on a promise ✨
+            Join the commitment market ✨
           </p>
         </div>
       </section>
