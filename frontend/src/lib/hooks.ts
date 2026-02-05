@@ -154,7 +154,7 @@ export function useGoalDetails(goalId?: number) {
 // Platform-wide stats (total staked, participants, active goals)
 export function usePlatformStats() {
   const contracts = useContracts()
-  const [stats, setStats] = useState({ totalStaked: 0, totalParticipants: 0, activeGoals: 0 })
+  const [stats, setStats] = useState({ totalStaked: 0, totalParticipants: 0, activeGoals: 0, totalGoals: 0 })
 
   const { data: goalCount } = useReadContract({
     address: contracts.goalStake,
@@ -199,6 +199,7 @@ export function usePlatformStats() {
       totalStaked: Number(formatUnits(totalStaked, 6)),
       totalParticipants,
       activeGoals,
+      totalGoals: count,
     })
   }, [goalsData])
 

@@ -167,7 +167,11 @@ export default function Home() {
               <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total Participants</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold tabular-nums">{platformStats.activeGoals}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-[#2EE59D] tabular-nums">{platformStats.activeGoals}</p>
+              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Active Promises</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl sm:text-3xl font-bold tabular-nums">{platformStats.totalGoals}</p>
               <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total Promises</p>
             </div>
           </div>

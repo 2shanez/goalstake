@@ -253,11 +253,11 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
   return (
     <div>
       {/* Goals Grid with stagger animation */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="flex flex-wrap justify-center gap-4">
         {filteredGoals.map((goal, index) => (
           <div
             key={goal.id}
-            className={`transition-all duration-500 ${
+            className={`w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] transition-all duration-500 ${
               mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
             style={{ transitionDelay: `${index * 50}ms` }}
