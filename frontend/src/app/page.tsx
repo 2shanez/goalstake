@@ -143,7 +143,7 @@ export default function Home() {
           </div>
           <div className="text-xs sm:text-sm text-[var(--text-secondary)] hidden sm:flex items-center gap-2 flex-shrink-0">
             <span className="w-2 h-2 rounded-full bg-[#2EE59D] animate-pulse" />
-            {platformStats.activeGoals} promises live
+            {platformStats.activeGoals} {platformStats.activeGoals === 1 ? 'promise' : 'promises'} live
           </div>
         </div>
       </div>
