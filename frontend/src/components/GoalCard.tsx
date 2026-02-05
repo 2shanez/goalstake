@@ -303,22 +303,22 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
                 { 
                   label: 'Entry', 
                   desc: goalDetails.entryDeadline 
-                    ? formatTimeLeft(goalDetails.entryDeadline)
-                    : 'Open'
+                    ? `Closes in ${formatTimeLeft(goalDetails.entryDeadline)}`
+                    : 'Join now'
                 },
                 { 
                   label: 'Compete', 
                   desc: goalDetails.deadline 
-                    ? formatTimeLeft(goalDetails.deadline)
-                    : durationText
+                    ? `${formatTimeLeft(goalDetails.deadline)} left`
+                    : `${durationText} window`
                 },
                 { 
                   label: 'Verify', 
-                  desc: 'Strava' 
+                  desc: 'Via Strava' 
                 },
                 { 
                   label: 'Payout', 
-                  desc: 'Auto' 
+                  desc: 'Split the pool' 
                 },
               ].map((step, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center">
