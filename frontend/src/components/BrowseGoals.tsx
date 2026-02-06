@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { GoalCard, Goal } from './GoalCard'
+import { DOMAINS, type DomainKey } from '@/lib/abis'
 
 // Email Modal Component
 function NotifyModal({ 
@@ -114,96 +115,209 @@ function NotifyModal({
 }
 
 const FEATURED_GOALS: Goal[] = [
-  // Test goals removed (WIN Test, E2E Test, Quick Test all completed)
-
-  // Daily Goals
+  // ═══════════════════════════════════════════
+  // FITNESS - RUNNING
+  // ═══════════════════════════════════════════
+  
+  // Daily Running
   {
-    id: '1',
-    onChainId: 11,  // V3 goal 11 - Test WIN
-    title: 'Test WIN',
-    description: 'Run 0.2 miles',
-    emoji: '🏆',
-    targetMiles: 0.2,
+    id: 'fitness-running-daily-1',
+    onChainId: 11,
+    title: 'Daily Mile',
+    description: 'Run 1 mile today',
+    emoji: '🌅',
+    targetMiles: 1,
+    targetUnit: 'miles',
     durationDays: 1,
     minStake: 5,
     maxStake: 50,
     participants: 0,
     totalStaked: 0,
     category: 'Daily',
+    domain: 'Fitness',
+    subdomain: 'Running',
   },
   {
-    id: '2',
-    onChainId: undefined,  // Not created on V3 yet
+    id: 'fitness-running-daily-2',
     title: 'Daily 3',
     description: 'Run 3 miles today',
     emoji: '☀️',
     targetMiles: 3,
+    targetUnit: 'miles',
     durationDays: 1,
     minStake: 5,
     maxStake: 50,
     participants: 0,
     totalStaked: 0,
     category: 'Daily',
+    domain: 'Fitness',
+    subdomain: 'Running',
   },
-
-  // Weekly Goals
+  
+  // Weekly Running
   {
-    id: '3',
-    onChainId: undefined,  // Not created on V3 yet
+    id: 'fitness-running-weekly-1',
     title: 'Weekend Warrior',
     description: 'Run 10 miles this weekend',
     emoji: '💪',
     targetMiles: 10,
+    targetUnit: 'miles',
     durationDays: 3,
     minStake: 10,
     maxStake: 100,
     participants: 0,
     totalStaked: 0,
     category: 'Weekly',
+    domain: 'Fitness',
+    subdomain: 'Running',
   },
   {
-    id: '4', 
-    onChainId: undefined,  // Not created on V3 yet
+    id: 'fitness-running-weekly-2',
     title: 'Weekly 15',
     description: 'Run 15 miles this week',
     emoji: '⚡',
     targetMiles: 15,
+    targetUnit: 'miles',
     durationDays: 7,
     minStake: 10,
     maxStake: 100,
     participants: 0,
     totalStaked: 0,
     category: 'Weekly',
+    domain: 'Fitness',
+    subdomain: 'Running',
   },
-
-  // Monthly Goals
+  
+  // Monthly Running
   {
-    id: '5',
-    onChainId: undefined,  // Not created on V3 yet
+    id: 'fitness-running-monthly-1',
     title: 'February 50',
     description: 'Run 50 miles this month',
     emoji: '🏃',
     targetMiles: 50,
+    targetUnit: 'miles',
     durationDays: 28,
     minStake: 20,
     maxStake: 200,
     participants: 0,
     totalStaked: 0,
     category: 'Monthly',
+    domain: 'Fitness',
+    subdomain: 'Running',
   },
   {
-    id: '6',
-    onChainId: undefined,  // Not created on V3 yet
+    id: 'fitness-running-monthly-2',
     title: 'Marathon Prep',
     description: 'Hit 100 miles in 30 days',
     emoji: '🏅',
     targetMiles: 100,
+    targetUnit: 'miles',
     durationDays: 30,
     minStake: 20,
     maxStake: 200,
     participants: 0,
     totalStaked: 0,
     category: 'Monthly',
+    domain: 'Fitness',
+    subdomain: 'Running',
+  },
+
+  // ═══════════════════════════════════════════
+  // CREATIVE - SUBSTACK
+  // ═══════════════════════════════════════════
+  
+  // Weekly Substack
+  {
+    id: 'creative-substack-weekly-1',
+    title: 'Weekly Writer',
+    description: 'Publish 1 Substack post this week',
+    emoji: '✍️',
+    targetMiles: 1,
+    targetUnit: 'posts',
+    durationDays: 7,
+    minStake: 10,
+    maxStake: 100,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Weekly',
+    domain: 'Creative',
+    subdomain: 'Substack',
+  },
+  
+  // Monthly Substack
+  {
+    id: 'creative-substack-monthly-1',
+    title: 'Content Creator',
+    description: 'Publish 4 posts this month',
+    emoji: '📝',
+    targetMiles: 4,
+    targetUnit: 'posts',
+    durationDays: 30,
+    minStake: 20,
+    maxStake: 200,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Creative',
+    subdomain: 'Substack',
+  },
+
+  // ═══════════════════════════════════════════
+  // EDUCATIONAL - DUOLINGO
+  // ═══════════════════════════════════════════
+  
+  // Daily Duolingo
+  {
+    id: 'edu-duolingo-daily-1',
+    title: 'Daily Streak',
+    description: 'Complete 1 Duolingo lesson',
+    emoji: '🦉',
+    targetMiles: 1,
+    targetUnit: 'lessons',
+    durationDays: 1,
+    minStake: 5,
+    maxStake: 25,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Daily',
+    domain: 'Educational',
+    subdomain: 'Duolingo',
+  },
+  
+  // Weekly Duolingo
+  {
+    id: 'edu-duolingo-weekly-1',
+    title: 'Language Learner',
+    description: 'Complete 7 lessons this week',
+    emoji: '🗣️',
+    targetMiles: 7,
+    targetUnit: 'lessons',
+    durationDays: 7,
+    minStake: 10,
+    maxStake: 50,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Weekly',
+    domain: 'Educational',
+    subdomain: 'Duolingo',
+  },
+  
+  // Monthly Duolingo
+  {
+    id: 'edu-duolingo-monthly-1',
+    title: '30 Day Streak',
+    description: 'Maintain a 30-day streak',
+    emoji: '🔥',
+    targetMiles: 30,
+    targetUnit: 'days',
+    durationDays: 30,
+    minStake: 25,
+    maxStake: 100,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Educational',
+    subdomain: 'Duolingo',
   },
 ]
 
@@ -218,10 +332,15 @@ interface BrowseGoalsProps {
   filter?: 'Active' | 'All' | 'Test' | 'Daily' | 'Weekly' | 'Monthly'
 }
 
+const TIMEFRAMES = ['All', 'Daily', 'Weekly', 'Monthly'] as const
+type Timeframe = typeof TIMEFRAMES[number]
+
 export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
   const [mounted, setMounted] = useState(false)
   const [notified, setNotified] = useState<string[]>([])
   const [modalFeature, setModalFeature] = useState<string | null>(null)
+  const [selectedDomain, setSelectedDomain] = useState<DomainKey | 'All'>('All')
+  const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe>('All')
   
   useEffect(() => {
     setMounted(true)
@@ -243,9 +362,12 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
     setModalFeature(null)
   }
 
-  const filteredGoals = filter === 'Active' || filter === 'All' 
-    ? FEATURED_GOALS.filter(g => filter === 'All' || g.onChainId !== undefined)
-    : FEATURED_GOALS.filter(g => g.category === filter)
+  // Filter goals by domain and timeframe
+  const filteredGoals = FEATURED_GOALS.filter(g => {
+    const domainMatch = selectedDomain === 'All' || g.domain === selectedDomain
+    const timeframeMatch = selectedTimeframe === 'All' || g.category === selectedTimeframe
+    return domainMatch && timeframeMatch
+  })
 
   const showComingSoon = false // Hidden for now
 
@@ -253,21 +375,106 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
   const totalParticipants = FEATURED_GOALS.reduce((sum, g) => sum + g.participants, 0)
   const totalStaked = FEATURED_GOALS.reduce((sum, g) => sum + g.totalStaked, 0)
 
+  // Domain colors
+  const domainColors: Record<string, { bg: string; text: string; border: string }> = {
+    All: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-700 dark:text-gray-300', border: 'border-gray-300 dark:border-gray-600' },
+    Fitness: { bg: 'bg-orange-100 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-400', border: 'border-orange-300 dark:border-orange-700' },
+    Creative: { bg: 'bg-purple-100 dark:bg-purple-900/30', text: 'text-purple-700 dark:text-purple-400', border: 'border-purple-300 dark:border-purple-700' },
+    Educational: { bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-400', border: 'border-blue-300 dark:border-blue-700' },
+  }
+
   return (
     <div>
+      {/* Filter Section */}
+      <div className="mb-8 space-y-4">
+        {/* Domain Tabs */}
+        <div className="flex flex-wrap justify-center gap-2">
+          <button
+            onClick={() => setSelectedDomain('All')}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+              selectedDomain === 'All'
+                ? 'bg-[#2EE59D] text-white shadow-lg shadow-[#2EE59D]/25'
+                : 'bg-[var(--surface)] border border-[var(--border)] text-[var(--foreground)] hover:border-[#2EE59D]/50'
+            }`}
+          >
+            🎯 All Goals
+          </button>
+          {(Object.keys(DOMAINS) as DomainKey[]).map((domain) => (
+            <button
+              key={domain}
+              onClick={() => setSelectedDomain(domain)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                selectedDomain === domain
+                  ? `${domainColors[domain].bg} ${domainColors[domain].text} border ${domainColors[domain].border}`
+                  : 'bg-[var(--surface)] border border-[var(--border)] text-[var(--foreground)] hover:border-[var(--text-secondary)]/50'
+              }`}
+            >
+              {DOMAINS[domain].emoji} {domain}
+            </button>
+          ))}
+        </div>
+
+        {/* Timeframe Pills */}
+        <div className="flex justify-center gap-2">
+          {TIMEFRAMES.map((tf) => (
+            <button
+              key={tf}
+              onClick={() => setSelectedTimeframe(tf)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                selectedTimeframe === tf
+                  ? 'bg-[var(--foreground)] text-[var(--background)]'
+                  : 'bg-[var(--surface)] border border-[var(--border)] text-[var(--text-secondary)] hover:text-[var(--foreground)]'
+              }`}
+            >
+              {tf}
+            </button>
+          ))}
+        </div>
+
+        {/* Active filter indicator */}
+        {(selectedDomain !== 'All' || selectedTimeframe !== 'All') && (
+          <div className="flex justify-center">
+            <p className="text-sm text-[var(--text-secondary)]">
+              Showing {filteredGoals.length} {filteredGoals.length === 1 ? 'goal' : 'goals'}
+              {selectedDomain !== 'All' && ` in ${selectedDomain}`}
+              {selectedTimeframe !== 'All' && ` • ${selectedTimeframe}`}
+            </p>
+          </div>
+        )}
+      </div>
+
       {/* Goals Grid with stagger animation */}
       <div className="flex flex-wrap justify-center gap-4">
-        {filteredGoals.map((goal, index) => (
-          <div
-            key={goal.id}
-            className={`w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] transition-all duration-500 ${
-              mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
-            style={{ transitionDelay: `${index * 50}ms` }}
-          >
-            <GoalCard goal={goal} />
+        {filteredGoals.length === 0 ? (
+          <div className="w-full text-center py-12">
+            <div className="text-4xl mb-3">🔍</div>
+            <p className="text-[var(--text-secondary)] mb-2">No goals found</p>
+            <p className="text-sm text-[var(--text-secondary)]">
+              Try adjusting your filters or check back soon!
+            </p>
+            <button
+              onClick={() => {
+                setSelectedDomain('All')
+                setSelectedTimeframe('All')
+              }}
+              className="mt-4 px-4 py-2 text-sm font-medium text-[#2EE59D] hover:bg-[#2EE59D]/10 rounded-lg transition-colors"
+            >
+              Clear filters
+            </button>
           </div>
-        ))}
+        ) : (
+          filteredGoals.map((goal, index) => (
+            <div
+              key={goal.id}
+              className={`w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] transition-all duration-500 ${
+                mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
+              style={{ transitionDelay: `${index * 50}ms` }}
+            >
+              <GoalCard goal={goal} />
+            </div>
+          ))
+        )}
         
         {/* Coming Soon Placeholders */}
         {showComingSoon && COMING_SOON.map((item, i) => (

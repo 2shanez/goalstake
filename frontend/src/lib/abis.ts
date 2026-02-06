@@ -147,13 +147,25 @@ export interface Goal {
   description: string
   emoji: string
   targetMiles: number
+  targetUnit?: string  // 'miles' | 'posts' | 'lessons' etc
   durationDays: number
   minStake: number
   maxStake: number
   participants: number
   totalStaked: number
-  category: string
+  category: string  // 'Daily' | 'Weekly' | 'Monthly'
+  domain: string    // 'Fitness' | 'Creative' | 'Educational'
+  subdomain: string // 'Running' | 'Substack' | 'Duolingo'
 }
+
+// Domain definitions for filtering
+export const DOMAINS = {
+  Fitness: { emoji: '🏃', subdomains: ['Running'] },
+  Creative: { emoji: '✍️', subdomains: ['Substack'] },
+  Educational: { emoji: '📚', subdomains: ['Duolingo'] },
+} as const
+
+export type DomainKey = keyof typeof DOMAINS
 
 // Goal phases
 export enum GoalPhase {
@@ -171,8 +183,15 @@ export const PHASE_LABELS: Record<GoalPhase, { label: string; emoji: string; col
 }
 
 export const CATEGORY_STYLES: Record<string, { bg: string; text: string }> = {
-  Test: { bg: 'bg-orange-50', text: 'text-orange-600' },
-  Daily: { bg: 'bg-blue-50', text: 'text-blue-600' },
-  Weekly: { bg: 'bg-purple-50', text: 'text-purple-600' },
-  Monthly: { bg: 'bg-emerald-50', text: 'text-emerald-600' },
+  Test: { bg: 'bg-orange-50 dark:bg-orange-900/30', text: 'text-orange-600 dark:text-orange-400' },
+  Daily: { bg: 'bg-blue-50 dark:bg-blue-900/30', text: 'text-blue-600 dark:text-blue-400' },
+  Weekly: { bg: 'bg-purple-50 dark:bg-purple-900/30', text: 'text-purple-600 dark:text-purple-400' },
+  Monthly: { bg: 'bg-emerald-50 dark:bg-emerald-900/30', text: 'text-emerald-600 dark:text-emerald-400' },
+}
+
+// Domain badge styles
+export const DOMAIN_STYLES: Record<string, { bg: string; text: string }> = {
+  Fitness: { bg: 'bg-orange-50 dark:bg-orange-900/30', text: 'text-orange-600 dark:text-orange-400' },
+  Creative: { bg: 'bg-purple-50 dark:bg-purple-900/30', text: 'text-purple-600 dark:text-purple-400' },
+  Educational: { bg: 'bg-blue-50 dark:bg-blue-900/30', text: 'text-blue-600 dark:text-blue-400' },
 }
