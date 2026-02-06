@@ -77,17 +77,17 @@ export default function Home() {
             </div>
             vaada
           </a>
-          <div className="flex items-center gap-3 sm:gap-6 overflow-x-auto hide-scrollbar">
-            <a href="#how-it-works" onClick={(e) => scrollToSection(e, 'how-it-works')} className="hidden sm:flex items-center px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm hover:border-[#2EE59D]/50 transition-all cursor-pointer flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-6">
+            <a href="#how-it-works" onClick={(e) => scrollToSection(e, 'how-it-works')} className="hidden sm:flex items-center px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm hover:border-[#2EE59D]/50 transition-all cursor-pointer">
               How it works
             </a>
-            <a href="#promises" onClick={(e) => scrollToSection(e, 'promises')} className="hidden sm:flex items-center px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm hover:border-[#2EE59D]/50 transition-all cursor-pointer flex-shrink-0">
+            <a href="#promises" onClick={(e) => scrollToSection(e, 'promises')} className="hidden sm:flex items-center px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm hover:border-[#2EE59D]/50 transition-all cursor-pointer">
               Promises
             </a>
-            <div className="flex-shrink-0"><StravaConnect /></div>
-            <div className="flex-shrink-0"><FundWalletButton /></div>
-            <div className="flex-shrink-0"><PrivyConnectButton /></div>
-            <div className="flex-shrink-0"><ThemeToggle /></div>
+            <StravaConnect />
+            <FundWalletButton />
+            <PrivyConnectButton />
+            <ThemeToggle />
           </div>
         </div>
       </header>
