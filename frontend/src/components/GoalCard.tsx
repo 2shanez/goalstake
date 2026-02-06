@@ -144,6 +144,16 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
     }
   }, [isJoinSuccess, step, refetchParticipant, onJoined])
 
+  // Auto-dismiss success screen after 2 seconds
+  useEffect(() => {
+    if (step === 'done') {
+      const timer = setTimeout(() => {
+        setStep('idle')
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [step])
+
   // Handlers
   const handleStravaConnect = () => {
     const callbackUrl = typeof window !== 'undefined' 
