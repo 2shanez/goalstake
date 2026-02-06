@@ -42,7 +42,7 @@ export function FundWalletButton() {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-[100]">
+        <div className="fixed top-0 left-0 right-0 bottom-0 z-[100] flex flex-col justify-end sm:justify-center sm:items-center">
           {/* Backdrop */}
           <div 
             className="absolute inset-0 bg-black/40"
@@ -50,7 +50,7 @@ export function FundWalletButton() {
           />
           
           {/* Modal */}
-          <div className="absolute bottom-0 left-0 right-0 bg-[var(--background)] rounded-t-2xl p-4 pb-8 sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-2xl sm:max-w-sm sm:w-full sm:mx-4">
+          <div className="relative bg-[var(--background)] rounded-t-2xl p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] sm:rounded-2xl sm:max-w-sm sm:w-full sm:mx-4 sm:pb-4">
             <p className="text-base font-semibold mb-4 text-center">Get Testnet Tokens</p>
             
             <a
