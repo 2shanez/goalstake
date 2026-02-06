@@ -28,10 +28,11 @@ export function FundWalletButton() {
   // Testnet: show faucet links
   if (isTestnet) {
     return (
-      <div className="relative">
+      <div className="relative z-10">
         <button
-          onClick={() => setShowFaucets(!showFaucets)}
-          className="min-h-[44px] px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-sm hover:border-[#2EE59D]/50 active:scale-95 transition-all flex items-center gap-1.5"
+          type="button"
+          onPointerDown={() => setShowFaucets(!showFaucets)}
+          className="min-h-[44px] px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-sm hover:border-[#2EE59D]/50 active:scale-95 transition-all flex items-center gap-1.5 touch-manipulation"
         >
           <span className="text-base">💰</span>
           <span className="hidden sm:inline">Fund</span>
