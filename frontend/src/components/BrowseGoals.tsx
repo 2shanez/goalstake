@@ -3,6 +3,40 @@
 import { useState, useEffect, useRef } from 'react'
 import { GoalCard, Goal } from './GoalCard'
 
+// Skeleton Card Component
+function GoalCardSkeleton() {
+  return (
+    <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl overflow-hidden">
+      {/* Hero skeleton */}
+      <div className="h-24 bg-gradient-to-br from-[var(--border)] to-[var(--surface)] relative overflow-hidden">
+        <div className="absolute inset-0 skeleton" />
+      </div>
+      
+      {/* Content skeleton */}
+      <div className="p-4 space-y-4">
+        {/* Title */}
+        <div className="h-5 w-3/4 rounded-md skeleton" />
+        
+        {/* Description */}
+        <div className="h-4 w-full rounded-md skeleton" />
+        
+        {/* Stats row */}
+        <div className="flex gap-3">
+          <div className="h-8 w-16 rounded-md skeleton" />
+          <div className="h-8 w-16 rounded-md skeleton" />
+          <div className="h-8 w-16 rounded-md skeleton" />
+        </div>
+        
+        {/* Timeline */}
+        <div className="h-2 w-full rounded-full skeleton" />
+        
+        {/* Button */}
+        <div className="h-12 w-full rounded-xl skeleton" />
+      </div>
+    </div>
+  )
+}
+
 // Email Modal Component
 function NotifyModal({ 
   feature, 
@@ -220,6 +254,7 @@ interface BrowseGoalsProps {
 
 export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
   const [mounted, setMounted] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [notified, setNotified] = useState<string[]>([])
   const [modalFeature, setModalFeature] = useState<string | null>(null)
   
@@ -228,6 +263,9 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
     // Load notified items from localStorage
     const saved = localStorage.getItem('vaada_notified')
     if (saved) setNotified(JSON.parse(saved))
+    // Brief delay to show skeleton, then reveal cards
+    const timer = setTimeout(() => setLoading(false), 400)
+    return () => clearTimeout(timer)
   }, [])
 
   const handleNotifyClick = (title: string) => {
@@ -257,17 +295,29 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
     <div>
       {/* Goals Grid with stagger animation */}
       <div className="flex flex-wrap justify-center gap-4">
-        {filteredGoals.map((goal, index) => (
-          <div
-            key={goal.id}
-            className={`w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] transition-all duration-500 ${
-              mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
-            style={{ transitionDelay: `${index * 50}ms` }}
-          >
-            <GoalCard goal={goal} />
-          </div>
-        ))}
+        {loading ? (
+          // Show skeletons while loading
+          Array.from({ length: 4 }).map((_, index) => (
+            <div
+              key={`skeleton-${index}`}
+              className="w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)]"
+            >
+              <GoalCardSkeleton />
+            </div>
+          ))
+        ) : (
+          filteredGoals.map((goal, index) => (
+            <div
+              key={goal.id}
+              className={`w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(25%-0.75rem)] transition-all duration-500 ${
+                mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
+              style={{ transitionDelay: `${index * 50}ms` }}
+            >
+              <GoalCard goal={goal} />
+            </div>
+          ))
+        )}
         
         {/* Coming Soon Placeholders */}
         {showComingSoon && COMING_SOON.map((item, i) => (
