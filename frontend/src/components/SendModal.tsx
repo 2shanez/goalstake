@@ -152,14 +152,23 @@ export function SendModal({ onClose }: SendModalProps) {
               </p>
             )}
 
-            <button
-              onClick={handleSend}
-              disabled={isPending || isConfirming}
-              className="w-full mt-4 px-4 py-3 bg-[#2EE59D] text-white font-semibold rounded-xl
-                hover:bg-[#26c987] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isConfirming ? 'Confirming...' : isPending ? 'Confirm in wallet...' : 'Send'}
-            </button>
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={onClose}
+                className="flex-1 px-4 py-3 bg-[var(--surface)] border border-[var(--border)] text-[var(--foreground)] font-semibold rounded-xl
+                  hover:bg-[var(--surface-hover)] active:scale-95 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSend}
+                disabled={isPending || isConfirming}
+                className="flex-1 px-4 py-3 bg-[#2EE59D] text-white font-semibold rounded-xl
+                  hover:bg-[#26c987] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isConfirming ? 'Confirming...' : isPending ? 'Confirm...' : 'Send'}
+              </button>
+            </div>
           </>
         )}
       </div>
