@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { parseUnits } from 'viem'
 import { useUSDC, useContracts } from '@/lib/hooks'
@@ -17,14 +18,19 @@ export function SendModal({ onClose }: SendModalProps) {
   const [recipient, setRecipient] = useState('')
   const [amount, setAmount] = useState('')
   const [error, setError] = useState('')
+  const [mounted, setMounted] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const { writeContract, data: hash, error: writeError, isPending } = useWriteContract()
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
 
   useEffect(() => {
-    inputRef.current?.focus()
+    setMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (mounted) inputRef.current?.focus()
+  }, [mounted])
 
   useEffect(() => {
     if (isSuccess) {
@@ -63,16 +69,18 @@ export function SendModal({ onClose }: SendModalProps) {
     })
   }
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+  if (!mounted) return null
+
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex flex-col justify-end sm:justify-center sm:items-center p-0 sm:p-4">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/50"
         onClick={onClose}
       />
       
       {/* Modal */}
-      <div className="relative bg-[var(--background)] border border-[var(--border)] rounded-2xl p-6 w-full max-w-sm shadow-xl animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-[var(--background)] border-t sm:border border-[var(--border)] rounded-t-2xl sm:rounded-2xl p-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:pb-6 w-full sm:max-w-sm shadow-xl animate-slide-up max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors"
@@ -172,6 +180,7 @@ export function SendModal({ onClose }: SendModalProps) {
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
