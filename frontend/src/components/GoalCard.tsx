@@ -43,10 +43,10 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const { hasTokenOnChain, refetch: refetchToken } = useStravaToken()
   const goalDetails = useGoalDetails(goal.onChainId)
   
-  // Tick every 60s to update countdowns
+  // Tick every second to update countdowns live
   const [, setTick] = useState(0)
   useEffect(() => {
-    const interval = setInterval(() => setTick(t => t + 1), 60000)
+    const interval = setInterval(() => setTick(t => t + 1), 1000)
     return () => clearInterval(interval)
   }, [])
 
@@ -257,11 +257,16 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
     }
   })
 
-  // Phase timeline
+  // Phase timeline - maps contract phase to timeline step (0=Entry, 1=Compete, 2=Verify, 3=Payout)
   const getPhaseStep = () => {
     if (isSettled) return 3
+    if (phase === GoalPhase.AwaitingSettlement) return 2
     if (phase === GoalPhase.Competition) return 1
     if (phase === GoalPhase.Entry || entryOpen) return 0
+    // Fallback: check timestamps if phase not yet updated
+    const now = Math.floor(Date.now() / 1000)
+    if (goalDetails.deadline && now >= goalDetails.deadline) return 2
+    if (goalDetails.entryDeadline && now >= goalDetails.entryDeadline) return 1
     return 0
   }
   const currentPhaseStep = getPhaseStep()
@@ -305,8 +310,16 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
               {goal.category.toUpperCase()}
             </span>
             {phaseInfo && (
-              <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-full ${phaseInfo.color}`}>
-                {phaseInfo.emoji} {phaseInfo.label}
+              <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5 ${phaseInfo.color}`}>
+                {phase === GoalPhase.AwaitingSettlement ? (
+                  <svg className="w-3 h-3 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                  </svg>
+                ) : (
+                  <span>{phaseInfo.emoji}</span>
+                )}
+                {phaseInfo.label}
               </span>
             )}
           </div>
@@ -362,7 +375,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
                 },
                 { 
                   label: 'Verify', 
-                  desc: 'Via Strava' 
+                  desc: currentPhaseStep === 2 ? 'Verifying...' : 'Via Strava' 
                 },
                 { 
                   label: 'Payout', 
