@@ -51,9 +51,9 @@ export function PrivyConnectButton() {
     <>
       <div className="flex items-center gap-2">
         <button
-          onClick={() => setShowSend(true)}
+          onClick={(e) => { e.stopPropagation(); setShowSend(true); }}
           title="Click to send USDC"
-          className="px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-sm hover:border-[#2EE59D]/50 transition-all flex items-center gap-1.5"
+          className="min-h-[44px] px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-sm hover:border-[#2EE59D]/50 active:scale-95 transition-all flex items-center gap-1.5"
         >
           <span className="text-[#2EE59D] font-medium">${balanceNum.toFixed(2)}</span>
           <svg className="w-3 h-3 text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
