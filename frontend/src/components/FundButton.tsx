@@ -30,7 +30,7 @@ export function FundWalletButton() {
     return (
       <div className="relative">
         <button
-          onClick={(e) => { e.stopPropagation(); setShowFaucets(!showFaucets); }}
+          onClick={() => setShowFaucets(!showFaucets)}
           className="min-h-[44px] px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-sm hover:border-[#2EE59D]/50 active:scale-95 transition-all flex items-center gap-1.5"
         >
           <span className="text-base">💰</span>
@@ -40,7 +40,7 @@ export function FundWalletButton() {
         {showFaucets && (
           <>
             <div className="fixed inset-0 z-40 bg-black/20" onClick={() => setShowFaucets(false)} />
-            <div className="fixed sm:absolute inset-x-4 sm:inset-x-auto sm:right-0 bottom-20 sm:bottom-auto sm:top-full sm:mt-2 z-50 bg-[var(--background)] border border-[var(--border)] rounded-xl shadow-xl p-4 sm:p-3 sm:w-56 animate-in slide-in-from-bottom-4 sm:animate-in sm:fade-in sm:zoom-in-95 duration-200">
+            <div className="fixed sm:absolute inset-x-4 sm:inset-x-auto sm:right-0 bottom-20 sm:bottom-auto sm:top-full sm:mt-2 z-50 bg-[var(--background)] border border-[var(--border)] rounded-xl shadow-xl p-4 sm:p-3 sm:w-56">
               <p className="text-sm sm:text-xs text-[var(--text-secondary)] mb-3 sm:mb-2 font-medium">Testnet Faucets</p>
               
               <a
