@@ -51,7 +51,7 @@ export function FundWalletButton() {
         className="min-h-[44px] min-w-[44px] px-3 py-2 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-sm hover:border-[#2EE59D]/50 active:scale-95 transition-all flex items-center justify-center gap-1.5"
       >
         <span className="text-lg">💰</span>
-        <span className="hidden sm:inline">Fund</span>
+        <span>Fund</span>
       </button>
 
       {isOpen && mounted && createPortal(
