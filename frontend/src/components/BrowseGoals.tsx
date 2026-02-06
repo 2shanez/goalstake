@@ -119,11 +119,11 @@ const FEATURED_GOALS: Goal[] = [
   // Daily Goals
   {
     id: '1',
-    onChainId: 10,  // V3 goal 10 - Daily Mile
-    title: 'Daily Mile',
-    description: 'Run 1 mile today',
-    emoji: '🌅',
-    targetMiles: 1,
+    onChainId: 11,  // V3 goal 11 - Test WIN
+    title: 'Test WIN',
+    description: 'Run 0.2 miles',
+    emoji: '🏆',
+    targetMiles: 0.2,
     durationDays: 1,
     minStake: 5,
     maxStake: 50,
