@@ -55,20 +55,40 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const [showPlayers, setShowPlayers] = useState(false)
   const [stakeAmount, setStakeAmount] = useState(goal.minStake.toString())
   const [step, setStep] = useState<Step>('idle')
+  const [showClaimCelebration, setShowClaimCelebration] = useState(false)
   const stravaConnected = isStravaConnected()
 
-  // Contract writes
-  const { writeContract: writeApprove, data: approveHash, isPending: isApprovePending } = useWriteContract()
-  const { isLoading: isApproveConfirming, isSuccess: isApproveSuccess } = useWaitForTransactionReceipt({ hash: approveHash })
+  // Contract writes with error tracking
+  const { writeContract: writeApprove, data: approveHash, isPending: isApprovePending, error: approveError } = useWriteContract()
+  const { isLoading: isApproveConfirming, isSuccess: isApproveSuccess, error: approveConfirmError } = useWaitForTransactionReceipt({ hash: approveHash })
 
-  const { writeContract: writeJoin, data: joinHash, isPending: isJoinPending } = useWriteContract()
-  const { isLoading: isJoinConfirming, isSuccess: isJoinSuccess } = useWaitForTransactionReceipt({ hash: joinHash })
+  const { writeContract: writeJoin, data: joinHash, isPending: isJoinPending, error: joinError } = useWriteContract()
+  const { isLoading: isJoinConfirming, isSuccess: isJoinSuccess, error: joinConfirmError } = useWaitForTransactionReceipt({ hash: joinHash })
 
-  const { writeContract: writeStoreToken, data: storeTokenHash, isPending: isStorePending } = useWriteContract()
-  const { isLoading: isStoreConfirming, isSuccess: isStoreSuccess } = useWaitForTransactionReceipt({ hash: storeTokenHash })
+  const { writeContract: writeStoreToken, data: storeTokenHash, isPending: isStorePending, error: storeError } = useWriteContract()
+  const { isLoading: isStoreConfirming, isSuccess: isStoreSuccess, error: storeConfirmError } = useWaitForTransactionReceipt({ hash: storeTokenHash })
 
-  const { writeContract: writeClaim, data: claimHash, isPending: isClaimPending } = useWriteContract()
-  const { isLoading: isClaimConfirming, isSuccess: isClaimSuccess } = useWaitForTransactionReceipt({ hash: claimHash })
+  const { writeContract: writeClaim, data: claimHash, isPending: isClaimPending, error: claimError } = useWriteContract()
+  const { isLoading: isClaimConfirming, isSuccess: isClaimSuccess, error: claimConfirmError } = useWaitForTransactionReceipt({ hash: claimHash })
+
+  // Parse user-friendly error messages
+  const getErrorMessage = (error: Error | null): string | null => {
+    if (!error) return null
+    const msg = error.message.toLowerCase()
+    if (msg.includes('user rejected') || msg.includes('user denied')) return 'Transaction cancelled'
+    if (msg.includes('insufficient funds')) return 'Insufficient funds for gas'
+    if (msg.includes('insufficient allowance')) return 'Please approve USDC first'
+    if (msg.includes('already joined') || msg.includes('already participant')) return 'Already joined this goal'
+    if (msg.includes('entry closed') || msg.includes('entry deadline')) return 'Entry period has closed'
+    if (msg.includes('not participant')) return 'You haven\'t joined this goal'
+    if (msg.includes('not verified')) return 'Results not verified yet'
+    if (msg.includes('already claimed')) return 'Already claimed'
+    if (msg.includes('did not succeed')) return 'Goal not completed'
+    return 'Transaction failed. Please try again.'
+  }
+
+  const txError = approveError || approveConfirmError || joinError || joinConfirmError || storeError || storeConfirmError || claimError || claimConfirmError
+  const errorMessage = getErrorMessage(txError as Error | null)
 
   // Derived state
   const isSettled = phase === GoalPhase.Settled
@@ -87,6 +107,17 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
       setStep('idle')
     }
   }, [isStoreSuccess, refetchToken])
+
+  // Handle claim success - show celebration
+  useEffect(() => {
+    if (isClaimSuccess) {
+      setShowClaimCelebration(true)
+      refetchParticipant()
+      // Auto-hide after 5 seconds
+      const timeout = setTimeout(() => setShowClaimCelebration(false), 5000)
+      return () => clearTimeout(timeout)
+    }
+  }, [isClaimSuccess, refetchParticipant])
 
   // Handle approval → join flow
   useEffect(() => {
@@ -294,6 +325,38 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
     )
   }
 
+  // Claim celebration overlay
+  if (showClaimCelebration) {
+    return (
+      <div className="bg-gradient-to-br from-[#2EE59D]/20 to-[#2EE59D]/5 border border-[#2EE59D] rounded-2xl p-8 text-center relative overflow-hidden">
+        {/* Confetti effect */}
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 rounded-full animate-bounce"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                backgroundColor: ['#2EE59D', '#FFD700', '#FF6B6B', '#4ECDC4'][i % 4],
+                animationDelay: `${Math.random() * 0.5}s`,
+                animationDuration: `${0.5 + Math.random() * 0.5}s`,
+              }}
+            />
+          ))}
+        </div>
+        <div className="relative">
+          <div className="text-6xl mb-4">🎉</div>
+          <h3 className="text-2xl font-bold text-[#2EE59D] mb-2">Winnings Claimed!</h3>
+          <p className="text-[var(--text-secondary)]">You kept your promise and earned from those who didn't.</p>
+          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-[#2EE59D]/10 rounded-full">
+            <span className="text-sm font-bold text-[#2EE59D]">+${userStake} USDC</span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={`group bg-[var(--surface)] border rounded-2xl transition-all duration-200 relative
       ${showPlayers ? 'z-40' : 'z-0'}
@@ -320,6 +383,16 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
                   <span>{phaseInfo.emoji}</span>
                 )}
                 {phaseInfo.label}
+              </span>
+            )}
+            {/* WIN/LOSE badge after verification */}
+            {hasJoined && participantData?.verified && (
+              <span className={`text-[10px] font-semibold px-2.5 py-1 rounded-full ${
+                userWon 
+                  ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' 
+                  : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+              }`}>
+                {userWon ? '🏆 WON' : '❌ LOST'}
               </span>
             )}
           </div>
@@ -437,6 +510,13 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
           )}
           </div>
         </div>
+
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="mb-3 p-2 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+            <p className="text-xs text-red-600 dark:text-red-400 text-center">{errorMessage}</p>
+          </div>
+        )}
 
         {/* Action Button (collapsed) */}
         {!expanded && (
