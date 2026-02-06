@@ -36,7 +36,7 @@ export function FundWalletButton() {
       setTimeout(() => {
         setIsOpen(false)
         setCopied(false)
-      }, 800)
+      }, 1000)
     }
   }, [address])
   
@@ -107,7 +107,7 @@ export function FundWalletButton() {
                   : 'bg-[var(--surface)] border-[var(--border)]'
               }`}
             >
-              <span className="text-2xl">{copied ? '✓' : '📋'}</span>
+              <span className="text-2xl">{copied ? '✅' : '📋'}</span>
               <div className="text-left">
                 <p className={`font-medium ${copied ? 'text-[#2EE59D]' : ''}`}>
                   {copied ? 'Copied!' : 'Copy Wallet Address'}
