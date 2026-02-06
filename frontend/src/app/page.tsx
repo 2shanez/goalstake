@@ -77,17 +77,17 @@ export default function Home() {
             </div>
             vaada
           </a>
-          <div className="flex items-center gap-6">
-            <a href="#how-it-works" onClick={(e) => scrollToSection(e, 'how-it-works')} className="hidden sm:flex items-center px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm hover:border-[#2EE59D]/50 transition-all cursor-pointer">
+          <div className="flex items-center gap-3 sm:gap-6 overflow-x-auto hide-scrollbar">
+            <a href="#how-it-works" onClick={(e) => scrollToSection(e, 'how-it-works')} className="hidden sm:flex items-center px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm hover:border-[#2EE59D]/50 transition-all cursor-pointer flex-shrink-0">
               How it works
             </a>
-            <a href="#promises" onClick={(e) => scrollToSection(e, 'promises')} className="hidden sm:flex items-center px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm hover:border-[#2EE59D]/50 transition-all cursor-pointer">
+            <a href="#promises" onClick={(e) => scrollToSection(e, 'promises')} className="hidden sm:flex items-center px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm hover:border-[#2EE59D]/50 transition-all cursor-pointer flex-shrink-0">
               Promises
             </a>
-            <StravaConnect />
-            <FundWalletButton />
-            <PrivyConnectButton />
-            <ThemeToggle />
+            <div className="flex-shrink-0"><StravaConnect /></div>
+            <div className="flex-shrink-0"><FundWalletButton /></div>
+            <div className="flex-shrink-0"><PrivyConnectButton /></div>
+            <div className="flex-shrink-0"><ThemeToggle /></div>
           </div>
         </div>
       </header>
