@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePrivy } from '@privy-io/react-auth'
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract, useSwitchChain, useChainId } from 'wagmi'
 import { baseSepolia } from 'wagmi/chains'
 import { CONTRACTS } from '@/lib/wagmi'
@@ -26,6 +27,7 @@ const automationAbi = [
 ] as const
 
 export function StravaConnect() {
+  const { authenticated } = usePrivy()
   const { address, isConnected } = useAccount()
   const chainId = useChainId()
   const { switchChain, isPending: isSwitching } = useSwitchChain()
@@ -174,7 +176,8 @@ export function StravaConnect() {
     }
   }
 
-  if (!isConnected) return null
+  // Only show Strava button if user is authenticated via Privy
+  if (!authenticated || !isConnected) return null
 
   // Already stored on-chain - fully verified
   if (hasTokenOnChain) {
