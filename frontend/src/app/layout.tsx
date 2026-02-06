@@ -40,6 +40,10 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://auth.privy.io" />
         <link rel="dns-prefetch" href="https://auth.privy.io" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#2EE59D" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       <body className={`${inter.className} bg-[var(--background)] text-[var(--foreground)]`} suppressHydrationWarning>
         <Providers>
