@@ -25,11 +25,18 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       url: `https://vaada.io/goal/${id}`,
       siteName: 'vaada',
       type: 'website',
+      images: [{
+        url: `https://vaada.io/api/og/${id}`,
+        width: 1200,
+        height: 630,
+        alt: goal.title,
+      }],
     },
     twitter: {
       card: 'summary_large_image',
       title: `${goal.emoji} ${goal.title}`,
       description: `${goal.description}. Stake $${goal.minStake}-$${goal.maxStake} on your promise.`,
+      images: [`https://vaada.io/api/og/${id}`],
     },
   }
 }
