@@ -65,7 +65,7 @@ export default function Home() {
   return (
     <>
       {/* Header - outside main to avoid overflow clipping on iOS */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] sm:bg-[var(--background)]/80 sm:backdrop-blur-md border-b border-[var(--border)]">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)] border-b border-[var(--border)]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center gap-6 sm:gap-4">
           <a 
             href="/" 
