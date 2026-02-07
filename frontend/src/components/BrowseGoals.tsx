@@ -390,23 +390,32 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
       {/* Filter Section */}
       <div className="mb-8">
         <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4 max-w-lg mx-auto space-y-3">
-          {/* Active Toggle Row */}
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-[var(--text-secondary)]">Show only live</span>
-            <button
-              onClick={() => setActiveOnly(!activeOnly)}
-              className={`relative w-12 h-6 rounded-full transition-colors ${
-                activeOnly ? 'bg-[#2EE59D]' : 'bg-[var(--border)]'
-              }`}
-            >
-              <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                activeOnly ? 'left-7' : 'left-1'
-              }`} />
-            </button>
+          {/* Live/All Segmented Control */}
+          <div className="flex justify-center">
+            <div className="inline-flex p-1 bg-[var(--background)] rounded-lg">
+              <button
+                onClick={() => setActiveOnly(true)}
+                className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all flex items-center gap-1.5 ${
+                  activeOnly
+                    ? 'bg-[#2EE59D] text-white shadow-sm'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                <span className={`w-1.5 h-1.5 rounded-full ${activeOnly ? 'bg-white' : 'bg-[#2EE59D]'} ${activeOnly ? '' : 'animate-pulse'}`} />
+                Live
+              </button>
+              <button
+                onClick={() => setActiveOnly(false)}
+                className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${
+                  !activeOnly
+                    ? 'bg-[var(--foreground)] text-[var(--background)] shadow-sm'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                All
+              </button>
+            </div>
           </div>
-
-          {/* Divider */}
-          <div className="h-px bg-[var(--border)]" />
 
           {/* Domain Filter */}
           <div className="flex justify-center gap-1.5">
