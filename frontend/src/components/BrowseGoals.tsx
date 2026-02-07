@@ -319,6 +319,118 @@ const FEATURED_GOALS: Goal[] = [
     domain: 'Educational',
     subdomain: 'Duolingo',
   },
+
+  // ═══════════════════════════════════════════
+  // HEALTH - WEIGHT (Smart Scale)
+  // ═══════════════════════════════════════════
+  
+  // Weekly Weight
+  {
+    id: 'health-weight-weekly-1',
+    title: 'Daily Weigh-In',
+    description: 'Log weight 7 days straight',
+    emoji: '⚖️',
+    targetMiles: 7,
+    targetUnit: 'weigh-ins',
+    durationDays: 7,
+    minStake: 10,
+    maxStake: 50,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Weekly',
+    domain: 'Health',
+    subdomain: 'Weight',
+  },
+  
+  // Monthly Weight
+  {
+    id: 'health-weight-monthly-1',
+    title: 'Lose 5 lbs',
+    description: 'Hit your target weight in 30 days',
+    emoji: '📉',
+    targetMiles: 5,
+    targetUnit: 'lbs',
+    durationDays: 30,
+    minStake: 25,
+    maxStake: 200,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Health',
+    subdomain: 'Weight',
+  },
+  {
+    id: 'health-weight-monthly-2',
+    title: 'Lose 10 lbs',
+    description: 'Serious weight loss in 60 days',
+    emoji: '🏆',
+    targetMiles: 10,
+    targetUnit: 'lbs',
+    durationDays: 60,
+    minStake: 50,
+    maxStake: 500,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Health',
+    subdomain: 'Weight',
+  },
+
+  // ═══════════════════════════════════════════
+  // HEALTH - NUTRITION (No Delivery)
+  // ═══════════════════════════════════════════
+  
+  // Weekly Nutrition
+  {
+    id: 'health-nutrition-weekly-1',
+    title: 'No Delivery Week',
+    description: 'Zero DoorDash/UberEats orders for 7 days',
+    emoji: '🚫🍔',
+    targetMiles: 0,
+    targetUnit: 'orders',
+    durationDays: 7,
+    minStake: 10,
+    maxStake: 50,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Weekly',
+    domain: 'Health',
+    subdomain: 'Nutrition',
+  },
+  
+  // Monthly Nutrition
+  {
+    id: 'health-nutrition-monthly-1',
+    title: 'No Delivery Month',
+    description: 'Zero food delivery for 30 days',
+    emoji: '🥗',
+    targetMiles: 0,
+    targetUnit: 'orders',
+    durationDays: 30,
+    minStake: 50,
+    maxStake: 200,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Health',
+    subdomain: 'Nutrition',
+  },
+  {
+    id: 'health-nutrition-monthly-2',
+    title: 'Home Cook Challenge',
+    description: 'Max 4 delivery orders in 30 days',
+    emoji: '👨‍🍳',
+    targetMiles: 4,
+    targetUnit: 'orders max',
+    durationDays: 30,
+    minStake: 25,
+    maxStake: 100,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Health',
+    subdomain: 'Nutrition',
+  },
 ]
 
 const COMING_SOON = [

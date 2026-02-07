@@ -161,6 +161,7 @@ export interface Goal {
 // Domain definitions for filtering
 export const DOMAINS = {
   Fitness: { emoji: '🏃', subdomains: ['Running'] },
+  Health: { emoji: '💪', subdomains: ['Weight', 'Nutrition'] },
   Creative: { emoji: '🎬', subdomains: ['YouTube'] },
   Educational: { emoji: '📚', subdomains: ['Duolingo'] },
 } as const
@@ -192,6 +193,7 @@ export const CATEGORY_STYLES: Record<string, { bg: string; text: string }> = {
 // Domain badge styles
 export const DOMAIN_STYLES: Record<string, { bg: string; text: string }> = {
   Fitness: { bg: 'bg-orange-50 dark:bg-orange-900/30', text: 'text-orange-600 dark:text-orange-400' },
+  Health: { bg: 'bg-pink-50 dark:bg-pink-900/30', text: 'text-pink-600 dark:text-pink-400' },
   Creative: { bg: 'bg-purple-50 dark:bg-purple-900/30', text: 'text-purple-600 dark:text-purple-400' },
   Educational: { bg: 'bg-blue-50 dark:bg-blue-900/30', text: 'text-blue-600 dark:text-blue-400' },
 }
