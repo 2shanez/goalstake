@@ -203,10 +203,10 @@ export function LiveChallengeCard() {
       <div className="relative">
         {/* Top row: Badge + Timer */}
         <div className="flex items-center justify-between mb-4">
-          <span className="text-xs font-bold px-3 py-1.5 rounded-xl bg-[#2EE59D] text-black uppercase tracking-wide">
+          <span className="text-xs font-bold px-3 py-2 rounded-xl bg-[#2EE59D] text-white uppercase tracking-wide">
             New User Challenge
           </span>
-          <span className="text-xs font-medium px-3 py-1.5 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex items-center gap-1.5">
+          <span className="text-xs font-bold px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-[#2EE59D] animate-pulse" />
             {timeLeft} left
           </span>
@@ -214,12 +214,12 @@ export function LiveChallengeCard() {
         
         {/* Main content row */}
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#2EE59D]/20 to-[#2EE59D]/10 flex items-center justify-center text-3xl flex-shrink-0 border border-[#2EE59D]/20">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#2EE59D]/20 to-[#2EE59D]/10 flex items-center justify-center text-2xl flex-shrink-0 border border-[#2EE59D]/20">
             🚀
           </div>
           <div className="min-w-0">
-            <h3 className="font-bold text-lg leading-tight">24-Hour Commitment</h3>
-            <p className="text-sm text-[var(--text-secondary)]">Join a vaada within 24 hours</p>
+            <h3 className="font-bold text-base leading-tight">24-Hour Commitment</h3>
+            <p className="text-xs text-[var(--text-secondary)]">Join a vaada within 24 hours</p>
           </div>
         </div>
         
@@ -227,7 +227,7 @@ export function LiveChallengeCard() {
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5">
-              <span className="text-lg font-bold text-[#2EE59D]">{joinCount}</span>
+              <span className="text-base font-bold text-[#2EE59D]">{joinCount}</span>
               <span className="text-xs text-[var(--text-secondary)]">joined today</span>
             </div>
             {hasJoined && (
@@ -242,14 +242,14 @@ export function LiveChallengeCard() {
           </div>
           
           {hasJoined ? (
-            <div className="flex items-center gap-2 px-4 py-2 bg-[#2EE59D]/15 rounded-xl text-[#2EE59D] font-bold text-xs border border-[#2EE59D]/30">
+            <div className="flex items-center gap-2 px-3 py-2 bg-[#2EE59D]/15 rounded-xl text-[#2EE59D] font-bold text-xs border border-[#2EE59D]/30">
               <span>✓</span>
               <span>You're in!</span>
             </div>
           ) : (
             <button
               onClick={handleJoin}
-              className="px-4 py-2 bg-[#2EE59D] text-black font-bold text-xs rounded-xl 
+              className="px-3 py-2 bg-[#2EE59D] text-white font-bold text-xs rounded-xl 
                 hover:bg-[#26c987] hover:shadow-lg hover:shadow-[#2EE59D]/25 hover:-translate-y-0.5
                 active:translate-y-0 transition-all"
             >
