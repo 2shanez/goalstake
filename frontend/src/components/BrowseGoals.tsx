@@ -461,14 +461,6 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
             ))}
           </div>
         </div>
-
-        {/* Filter indicator */}
-        {filteredGoals.length > 0 && (
-          <p className="text-center text-xs text-[var(--text-secondary)] mt-3">
-            {filteredGoals.length} {filteredGoals.length === 1 ? 'promise' : 'promises'}
-            {!activeOnly && ' (incl. coming soon)'}
-          </p>
-        )}
       </div>
 
       {/* Goals Grid with stagger animation */}
