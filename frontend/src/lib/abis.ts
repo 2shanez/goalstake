@@ -164,6 +164,7 @@ export const DOMAINS = {
   Health: { emoji: '💪', subdomains: ['Weight', 'Nutrition'] },
   Creative: { emoji: '🎬', subdomains: ['YouTube'] },
   Educational: { emoji: '📚', subdomains: ['Duolingo'] },
+  Startup: { emoji: '🚀', subdomains: ['Launch', 'Shipping'] },
 } as const
 
 export type DomainKey = keyof typeof DOMAINS
@@ -196,4 +197,5 @@ export const DOMAIN_STYLES: Record<string, { bg: string; text: string }> = {
   Health: { bg: 'bg-pink-50 dark:bg-pink-900/30', text: 'text-pink-600 dark:text-pink-400' },
   Creative: { bg: 'bg-purple-50 dark:bg-purple-900/30', text: 'text-purple-600 dark:text-purple-400' },
   Educational: { bg: 'bg-blue-50 dark:bg-blue-900/30', text: 'text-blue-600 dark:text-blue-400' },
+  Startup: { bg: 'bg-emerald-50 dark:bg-emerald-900/30', text: 'text-emerald-600 dark:text-emerald-400' },
 }

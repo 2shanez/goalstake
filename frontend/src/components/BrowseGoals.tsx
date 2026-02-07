@@ -431,6 +431,120 @@ const FEATURED_GOALS: Goal[] = [
     domain: 'Health',
     subdomain: 'Nutrition',
   },
+
+  // ═══════════════════════════════════════════
+  // STARTUP - LAUNCH (Product Hunt)
+  // ═══════════════════════════════════════════
+  
+  // Weekly Launch
+  {
+    id: 'startup-launch-weekly-1',
+    title: 'Launch This Week',
+    description: 'Ship your product on Product Hunt',
+    emoji: '🚀',
+    targetMiles: 1,
+    targetUnit: 'launch',
+    durationDays: 7,
+    minStake: 50,
+    maxStake: 500,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Weekly',
+    domain: 'Startup',
+    subdomain: 'Launch',
+  },
+  
+  // Monthly Launch
+  {
+    id: 'startup-launch-monthly-1',
+    title: 'Launch by End of Month',
+    description: 'Get your product live on Product Hunt',
+    emoji: '🎯',
+    targetMiles: 1,
+    targetUnit: 'launch',
+    durationDays: 30,
+    minStake: 100,
+    maxStake: 1000,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Startup',
+    subdomain: 'Launch',
+  },
+
+  // ═══════════════════════════════════════════
+  // STARTUP - SHIPPING (GitHub)
+  // ═══════════════════════════════════════════
+  
+  // Daily Shipping
+  {
+    id: 'startup-shipping-daily-1',
+    title: 'Daily Commit',
+    description: 'Push code to GitHub today',
+    emoji: '💻',
+    targetMiles: 1,
+    targetUnit: 'commits',
+    durationDays: 1,
+    minStake: 5,
+    maxStake: 25,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Daily',
+    domain: 'Startup',
+    subdomain: 'Shipping',
+  },
+  
+  // Weekly Shipping
+  {
+    id: 'startup-shipping-weekly-1',
+    title: 'Ship 3 Features',
+    description: 'Merge 3 PRs this week',
+    emoji: '⚡',
+    targetMiles: 3,
+    targetUnit: 'PRs',
+    durationDays: 7,
+    minStake: 25,
+    maxStake: 100,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Weekly',
+    domain: 'Startup',
+    subdomain: 'Shipping',
+  },
+  {
+    id: 'startup-shipping-weekly-2',
+    title: 'Build in Public',
+    description: 'Tweet your progress 7 days straight',
+    emoji: '🐦',
+    targetMiles: 7,
+    targetUnit: 'tweets',
+    durationDays: 7,
+    minStake: 10,
+    maxStake: 50,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Weekly',
+    domain: 'Startup',
+    subdomain: 'Shipping',
+  },
+  
+  // Monthly Shipping
+  {
+    id: 'startup-shipping-monthly-1',
+    title: '30 Day Streak',
+    description: 'Commit to GitHub every day for 30 days',
+    emoji: '🔥',
+    targetMiles: 30,
+    targetUnit: 'commits',
+    durationDays: 30,
+    minStake: 50,
+    maxStake: 250,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Startup',
+    subdomain: 'Shipping',
+  },
 ]
 
 const COMING_SOON = [
