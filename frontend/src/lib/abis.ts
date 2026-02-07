@@ -161,7 +161,7 @@ export interface Goal {
 // Domain definitions for filtering
 export const DOMAINS = {
   Fitness: { emoji: '🏃', subdomains: ['Running'] },
-  Creative: { emoji: '✍️', subdomains: ['Substack'] },
+  Creative: { emoji: '🎬', subdomains: ['YouTube'] },
   Educational: { emoji: '📚', subdomains: ['Duolingo'] },
 } as const
 

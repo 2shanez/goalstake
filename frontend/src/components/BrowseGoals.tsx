@@ -223,17 +223,17 @@ const FEATURED_GOALS: Goal[] = [
   },
 
   // ═══════════════════════════════════════════
-  // CREATIVE - SUBSTACK
+  // CREATIVE - YOUTUBE
   // ═══════════════════════════════════════════
   
-  // Weekly Substack
+  // Weekly YouTube
   {
-    id: 'creative-substack-weekly-1',
-    title: 'Weekly Writer',
-    description: 'Publish 1 Substack post this week',
-    emoji: '✍️',
+    id: 'creative-youtube-weekly-1',
+    title: 'Weekly Upload',
+    description: 'Upload 1 video this week',
+    emoji: '🎬',
     targetMiles: 1,
-    targetUnit: 'posts',
+    targetUnit: 'videos',
     durationDays: 7,
     minStake: 10,
     maxStake: 100,
@@ -241,17 +241,17 @@ const FEATURED_GOALS: Goal[] = [
     totalStaked: 0,
     category: 'Weekly',
     domain: 'Creative',
-    subdomain: 'Substack',
+    subdomain: 'YouTube',
   },
   
-  // Monthly Substack
+  // Monthly YouTube
   {
-    id: 'creative-substack-monthly-1',
-    title: 'Content Creator',
-    description: 'Publish 4 posts this month',
-    emoji: '📝',
+    id: 'creative-youtube-monthly-1',
+    title: 'Content Machine',
+    description: 'Upload 4 videos this month',
+    emoji: '📹',
     targetMiles: 4,
-    targetUnit: 'posts',
+    targetUnit: 'videos',
     durationDays: 30,
     minStake: 20,
     maxStake: 200,
@@ -259,7 +259,7 @@ const FEATURED_GOALS: Goal[] = [
     totalStaked: 0,
     category: 'Monthly',
     domain: 'Creative',
-    subdomain: 'Substack',
+    subdomain: 'YouTube',
   },
 
   // ═══════════════════════════════════════════
