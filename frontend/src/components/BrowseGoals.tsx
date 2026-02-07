@@ -339,7 +339,8 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
   const [mounted, setMounted] = useState(false)
   const [notified, setNotified] = useState<string[]>([])
   const [modalFeature, setModalFeature] = useState<string | null>(null)
-  const [selectedDomain, setSelectedDomain] = useState<DomainKey | 'Active'>('Active')
+  const [activeOnly, setActiveOnly] = useState(true)  // Toggle for on-chain goals only
+  const [selectedDomain, setSelectedDomain] = useState<DomainKey | 'All'>('All')
   const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe>('All')
   
   useEffect(() => {
@@ -362,14 +363,12 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
     setModalFeature(null)
   }
 
-  // Filter goals by domain and timeframe
+  // Filter goals by active toggle + domain + timeframe
   const filteredGoals = FEATURED_GOALS.filter(g => {
-    // 'Active' shows only on-chain goals, domain filters show all in that domain
-    const domainMatch = selectedDomain === 'Active' 
-      ? g.onChainId !== undefined 
-      : g.domain === selectedDomain
+    const activeMatch = !activeOnly || g.onChainId !== undefined
+    const domainMatch = selectedDomain === 'All' || g.domain === selectedDomain
     const timeframeMatch = selectedTimeframe === 'All' || g.category === selectedTimeframe
-    return domainMatch && timeframeMatch
+    return activeMatch && domainMatch && timeframeMatch
   })
 
   const showComingSoon = false // Hidden for now
@@ -390,18 +389,32 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
     <div>
       {/* Filter Section */}
       <div className="mb-8 space-y-4">
-        {/* Domain Filter */}
-        <div className="flex flex-wrap justify-center gap-2">
+        {/* Active Promises Toggle */}
+        <div className="flex justify-center">
           <button
-            onClick={() => setSelectedDomain('Active')}
+            onClick={() => setActiveOnly(!activeOnly)}
             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
-              selectedDomain === 'Active'
+              activeOnly
                 ? 'bg-[#2EE59D] text-white shadow-lg shadow-[#2EE59D]/25'
                 : 'bg-[var(--surface)] border border-[var(--border)] text-[var(--foreground)] hover:border-[#2EE59D]/50'
             }`}
           >
-            <span className={`w-2 h-2 rounded-full ${selectedDomain === 'Active' ? 'bg-white' : 'bg-[#2EE59D]'} animate-pulse`} />
+            <span className={`w-2 h-2 rounded-full ${activeOnly ? 'bg-white' : 'bg-[#2EE59D]'} animate-pulse`} />
             Active Promises
+          </button>
+        </div>
+
+        {/* Domain Filter */}
+        <div className="flex flex-wrap justify-center gap-2">
+          <button
+            onClick={() => setSelectedDomain('All')}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+              selectedDomain === 'All'
+                ? 'bg-[var(--foreground)] text-[var(--background)]'
+                : 'bg-[var(--surface)] border border-[var(--border)] text-[var(--foreground)] hover:border-[var(--text-secondary)]/50'
+            }`}
+          >
+            All
           </button>
           {(Object.keys(DOMAINS) as DomainKey[]).map((domain) => (
             <button
@@ -436,11 +449,12 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
         </div>
 
         {/* Active filter indicator */}
-        {(selectedDomain !== 'Active' || selectedTimeframe !== 'All') && (
+        {(!activeOnly || selectedDomain !== 'All' || selectedTimeframe !== 'All') && (
           <div className="flex justify-center">
             <p className="text-sm text-[var(--text-secondary)]">
               Showing {filteredGoals.length} {filteredGoals.length === 1 ? 'promise' : 'promises'}
-              {selectedDomain !== 'Active' && ` in ${selectedDomain}`}
+              {!activeOnly && ' (including coming soon)'}
+              {selectedDomain !== 'All' && ` in ${selectedDomain}`}
               {selectedTimeframe !== 'All' && ` • ${selectedTimeframe}`}
             </p>
           </div>
@@ -458,7 +472,8 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
             </p>
             <button
               onClick={() => {
-                setSelectedDomain('Active')
+                setActiveOnly(true)
+                setSelectedDomain('All')
                 setSelectedTimeframe('All')
               }}
               className="mt-4 px-4 py-2 text-sm font-medium text-[#2EE59D] hover:bg-[#2EE59D]/10 rounded-lg transition-colors"
