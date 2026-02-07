@@ -639,6 +639,80 @@ const FEATURED_GOALS: Goal[] = [
   },
 
   // ═══════════════════════════════════════════
+  // HEALTH - SCREEN TIME (RescueTime)
+  // ═══════════════════════════════════════════
+  
+  // Daily Screen Time
+  {
+    id: 'health-screen-daily-1',
+    title: 'Under 2 Hours',
+    description: 'Keep phone screen time under 2 hours today',
+    emoji: '📵',
+    targetMiles: 2,
+    targetUnit: 'hours max',
+    durationDays: 1,
+    minStake: 5,
+    maxStake: 25,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Daily',
+    domain: 'Health',
+    subdomain: 'Screen Time',
+  },
+  
+  // Weekly Screen Time
+  {
+    id: 'health-screen-weekly-1',
+    title: 'Digital Detox Week',
+    description: 'Average under 2 hours daily for 7 days',
+    emoji: '📱',
+    targetMiles: 2,
+    targetUnit: 'hours avg',
+    durationDays: 7,
+    minStake: 20,
+    maxStake: 100,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Weekly',
+    domain: 'Health',
+    subdomain: 'Screen Time',
+  },
+  {
+    id: 'health-screen-weekly-2',
+    title: 'No Social Media',
+    description: 'Zero social media apps for 7 days',
+    emoji: '🚫',
+    targetMiles: 0,
+    targetUnit: 'social hours',
+    durationDays: 7,
+    minStake: 25,
+    maxStake: 100,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Weekly',
+    domain: 'Health',
+    subdomain: 'Screen Time',
+  },
+  
+  // Monthly Screen Time
+  {
+    id: 'health-screen-monthly-1',
+    title: '30 Day Digital Diet',
+    description: 'Average under 2 hours screen time daily',
+    emoji: '✨',
+    targetMiles: 2,
+    targetUnit: 'hours avg',
+    durationDays: 30,
+    minStake: 50,
+    maxStake: 200,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Health',
+    subdomain: 'Screen Time',
+  },
+
+  // ═══════════════════════════════════════════
   // STARTUP - LAUNCH (Product Hunt)
   // ═══════════════════════════════════════════
   
