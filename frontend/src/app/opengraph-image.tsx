@@ -66,7 +66,7 @@ export default async function Image() {
             maxWidth: '800px',
           }}
         >
-          Stake money on your goals. Keep your promise, keep your stake + earn from those who don't.
+          Stake money on your vaada. Keep it, keep your stake. Earn from losers.
         </div>
 
         {/* Built on badge */}
