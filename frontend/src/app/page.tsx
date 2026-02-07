@@ -140,8 +140,17 @@ export default function Home() {
       {/* Scroll anchor */}
       <div id="promises" />
 
+      {/* Section Divider */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="flex items-center gap-4">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[var(--border)] to-transparent" />
+          <span className="text-xs text-[var(--text-secondary)] uppercase tracking-widest">Browse Promises</span>
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[var(--border)] to-transparent" />
+        </div>
+      </div>
+
       {/* Promises Grid */}
-      <section className="py-6 sm:py-8 px-4 sm:px-6 relative">
+      <section className="pb-6 sm:pb-8 px-4 sm:px-6 relative">
         <div className="max-w-6xl mx-auto">
           <BrowseGoals />
         </div>
