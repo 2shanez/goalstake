@@ -15,7 +15,7 @@ const BrowseGoals = dynamic(() => import('@/components/BrowseGoals').then(m => (
   ssr: false,
 })
 const PrivyConnectButton = dynamic(() => import('@/components/PrivyConnectButton').then(m => ({ default: m.PrivyConnectButton })), { ssr: false })
-const StravaConnect = dynamic(() => import('@/components/StravaConnect').then(m => ({ default: m.StravaConnect })), { ssr: false })
+// StravaConnect removed from header - now shown contextually in GoalCard for Running goals
 const FundWalletButton = dynamic(() => import('@/components/FundButton').then(m => ({ default: m.FundWalletButton })), { ssr: false })
 
 export default function Home() {
@@ -81,7 +81,6 @@ export default function Home() {
               <a href="#promises" onClick={(e) => scrollToSection(e, 'promises')} className="hidden sm:flex items-center px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm hover:border-[#2EE59D]/50 transition-all cursor-pointer">
                 Promises
               </a>
-              <StravaConnect />
               <FundWalletButton />
               <PrivyConnectButton />
               <ThemeToggle />
