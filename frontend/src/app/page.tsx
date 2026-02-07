@@ -162,10 +162,12 @@ export default function Home() {
       {/* Promises Grid */}
       <section className="pb-6 sm:pb-8 px-4 sm:px-6 relative">
         <div className="max-w-6xl mx-auto">
-          {/* Live 24-hour challenge card */}
-          <div className="mb-6">
-            <LiveChallengeCard />
-          </div>
+          {/* Live 24-hour challenge card - only show when signed in */}
+          {authenticated && (
+            <div className="mb-6">
+              <LiveChallengeCard />
+            </div>
+          )}
           
           <BrowseGoals />
         </div>
