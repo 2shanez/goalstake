@@ -230,11 +230,15 @@ export function LiveChallengeCard() {
               <span className="text-xl font-bold text-[#2EE59D]">{joinCount}</span>
               <span className="text-xs text-[var(--text-secondary)]">joined today</span>
             </div>
-            <span className="text-[var(--border)]">•</span>
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs text-[var(--text-secondary)]">From</span>
-              <span className="text-sm font-semibold text-[#2EE59D]">$5</span>
-            </div>
+            {hasJoined && (
+              <>
+                <span className="text-[var(--border)]">•</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-[var(--text-secondary)]">Staked</span>
+                  <span className="text-sm font-semibold text-[#2EE59D]">$5</span>
+                </div>
+              </>
+            )}
           </div>
           
           {hasJoined ? (
@@ -249,7 +253,7 @@ export function LiveChallengeCard() {
                 hover:bg-[#26c987] hover:shadow-lg hover:shadow-[#2EE59D]/25 hover:-translate-y-0.5
                 active:translate-y-0 transition-all"
             >
-              Browse Promises →
+              Browse Vaadas →
             </button>
           )}
         </div>
