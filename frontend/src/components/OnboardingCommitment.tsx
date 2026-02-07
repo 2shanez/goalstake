@@ -62,13 +62,6 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
               >
                 I'm Ready to Commit
               </button>
-              
-              <button
-                onClick={onComplete}
-                className="w-full py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors"
-              >
-                Skip for now
-              </button>
             </div>
           )}
 
