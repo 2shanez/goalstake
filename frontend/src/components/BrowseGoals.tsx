@@ -387,18 +387,25 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
     <div>
       {/* Filter Section */}
       <div className="mb-8 space-y-4">
-        {/* Domain Tabs */}
+        {/* Header */}
+        <div className="flex justify-center">
+          <div className="flex items-center gap-2 text-lg font-semibold">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#2EE59D] animate-pulse" />
+            <span>Active Promises</span>
+          </div>
+        </div>
+
+        {/* Domain Filter */}
         <div className="flex flex-wrap justify-center gap-2">
           <button
             onClick={() => setSelectedDomain('All')}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
               selectedDomain === 'All'
                 ? 'bg-[#2EE59D] text-white shadow-lg shadow-[#2EE59D]/25'
                 : 'bg-[var(--surface)] border border-[var(--border)] text-[var(--foreground)] hover:border-[#2EE59D]/50'
             }`}
           >
-            <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
-            Active Goals
+            All
           </button>
           {(Object.keys(DOMAINS) as DomainKey[]).map((domain) => (
             <button
@@ -436,7 +443,7 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
         {(selectedDomain !== 'All' || selectedTimeframe !== 'All') && (
           <div className="flex justify-center">
             <p className="text-sm text-[var(--text-secondary)]">
-              Showing {filteredGoals.length} {filteredGoals.length === 1 ? 'goal' : 'goals'}
+              Showing {filteredGoals.length} {filteredGoals.length === 1 ? 'promise' : 'promises'}
               {selectedDomain !== 'All' && ` in ${selectedDomain}`}
               {selectedTimeframe !== 'All' && ` • ${selectedTimeframe}`}
             </p>
@@ -449,7 +456,7 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
         {filteredGoals.length === 0 ? (
           <div className="w-full text-center py-12">
             <div className="text-4xl mb-3">🔍</div>
-            <p className="text-[var(--text-secondary)] mb-2">No goals found</p>
+            <p className="text-[var(--text-secondary)] mb-2">No promises found</p>
             <p className="text-sm text-[var(--text-secondary)]">
               Try adjusting your filters or check back soon!
             </p>
