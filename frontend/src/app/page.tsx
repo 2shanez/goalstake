@@ -187,11 +187,11 @@ export default function Home() {
             </div>
             <div className="text-center">
               <p className="text-2xl sm:text-3xl font-bold tabular-nums">{platformStats.activeGoals}</p>
-              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Active {platformStats.activeGoals === 1 ? 'Promise' : 'Promises'}</p>
+              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Active {platformStats.activeGoals === 1 ? 'vaada' : 'vaadas'}</p>
             </div>
             <div className="text-center">
               <p className="text-2xl sm:text-3xl font-bold tabular-nums">{platformStats.totalGoals}</p>
-              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total {platformStats.totalGoals === 1 ? 'Promise' : 'Promises'}</p>
+              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total {platformStats.totalGoals === 1 ? 'vaada' : 'vaadas'}</p>
             </div>
           </div>
         </div>
