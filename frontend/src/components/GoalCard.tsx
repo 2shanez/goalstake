@@ -8,6 +8,7 @@ import { baseSepolia } from 'wagmi/chains'
 import { isStravaConnected, getStravaAuthUrl } from '@/lib/strava'
 import { useContracts, useNetworkCheck, useUSDC, useGoalState, useGoalDetails, useParticipant, useStravaToken } from '@/lib/hooks'
 import { USDC_ABI, GOALSTAKE_ABI, AUTOMATION_ABI, PHASE_LABELS, CATEGORY_STYLES, GoalPhase, type Goal } from '@/lib/abis'
+import { markHasJoined } from './OnboardingCommitment'
 
 // Re-export Goal type for other components
 export type { Goal }
@@ -141,6 +142,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
       setStep('done')
       refetchParticipant()
       onJoined?.()
+      markHasJoined() // Clear onboarding commitment
     }
   }, [isJoinSuccess, step, refetchParticipant, onJoined])
 

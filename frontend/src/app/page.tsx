@@ -8,6 +8,7 @@ import { FEATURED_GOALS } from '@/components/BrowseGoals'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { usePlatformStats } from '@/lib/hooks'
 import { useInView } from '@/lib/useInView'
+import { OnboardingCommitment, OnboardingCountdownBanner, needsOnboarding } from '@/components/OnboardingCommitment'
 
 // Dynamic imports for heavy components - don't block first paint
 const BrowseGoals = dynamic(() => import('@/components/BrowseGoals').then(m => ({ default: m.BrowseGoals })), {
@@ -22,8 +23,9 @@ export default function Home() {
   const { isConnected } = useAccount()
   const onChainIds = FEATURED_GOALS.filter(g => g.onChainId !== undefined).map(g => g.onChainId!)
   const platformStats = usePlatformStats(onChainIds, FEATURED_GOALS.length)
-  const { login } = usePrivy()
+  const { login, authenticated } = usePrivy()
   const [mounted, setMounted] = useState(false)
+  const [showOnboarding, setShowOnboarding] = useState(false)
 
   const statsView = useInView(0.2)
   const howView = useInView(0.1)
@@ -33,6 +35,15 @@ export default function Home() {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Check if user needs onboarding after authentication
+  useEffect(() => {
+    if (authenticated && mounted && needsOnboarding()) {
+      // Small delay to let the page render first
+      const timer = setTimeout(() => setShowOnboarding(true), 500)
+      return () => clearTimeout(timer)
+    }
+  }, [authenticated, mounted])
 
   const scrollToSection = (e: React.MouseEvent, sectionId: string) => {
     e.preventDefault()
@@ -151,6 +162,9 @@ export default function Home() {
       {/* Promises Grid */}
       <section className="pb-6 sm:pb-8 px-4 sm:px-6 relative">
         <div className="max-w-6xl mx-auto">
+          {/* Onboarding countdown banner */}
+          {authenticated && <OnboardingCountdownBanner />}
+          
           <BrowseGoals />
         </div>
       </section>
@@ -297,6 +311,11 @@ export default function Home() {
         </div>
       </footer>
     </main>
+
+    {/* Onboarding commitment modal */}
+    {showOnboarding && (
+      <OnboardingCommitment onComplete={() => setShowOnboarding(false)} />
+    )}
     </>
   )
 }
