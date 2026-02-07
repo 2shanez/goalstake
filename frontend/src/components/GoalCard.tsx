@@ -509,7 +509,11 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
                 },
                 { 
                   label: 'Verify', 
-                  desc: currentPhaseStep === 2 ? 'Verifying...' : 'Via Strava' 
+                  desc: currentPhaseStep === 2 
+                    ? 'Verifying...' 
+                    : goal.subdomain === 'Running' 
+                      ? 'Via Strava' 
+                      : 'Coming soon'
                 },
                 { 
                   label: 'Payout', 
@@ -653,6 +657,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
             stravaConnected={stravaConnected}
             hasTokenOnChain={hasTokenOnChain}
             isConnected={isConnected}
+            subdomain={goal.subdomain}
           />
           
           {isLoading && (
@@ -743,20 +748,31 @@ function StakeSelector({ goal, stakeAmount, setStakeAmount, balanceNum }: {
   )
 }
 
-function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected }: {
+function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdomain }: {
   stravaConnected: boolean
   hasTokenOnChain: boolean | undefined
   isConnected: boolean
+  subdomain?: string
 }) {
   if (!isConnected) return null
 
+  // For non-Running goals, show "Coming Soon" indicator
+  if (subdomain && subdomain !== 'Running') {
+    return (
+      <div className="mb-3 p-2.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] flex items-center gap-2">
+        <span className="text-sm">🔜</span>
+        <p className="text-xs text-[var(--text-secondary)]">Verification coming soon</p>
+      </div>
+    )
+  }
+
   if (!stravaConnected) {
     return (
-      <div className="mb-3 p-2.5 rounded-lg bg-orange-50 border border-orange-100 flex items-center gap-2">
+      <div className="mb-3 p-2.5 rounded-lg bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800 flex items-center gap-2">
         <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
         </svg>
-        <p className="text-xs text-orange-700">Connect fitness app to verify progress</p>
+        <p className="text-xs text-orange-700 dark:text-orange-400">Connect Strava to verify runs</p>
       </div>
     )
   }
@@ -767,7 +783,7 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected }: {
         <svg className="w-4 h-4 text-[#FC4C02]" viewBox="0 0 24 24" fill="currentColor">
           <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.599h4.172L10.463 0l-7 13.828h4.169" />
         </svg>
-        <p className="text-xs text-[#FC4C02]">Strava connected — one more step to enable verification</p>
+        <p className="text-xs text-[#FC4C02]">Strava connected — enable auto-verification</p>
       </div>
     )
   }
