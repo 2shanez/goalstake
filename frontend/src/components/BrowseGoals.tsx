@@ -342,32 +342,14 @@ const FEATURED_GOALS: Goal[] = [
   // HEALTH - WEIGHT (Withings)
   // ═══════════════════════════════════════════
   
-  // Daily Weight
-  {
-    id: 'health-weight-daily-1',
-    title: 'Daily Weigh-In',
-    description: 'Log your weight today',
-    emoji: '⚖️',
-    targetMiles: 1,
-    targetUnit: 'weigh-ins',
-    durationDays: 1,
-    minStake: 5,
-    maxStake: 25,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Daily',
-    domain: 'Health',
-    subdomain: 'Weight',
-  },
-  
-  // Monthly Weight Loss
+  // Monthly Weight Loss (percentage-based like DietBet)
   {
     id: 'health-weight-monthly-1',
-    title: 'Lose 5 lbs',
-    description: 'Lose 5 pounds this month',
+    title: 'Lose 4%',
+    description: 'Lose 4% of your body weight in 30 days',
     emoji: '📉',
-    targetMiles: 5,
-    targetUnit: 'pounds',
+    targetMiles: 4,
+    targetUnit: '% body weight',
     durationDays: 30,
     minStake: 25,
     maxStake: 150,
@@ -379,11 +361,11 @@ const FEATURED_GOALS: Goal[] = [
   },
   {
     id: 'health-weight-monthly-2',
-    title: 'Lose 10 lbs',
-    description: 'Lose 10 pounds in 2 months',
+    title: 'Lose 6%',
+    description: 'Lose 6% of your body weight in 60 days',
     emoji: '💪',
-    targetMiles: 10,
-    targetUnit: 'pounds',
+    targetMiles: 6,
+    targetUnit: '% body weight',
     durationDays: 60,
     minStake: 50,
     maxStake: 300,
@@ -395,11 +377,11 @@ const FEATURED_GOALS: Goal[] = [
   },
   {
     id: 'health-weight-monthly-3',
-    title: 'Lose 20 lbs',
-    description: 'Lose 20 pounds in 3 months',
+    title: 'Lose 10%',
+    description: 'Lose 10% of your body weight in 90 days',
     emoji: '🏆',
-    targetMiles: 20,
-    targetUnit: 'pounds',
+    targetMiles: 10,
+    targetUnit: '% body weight',
     durationDays: 90,
     minStake: 100,
     maxStake: 500,
