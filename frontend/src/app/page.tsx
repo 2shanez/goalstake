@@ -8,6 +8,7 @@ import { FEATURED_GOALS } from '@/components/BrowseGoals'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { usePlatformStats } from '@/lib/hooks'
 import { useInView } from '@/lib/useInView'
+import { useCountUp } from '@/lib/useCountUp'
 import { LiveChallengeCard, OnboardingCommitment, isFirstTimeUser } from '@/components/OnboardingCommitment'
 
 // Dynamic imports for heavy components - don't block first paint
@@ -18,6 +19,50 @@ const BrowseGoals = dynamic(() => import('@/components/BrowseGoals').then(m => (
 const PrivyConnectButton = dynamic(() => import('@/components/PrivyConnectButton').then(m => ({ default: m.PrivyConnectButton })), { ssr: false })
 // StravaConnect removed from header - now shown contextually in GoalCard for Running goals
 const FundWalletButton = dynamic(() => import('@/components/FundButton').then(m => ({ default: m.FundWalletButton })), { ssr: false })
+
+// Stats card component with count-up animation
+function StatsCard({ 
+  label, 
+  value, 
+  icon, 
+  isInView, 
+  delay = 0,
+  prefix = '',
+  suffix = ''
+}: { 
+  label: string
+  value: number
+  icon: React.ReactNode
+  isInView: boolean
+  delay?: number
+  prefix?: string
+  suffix?: string
+}) {
+  const [shouldAnimate, setShouldAnimate] = useState(false)
+  const displayValue = useCountUp(value, shouldAnimate, 2000, prefix, suffix)
+
+  useEffect(() => {
+    if (isInView) {
+      const timer = setTimeout(() => setShouldAnimate(true), delay)
+      return () => clearTimeout(timer)
+    }
+  }, [isInView, delay])
+
+  return (
+    <div 
+      className={`bg-[var(--surface)] rounded-2xl p-5 transition-all duration-500 ${
+        isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+      }`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      <div className="flex items-start justify-between mb-3">
+        <p className="text-sm font-medium text-[var(--text-secondary)]">{label}</p>
+        {icon}
+      </div>
+      <p className="text-4xl font-bold tabular-nums tracking-tight">{displayValue}</p>
+    </div>
+  )
+}
 
 export default function Home() {
   const { isConnected } = useAccount()
@@ -173,27 +218,54 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Bar - Full Width */}
-      <section ref={statsView.ref} className={`border-t border-[var(--border)] py-6 sm:py-8 px-4 sm:px-6 transition-all duration-700 ${statsView.isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}>
-        <div className="max-w-6xl mx-auto">
-          <div className="flex justify-center gap-6 sm:gap-12">
-            <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold tabular-nums">${platformStats.totalStaked}</p>
-              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total Staked</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold tabular-nums">{platformStats.totalParticipants}</p>
-              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total {platformStats.totalParticipants === 1 ? 'Participant' : 'Participants'}</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold tabular-nums">{platformStats.activeGoals}</p>
-              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Active {platformStats.activeGoals === 1 ? 'vaada' : 'vaadas'}</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold tabular-nums">{platformStats.totalGoals}</p>
-              <p className="text-[10px] sm:text-xs text-[var(--text-secondary)] uppercase tracking-wider mt-1">Total {platformStats.totalGoals === 1 ? 'vaada' : 'vaadas'}</p>
-            </div>
-          </div>
+      {/* Stats Section - Vertical Cards */}
+      <section ref={statsView.ref} className="border-t border-[var(--border)] py-8 sm:py-12 px-4 sm:px-6">
+        <div className="max-w-md mx-auto space-y-4">
+          <StatsCard
+            label="Total Staked"
+            value={platformStats.totalStaked}
+            prefix="$"
+            icon={
+              <svg className="w-6 h-6 text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            }
+            isInView={statsView.isInView}
+            delay={0}
+          />
+          <StatsCard
+            label="Total Participants"
+            value={platformStats.totalParticipants}
+            icon={
+              <svg className="w-6 h-6 text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            }
+            isInView={statsView.isInView}
+            delay={100}
+          />
+          <StatsCard
+            label="Active vaadas"
+            value={platformStats.activeGoals}
+            icon={
+              <svg className="w-6 h-6 text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            }
+            isInView={statsView.isInView}
+            delay={200}
+          />
+          <StatsCard
+            label="Total vaadas"
+            value={platformStats.totalGoals}
+            icon={
+              <svg className="w-6 h-6 text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
+            }
+            isInView={statsView.isInView}
+            delay={300}
+          />
         </div>
       </section>
 
