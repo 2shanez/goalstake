@@ -1178,20 +1178,21 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
     <div>
       {/* Filter Section - Clean 2-row layout */}
       <div className="mb-6 space-y-3">
-        {/* Row 1: Live indicator + Timeframes in single pill */}
+        {/* Row 1: Live toggle + Timeframes in single pill */}
         <div className="flex justify-center">
           <div className="inline-flex items-center gap-0.5 p-1 bg-[var(--surface)] rounded-2xl border border-[var(--border)]">
-            {/* Live indicator */}
-            <div
+            {/* Live toggle */}
+            <button
+              onClick={() => { setShowLive(true); setSelectedDomain('All'); }}
               className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                 showLive
                   ? 'bg-[#2EE59D] text-white'
-                  : 'text-[var(--text-secondary)]'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
               }`}
             >
               <span className={`w-1.5 h-1.5 rounded-full ${showLive ? 'bg-white animate-pulse' : 'bg-gray-400'}`} />
               Live
-            </div>
+            </button>
             
             {/* Divider */}
             <div className="w-px h-5 bg-[var(--border)] mx-1" />
