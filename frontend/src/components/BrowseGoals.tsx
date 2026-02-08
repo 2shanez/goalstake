@@ -287,6 +287,25 @@ const FEATURED_GOALS: Goal[] = [
   // EDUCATIONAL - DUOLINGO
   // ═══════════════════════════════════════════
   
+  // Test Duolingo (short timeframes)
+  {
+    id: 'edu-duolingo-test',
+    onChainId: 26,
+    title: 'Duo Test',
+    description: 'Complete 1 Duolingo lesson (test goal)',
+    emoji: '🧪',
+    targetMiles: 1,
+    targetUnit: 'lessons',
+    durationDays: 1,
+    minStake: 1,
+    maxStake: 10,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Daily',
+    domain: 'Educational',
+    subdomain: 'Duolingo',
+  },
+
   // Daily Duolingo
   {
     id: 'edu-duolingo-daily-1',
