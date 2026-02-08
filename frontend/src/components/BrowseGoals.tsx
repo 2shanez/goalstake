@@ -390,11 +390,17 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
   }
 
   // Filter goals by active toggle + domain + timeframe
+  // Then sort: active (on-chain) goals first, then coming soon
   const filteredGoals = FEATURED_GOALS.filter(g => {
     const activeMatch = !activeOnly || g.onChainId !== undefined
     const domainMatch = selectedDomain === 'All' || g.domain === selectedDomain
     const timeframeMatch = selectedTimeframe === 'All' || g.category === selectedTimeframe
     return activeMatch && domainMatch && timeframeMatch
+  }).sort((a, b) => {
+    // Active goals (with onChainId) come first
+    const aActive = a.onChainId !== undefined ? 0 : 1
+    const bActive = b.onChainId !== undefined ? 0 : 1
+    return aActive - bActive
   })
 
   const showComingSoon = false // Hidden for now
