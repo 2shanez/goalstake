@@ -6,7 +6,7 @@ solc = "0.8.20"
 
 remappings = [
     "forge-std/=lib/forge-std/src/",
-    "chainlink/=lib/chainlink-brownie/"
+    "chainlink/=lib/chainlink-brownie-contracts/"
 ]
 
 [rpc_endpoints]
