@@ -225,63 +225,9 @@ const FEATURED_GOALS: Goal[] = [
   },
 
   // ═══════════════════════════════════════════
-  // FITNESS - STEPS
+  // FITNESS - STEPS - Hidden (no web API for Apple Health)
   // ═══════════════════════════════════════════
-  
-  // Daily Steps
-  {
-    id: 'fitness-steps-daily-1',
-    onChainId: 19,
-    title: '10K Steps',
-    description: 'Hit 10,000 steps today',
-    emoji: '👟',
-    targetMiles: 10000,
-    targetUnit: 'steps',
-    durationDays: 1,
-    minStake: 5,
-    maxStake: 25,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Daily',
-    domain: 'Fitness',
-    subdomain: 'Steps',
-  },
-  
-  // Weekly Steps
-  {
-    id: 'fitness-steps-weekly-1',
-    title: '70K Week',
-    description: 'Average 10K steps daily for 7 days',
-    emoji: '🚶',
-    targetMiles: 70000,
-    targetUnit: 'steps',
-    durationDays: 7,
-    minStake: 15,
-    maxStake: 75,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Weekly',
-    domain: 'Fitness',
-    subdomain: 'Steps',
-  },
-  
-  // Monthly Steps
-  {
-    id: 'fitness-steps-monthly-1',
-    title: '300K Month',
-    description: 'Walk 300,000 steps this month',
-    emoji: '🏆',
-    targetMiles: 300000,
-    targetUnit: 'steps',
-    durationDays: 30,
-    minStake: 25,
-    maxStake: 150,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Monthly',
-    domain: 'Fitness',
-    subdomain: 'Steps',
-  },
+  // Goal 19 deployed on-chain but hidden until native app built
 
   // ═══════════════════════════════════════════
   // EDUCATIONAL - Coming soon (GitHub, LeetCode)
