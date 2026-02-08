@@ -103,20 +103,20 @@ export function DuolingoConnect({ onConnect, onDisconnect, connectedUsername }: 
         <span className="text-sm font-medium">Connect Duolingo</span>
       </div>
       
-      <div className="flex gap-2">
+      <div className="flex gap-2 overflow-hidden">
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          placeholder="Your Duolingo username"
-          className="flex-1 px-3 py-2 text-sm rounded-lg border border-[var(--border)] bg-[var(--background)]
+          placeholder="Duolingo username"
+          className="flex-1 min-w-0 px-3 py-2 text-sm rounded-lg border border-[var(--border)] bg-[var(--background)]
             focus:outline-none focus:border-[#58CC02] focus:ring-1 focus:ring-[#58CC02]/50"
           onKeyDown={(e) => e.key === 'Enter' && handleConnect()}
         />
         <button
           onClick={handleConnect}
           disabled={loading}
-          className="px-4 py-2 text-sm font-bold rounded-lg bg-[#58CC02] text-white
+          className="flex-shrink-0 px-4 py-2 text-sm font-bold rounded-lg bg-[#58CC02] text-white
             hover:bg-[#4CAF00] disabled:opacity-50 transition-colors"
         >
           {loading ? '...' : 'Connect'}
