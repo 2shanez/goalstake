@@ -337,6 +337,78 @@ const FEATURED_GOALS: Goal[] = [
     domain: 'Educational',
     subdomain: 'Duolingo',
   },
+
+  // ═══════════════════════════════════════════
+  // HEALTH - WEIGHT (Withings)
+  // ═══════════════════════════════════════════
+  
+  // Daily Weight
+  {
+    id: 'health-weight-daily-1',
+    title: 'Daily Weigh-In',
+    description: 'Log your weight today',
+    emoji: '⚖️',
+    targetMiles: 1,
+    targetUnit: 'weigh-ins',
+    durationDays: 1,
+    minStake: 5,
+    maxStake: 25,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Daily',
+    domain: 'Health',
+    subdomain: 'Weight',
+  },
+  
+  // Monthly Weight Loss
+  {
+    id: 'health-weight-monthly-1',
+    title: 'Lose 5 lbs',
+    description: 'Lose 5 pounds this month',
+    emoji: '📉',
+    targetMiles: 5,
+    targetUnit: 'pounds',
+    durationDays: 30,
+    minStake: 25,
+    maxStake: 150,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Health',
+    subdomain: 'Weight',
+  },
+  {
+    id: 'health-weight-monthly-2',
+    title: 'Lose 10 lbs',
+    description: 'Lose 10 pounds in 2 months',
+    emoji: '💪',
+    targetMiles: 10,
+    targetUnit: 'pounds',
+    durationDays: 60,
+    minStake: 50,
+    maxStake: 300,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Health',
+    subdomain: 'Weight',
+  },
+  {
+    id: 'health-weight-monthly-3',
+    title: 'Lose 20 lbs',
+    description: 'Lose 20 pounds in 3 months',
+    emoji: '🏆',
+    targetMiles: 20,
+    targetUnit: 'pounds',
+    durationDays: 90,
+    minStake: 100,
+    maxStake: 500,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Monthly',
+    domain: 'Health',
+    subdomain: 'Weight',
+  },
 ]
 
 const COMING_SOON = [
