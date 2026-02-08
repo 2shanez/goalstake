@@ -284,84 +284,10 @@ const FEATURED_GOALS: Goal[] = [
   },
 
   // ═══════════════════════════════════════════
-  // EDUCATIONAL - DUOLINGO
+  // EDUCATIONAL - Coming soon (GitHub, LeetCode)
   // ═══════════════════════════════════════════
-  
-  // Test Duolingo (short timeframes)
-  {
-    id: 'edu-duolingo-test',
-    onChainId: 26,
-    title: 'Duo Test',
-    description: 'Complete 1 Duolingo lesson (test goal)',
-    emoji: '🧪',
-    targetMiles: 1,
-    targetUnit: 'lessons',
-    durationDays: 1,
-    minStake: 1,
-    maxStake: 10,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Daily',
-    domain: 'Educational',
-    subdomain: 'Duolingo',
-  },
-
-  // Daily Duolingo
-  {
-    id: 'edu-duolingo-daily-1',
-    onChainId: 21,
-    title: 'Daily Streak',
-    description: 'Complete 1 Duolingo lesson',
-    emoji: '🦉',
-    targetMiles: 1,
-    targetUnit: 'lessons',
-    durationDays: 1,
-    minStake: 5,
-    maxStake: 25,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Daily',
-    domain: 'Educational',
-    subdomain: 'Duolingo',
-  },
-  
-  // Weekly Duolingo
-  {
-    id: 'edu-duolingo-weekly-1',
-    onChainId: 22,
-    title: 'Language Learner',
-    description: 'Complete 7 Duolingo lessons this week',
-    emoji: '🌍',
-    targetMiles: 7,
-    targetUnit: 'lessons',
-    durationDays: 7,
-    minStake: 10,
-    maxStake: 50,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Weekly',
-    domain: 'Educational',
-    subdomain: 'Duolingo',
-  },
-  
-  // Monthly Duolingo
-  {
-    id: 'edu-duolingo-monthly-1',
-    onChainId: 20,
-    title: '30 Day Streak',
-    description: 'Maintain 30-day Duolingo streak',
-    emoji: '🔥',
-    targetMiles: 30,
-    targetUnit: 'days',
-    durationDays: 30,
-    minStake: 25,
-    maxStake: 100,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Monthly',
-    domain: 'Educational',
-    subdomain: 'Duolingo',
-  },
+  // Duolingo removed - API locked down
+  // TODO: Add GitHub integration
 
   // ═══════════════════════════════════════════
   // HEALTH - WEIGHT (Withings)

@@ -163,7 +163,7 @@ export interface Goal {
 export const DOMAINS = {
   Fitness: { emoji: '🏃', subdomains: ['Running', 'Steps'] },
   Health: { emoji: '💪', subdomains: ['Weight', 'Nutrition', 'Wellness', 'Sleep', 'Screen Time'] },
-  Educational: { emoji: '📚', subdomains: ['Duolingo', 'LeetCode', 'Reading'] },
+  // Educational: { emoji: '📚', subdomains: ['Duolingo', 'LeetCode', 'Reading'] }, // Coming soon
 } as const
 
 export type DomainKey = keyof typeof DOMAINS
