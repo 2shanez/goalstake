@@ -8,6 +8,8 @@ import { baseSepolia } from 'wagmi/chains'
 import { isStravaConnected, getStravaAuthUrl } from '@/lib/strava'
 import { useContracts, useNetworkCheck, useUSDC, useGoalState, useGoalDetails, useParticipant, useStravaToken } from '@/lib/hooks'
 import { USDC_ABI, GOALSTAKE_ABI, AUTOMATION_ABI, PHASE_LABELS, CATEGORY_STYLES, GoalPhase, type Goal } from '@/lib/abis'
+import { DuolingoConnect, useDuolingoConnection } from './DuolingoConnect'
+import { WithingsConnect, useWithingsConnection } from './WithingsConnect'
 // Re-export Goal type for other components
 export type { Goal }
 
@@ -753,9 +755,73 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
   isConnected: boolean
   subdomain?: string
 }) {
+  const duolingo = useDuolingoConnection()
+  const withings = useWithingsConnection()
+  
   if (!isConnected) return null
 
-  // For non-Running goals, show "Coming Soon" indicator
+  // Duolingo goals - show connect component
+  if (subdomain === 'Duolingo') {
+    if (duolingo.isConnected) {
+      return (
+        <div className="mb-3 p-2.5 rounded-lg bg-[#58CC02]/10 border border-[#58CC02]/20 flex items-center gap-2">
+          <span className="text-lg">🦉</span>
+          <div>
+            <p className="text-xs text-[#58CC02] font-medium">Duolingo connected</p>
+            <p className="text-[10px] text-[var(--text-secondary)]">🔥 {duolingo.streak} day streak</p>
+          </div>
+        </div>
+      )
+    }
+    return (
+      <div className="mb-3">
+        <DuolingoConnect 
+          onConnect={() => {}} 
+          onDisconnect={() => {}}
+        />
+      </div>
+    )
+  }
+
+  // Weight goals - show Withings connect
+  if (subdomain === 'Weight') {
+    if (withings.isConnected) {
+      return (
+        <div className="mb-3 p-2.5 rounded-lg bg-[#00B4D8]/10 border border-[#00B4D8]/20 flex items-center gap-2">
+          <span className="text-lg">⚖️</span>
+          <p className="text-xs text-[#00B4D8] font-medium">Withings scale connected</p>
+        </div>
+      )
+    }
+    return (
+      <div className="mb-3">
+        <WithingsConnect 
+          onConnect={() => {}} 
+          onDisconnect={() => {}}
+        />
+      </div>
+    )
+  }
+
+  // Steps goals - use Strava (tracks steps too)
+  if (subdomain === 'Steps') {
+    if (!stravaConnected) {
+      return (
+        <div className="mb-3 p-2.5 rounded-lg bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800 flex items-center gap-2">
+          <span className="text-lg">👟</span>
+          <p className="text-xs text-orange-700 dark:text-orange-400">Connect Strava to track steps</p>
+        </div>
+      )
+    }
+    return (
+      <div className="mb-3 p-2.5 rounded-lg bg-[#2EE59D]/10 border border-[#2EE59D]/20 flex items-center gap-2">
+        <span className="text-lg">👟</span>
+        <p className="text-xs text-[#2EE59D] font-medium">Strava connected — tracking steps</p>
+      </div>
+    )
+  }
+
+  // For other non-Running goals, show "Coming Soon" indicator
   if (subdomain && subdomain !== 'Running') {
     return (
       <div className="mb-3 p-2.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] flex items-center gap-2">
