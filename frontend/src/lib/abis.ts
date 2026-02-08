@@ -161,11 +161,9 @@ export interface Goal {
 
 // Domain definitions for filtering
 export const DOMAINS = {
-  Fitness: { emoji: '🏃', subdomains: ['Running', 'Cycling', 'Swimming', 'Steps'] },
+  Fitness: { emoji: '🏃', subdomains: ['Running', 'Steps'] },
   Health: { emoji: '💪', subdomains: ['Weight', 'Nutrition', 'Wellness', 'Sleep', 'Screen Time'] },
-  Creative: { emoji: '🎬', subdomains: ['YouTube'] },
   Educational: { emoji: '📚', subdomains: ['Duolingo', 'LeetCode', 'Reading'] },
-  Startup: { emoji: '🚀', subdomains: ['Launch', 'Shipping'] },
 } as const
 
 export type DomainKey = keyof typeof DOMAINS
