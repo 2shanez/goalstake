@@ -373,47 +373,46 @@ export function LiveChallengeCard() {
   const pendingCount = statsData ? totalChallenges - totalWon - Number(statsData[2]) : 0
 
   return (
-    <div className="bg-gradient-to-br from-[#2EE59D]/10 via-[#2EE59D]/5 to-transparent border border-[#2EE59D]/30 rounded-xl p-3 relative overflow-hidden">
-      <div className="relative flex items-center justify-between gap-3">
-        {/* Left: Icon + Content */}
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#2EE59D]/20 to-[#2EE59D]/10 flex items-center justify-center text-lg flex-shrink-0 border border-[#2EE59D]/20">
+    <div className="bg-gradient-to-br from-[#2EE59D]/10 via-[#2EE59D]/5 to-transparent border border-[#2EE59D]/30 rounded-xl p-4 relative overflow-hidden max-w-sm mx-auto">
+      <div className="relative">
+        {/* Top row: Badge + Timer */}
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-[#2EE59D] text-white uppercase tracking-wide">
+            New User Challenge
+          </span>
+          <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-[var(--surface)] border border-[var(--border)] flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#2EE59D] animate-pulse" />
+            {timeLeft} left
+          </span>
+        </div>
+        
+        {/* Content row */}
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#2EE59D]/20 to-[#2EE59D]/10 flex items-center justify-center text-xl flex-shrink-0 border border-[#2EE59D]/20">
             🚀
           </div>
           <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-bold text-sm leading-tight">24-Hour Commitment</h3>
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#2EE59D] text-white uppercase">
-                New User
-              </span>
-            </div>
-            <p className="text-[11px] text-[var(--text-secondary)]">Stake $5 • Join a goal within 24h or lose it</p>
+            <h3 className="font-bold text-sm leading-tight">24-Hour Commitment</h3>
+            <p className="text-xs text-[var(--text-secondary)]">Stake $5 • Join a goal within 24h or lose it</p>
           </div>
         </div>
         
-        {/* Right: Timer + CTA */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-[10px] font-bold px-2 py-1 rounded-lg bg-[var(--surface)] border border-[var(--border)] flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#2EE59D] animate-pulse" />
-            {timeLeft}
-          </span>
-          
-          {hasJoined ? (
-            <div className="flex items-center gap-1 px-2 py-1 bg-[#2EE59D]/15 rounded-lg text-[#2EE59D] font-bold text-[10px] border border-[#2EE59D]/30">
-              <span>✓</span>
-              <span>In!</span>
-            </div>
-          ) : (
-            <button
-              onClick={handleJoin}
-              className="px-2.5 py-1.5 bg-[#2EE59D] text-white font-bold text-[11px] rounded-lg 
-                hover:bg-[#26c987] hover:shadow-md hover:shadow-[#2EE59D]/25
-                active:scale-95 transition-all"
-            >
-              Join →
-            </button>
-          )}
-        </div>
+        {/* CTA */}
+        {hasJoined ? (
+          <div className="w-full flex items-center justify-center gap-2 py-2 bg-[#2EE59D]/15 rounded-xl text-[#2EE59D] font-bold text-sm border border-[#2EE59D]/30">
+            <span>✓</span>
+            <span>You're in!</span>
+          </div>
+        ) : (
+          <button
+            onClick={handleJoin}
+            className="w-full py-2.5 bg-[#2EE59D] text-white font-bold text-sm rounded-xl 
+              hover:bg-[#26c987] hover:shadow-md hover:shadow-[#2EE59D]/25
+              active:scale-[0.98] transition-all"
+          >
+            Take the challenge →
+          </button>
+        )}
       </div>
     </div>
   )
