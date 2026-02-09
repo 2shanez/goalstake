@@ -156,11 +156,13 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
 
       if (needsApproval) {
         setStep('approve')
+        // Approve max amount so user only needs to do this once
+        const maxApproval = BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
         approve({
           address: contracts.usdc,
           abi: USDC_ABI,
           functionName: 'approve',
-          args: [contracts.newUserChallenge, stakeAmountBigInt],
+          args: [contracts.newUserChallenge, maxApproval],
         })
       } else {
         // Already approved, go straight to join

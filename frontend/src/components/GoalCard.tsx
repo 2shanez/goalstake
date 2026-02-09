@@ -240,11 +240,13 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
 
     if (!hasAllowance) {
       setStep('approving')
+      // Approve max amount so user only needs to do this once
+      const maxApproval = BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
       writeApprove({
         address: contracts.usdc,
         abi: USDC_ABI,
         functionName: 'approve',
-        args: [contracts.goalStake, stakeAmountWei],
+        args: [contracts.goalStake, maxApproval],
       })
     } else if (goal.onChainId !== undefined) {
       setStep('joining')
