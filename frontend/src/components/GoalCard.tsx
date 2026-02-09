@@ -854,23 +854,8 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
     )
   }
 
-  // Steps goals - use Strava (tracks steps too)
-  if (subdomain === 'Steps') {
-    if (!stravaConnected) {
-      return (
-        <div className="mb-3 p-2.5 rounded-lg bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800 flex items-center gap-2">
-          <span className="text-lg">👟</span>
-          <p className="text-xs text-orange-700 dark:text-orange-400">Connect Strava to track steps</p>
-        </div>
-      )
-    }
-    return (
-      <div className="mb-3 p-2.5 rounded-lg bg-[#2EE59D]/10 border border-[#2EE59D]/20 flex items-center gap-2">
-        <span className="text-lg">👟</span>
-        <p className="text-xs text-[#2EE59D] font-medium">Strava connected — tracking steps</p>
-      </div>
-    )
-  }
+  // Steps goals - also use data source picker (Strava or Fitbit can track steps)
+  // Falls through to the Running/fitness picker below
 
   // Screen Time goals - show RescueTime connect
   if (subdomain === 'Screen Time') {
@@ -897,8 +882,9 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
     )
   }
 
-  // For other non-Running goals, show "Coming Soon" indicator
-  if (subdomain && subdomain !== 'Running') {
+  // For non-fitness goals, show "Coming Soon" indicator
+  const fitnessSubdomains = ['Running', 'Steps', 'Cycling', 'Walking', 'Workout']
+  if (subdomain && !fitnessSubdomains.includes(subdomain)) {
     return (
       <div className="mb-3 p-2.5 rounded-lg bg-[var(--surface)] border border-[var(--border)] flex items-center gap-2">
         <span className="text-sm">🔜</span>
