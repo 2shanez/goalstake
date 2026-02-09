@@ -2,14 +2,15 @@
 
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import { useAccount } from 'wagmi'
+import { useAccount, useReadContract } from 'wagmi'
 import { usePrivy } from '@privy-io/react-auth'
 import { FEATURED_GOALS } from '@/components/BrowseGoals'
 import { ThemeToggle } from '@/components/ThemeToggle'
-import { usePlatformStats } from '@/lib/hooks'
+import { usePlatformStats, useContracts } from '@/lib/hooks'
 import { useInView } from '@/lib/useInView'
 import { useCountUp } from '@/lib/useCountUp'
-import { LiveChallengeCard, OnboardingCommitment, isFirstTimeUser } from '@/components/OnboardingCommitment'
+import { LiveChallengeCard, OnboardingCommitment } from '@/components/OnboardingCommitment'
+import { NEW_USER_CHALLENGE_ABI } from '@/lib/abis'
 
 // Dynamic imports for heavy components - don't block first paint
 const BrowseGoals = dynamic(() => import('@/components/BrowseGoals').then(m => ({ default: m.BrowseGoals })), {
@@ -66,7 +67,8 @@ function StatsCard({
 }
 
 export default function Home() {
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
+  const contracts = useContracts()
   const onChainIds = FEATURED_GOALS.filter(g => g.onChainId !== undefined).map(g => g.onChainId!)
   const platformStats = usePlatformStats(onChainIds, FEATURED_GOALS.length)
   const { login, authenticated } = usePrivy()
@@ -78,18 +80,28 @@ export default function Home() {
   const whyView = useInView(0.1)
   const ctaView = useInView(0.2)
 
+  // Check if user has completed the new user challenge (contract state)
+  const isNewUserChallengeDeployed = contracts.newUserChallenge !== '0x0000000000000000000000000000000000000000'
+  const { data: hasCompletedChallenge } = useReadContract({
+    address: contracts.newUserChallenge,
+    abi: NEW_USER_CHALLENGE_ABI,
+    functionName: 'hasJoinedChallenge',
+    args: address ? [address] : undefined,
+    query: { enabled: !!address && isNewUserChallengeDeployed },
+  })
+
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  // Show onboarding modal for first-time users after they authenticate
+  // Show onboarding modal for users who haven't completed the challenge
   useEffect(() => {
-    if (authenticated && mounted && isFirstTimeUser()) {
+    if (authenticated && mounted && isNewUserChallengeDeployed && hasCompletedChallenge === false) {
       // Small delay to let the page render first
       const timer = setTimeout(() => setShowOnboarding(true), 500)
       return () => clearTimeout(timer)
     }
-  }, [authenticated, mounted])
+  }, [authenticated, mounted, isNewUserChallengeDeployed, hasCompletedChallenge])
 
   const scrollToSection = (e: React.MouseEvent, sectionId: string) => {
     e.preventDefault()
