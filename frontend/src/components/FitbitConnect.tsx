@@ -278,3 +278,18 @@ export function FitbitConnect() {
     </button>
   )
 }
+
+// Hook to check Fitbit connection status
+export function useFitbitConnection() {
+  const [isConnected, setIsConnected] = useState(false)
+  
+  useEffect(() => {
+    const userId = document.cookie
+      .split('; ')
+      .find(row => row.startsWith('fitbit_user_id='))
+      ?.split('=')[1]
+    setIsConnected(!!userId)
+  }, [])
+  
+  return { isConnected }
+}

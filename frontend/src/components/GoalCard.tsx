@@ -11,6 +11,7 @@ import { USDC_ABI, GOALSTAKE_ABI, AUTOMATION_ABI, NEW_USER_CHALLENGE_ABI, PHASE_
 import { DuolingoConnect, useDuolingoConnection } from './DuolingoConnect'
 import { WithingsConnect, useWithingsConnection } from './WithingsConnect'
 import { RescueTimeConnect, useRescueTimeConnection } from './RescueTimeConnect'
+import { FitbitConnect, useFitbitConnection } from './FitbitConnect'
 import { OnboardingCommitment } from './OnboardingCommitment'
 // Re-export Goal type for other components
 export type { Goal }
@@ -692,6 +693,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
             hasTokenOnChain={hasTokenOnChain}
             isConnected={isConnected}
             subdomain={goal.subdomain}
+            goalId={goal.id}
           />
           
           {isLoading && (
@@ -783,15 +785,29 @@ function StakeSelector({ goal, stakeAmount, setStakeAmount, balanceNum }: {
   )
 }
 
-function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdomain }: {
+function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdomain, goalId }: {
   stravaConnected: boolean
   hasTokenOnChain: boolean | undefined
   isConnected: boolean
   subdomain?: string
+  goalId?: string
 }) {
   const duolingo = useDuolingoConnection()
   const withings = useWithingsConnection()
   const rescuetime = useRescueTimeConnection()
+  const { isConnected: fitbitConnected } = useFitbitConnection()
+  
+  // Data source selection for fitness goals (stored per goal in localStorage)
+  const storageKey = goalId ? `vaada_datasource_${goalId}` : null
+  const [dataSource, setDataSource] = useState<'strava' | 'fitbit' | null>(() => {
+    if (typeof window === 'undefined' || !storageKey) return null
+    return localStorage.getItem(storageKey) as 'strava' | 'fitbit' | null
+  })
+  
+  const selectDataSource = (source: 'strava' | 'fitbit') => {
+    setDataSource(source)
+    if (storageKey) localStorage.setItem(storageKey, source)
+  }
   
   if (!isConnected) return null
 
@@ -891,13 +907,75 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
     )
   }
 
+  // Running/Fitness goals - show data source picker
+  // Step 1: Choose data source if not selected
+  if (!dataSource) {
+    return (
+      <div className="mb-3 p-3 rounded-xl bg-[var(--surface)] border border-[var(--border)]">
+        <p className="text-xs text-[var(--text-secondary)] mb-2 text-center">Choose your fitness tracker</p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => selectDataSource('strava')}
+            className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-[#FC4C02]/10 border border-[#FC4C02]/30 hover:bg-[#FC4C02]/20 transition-colors"
+          >
+            <svg className="w-4 h-4 text-[#FC4C02]" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.599h4.172L10.463 0l-7 13.828h4.169" />
+            </svg>
+            <span className="text-xs font-medium text-[#FC4C02]">Strava</span>
+          </button>
+          <button
+            onClick={() => selectDataSource('fitbit')}
+            className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-[#00B0B9]/10 border border-[#00B0B9]/30 hover:bg-[#00B0B9]/20 transition-colors"
+          >
+            <span className="text-xs">⌚</span>
+            <span className="text-xs font-medium text-[#00B0B9]">Fitbit</span>
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Step 2: Show connect UI for selected data source
+  if (dataSource === 'fitbit') {
+    if (fitbitConnected) {
+      return (
+        <div className="mb-3">
+          <div className="p-2.5 rounded-xl bg-[#00B0B9]/10 border border-[#00B0B9]/20 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm">⌚</span>
+              <p className="text-xs text-[#00B0B9] font-medium">✓ Fitbit Connected</p>
+            </div>
+            <button onClick={() => selectDataSource('strava')} className="text-[10px] text-[var(--text-secondary)] hover:text-[var(--foreground)]">
+              Switch
+            </button>
+          </div>
+        </div>
+      )
+    }
+    return (
+      <div className="mb-3 p-3 rounded-xl bg-[#00B0B9]/10 border border-[#00B0B9]/20">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs text-[var(--text-secondary)]">Connect Fitbit to verify</p>
+          <button onClick={() => setDataSource(null)} className="text-[10px] text-[var(--text-secondary)] hover:text-[var(--foreground)]">
+            Change
+          </button>
+        </div>
+        <FitbitConnect />
+      </div>
+    )
+  }
+
+  // Strava flow (existing logic)
   if (!stravaConnected) {
     return (
-      <div className="mb-3 p-2.5 rounded-lg bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800 flex items-center gap-2">
-        <svg className="w-4 h-4 text-orange-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-        </svg>
-        <p className="text-xs text-orange-700 dark:text-orange-400">Connect Strava to verify runs</p>
+      <div className="mb-3 p-3 rounded-xl bg-[#FC4C02]/10 border border-[#FC4C02]/20">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs text-[var(--text-secondary)]">Connect Strava to verify</p>
+          <button onClick={() => setDataSource(null)} className="text-[10px] text-[var(--text-secondary)] hover:text-[var(--foreground)]">
+            Change
+          </button>
+        </div>
+        <p className="text-xs text-orange-700 dark:text-orange-400">Connect Strava below</p>
       </div>
     )
   }
@@ -905,11 +983,16 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
   if (!hasTokenOnChain) {
     return (
       <div className="mb-3 p-3 rounded-xl bg-[#FC4C02]/10 border border-[#FC4C02]/20">
-        <div className="flex items-center gap-2 mb-1.5">
-          <svg className="w-4 h-4 text-[#FC4C02]" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.599h4.172L10.463 0l-7 13.828h4.169" />
-          </svg>
-          <p className="text-sm font-medium text-[#FC4C02]">✓ Strava Connected</p>
+        <div className="flex items-center justify-between mb-1.5">
+          <div className="flex items-center gap-2">
+            <svg className="w-4 h-4 text-[#FC4C02]" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.599h4.172L10.463 0l-7 13.828h4.169" />
+            </svg>
+            <p className="text-sm font-medium text-[#FC4C02]">✓ Strava Connected</p>
+          </div>
+          <button onClick={() => setDataSource(null)} className="text-[10px] text-[var(--text-secondary)] hover:text-[var(--foreground)]">
+            Switch
+          </button>
         </div>
         <p className="text-xs text-[var(--text-secondary)] ml-6">Tap below to let us verify your runs automatically</p>
       </div>
@@ -917,11 +1000,16 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
   }
 
   return (
-    <div className="mb-3 p-2.5 rounded-xl bg-[#2EE59D]/10 border border-[#2EE59D]/20 flex items-center gap-2">
-      <svg className="w-4 h-4 text-[#2EE59D]" fill="currentColor" viewBox="0 0 20 20">
-        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-      </svg>
-      <p className="text-xs text-[#2EE59D] font-medium">✓ Runs will be verified automatically</p>
+    <div className="mb-3 p-2.5 rounded-xl bg-[#2EE59D]/10 border border-[#2EE59D]/20 flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <svg className="w-4 h-4 text-[#2EE59D]" fill="currentColor" viewBox="0 0 20 20">
+          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+        </svg>
+        <p className="text-xs text-[#2EE59D] font-medium">✓ Runs will be verified via Strava</p>
+      </div>
+      <button onClick={() => setDataSource(null)} className="text-[10px] text-[var(--text-secondary)] hover:text-[var(--foreground)]">
+        Switch
+      </button>
     </div>
   )
 }
