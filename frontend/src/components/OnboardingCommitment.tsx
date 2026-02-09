@@ -264,18 +264,42 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                 )}
               </button>
 
-              {/* Skip option for testing */}
-              {!isContractDeployed && (
-                <button
-                  onClick={() => {
-                    markOnboarded()
-                    onComplete()
-                  }}
-                  className="w-full mt-2 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)]"
-                >
-                  Skip for now (contract not deployed)
-                </button>
-              )}
+              {/* Skip option - always available for users who need to fund first */}
+              <button
+                onClick={() => {
+                  markOnboarded()
+                  onComplete()
+                }}
+                className="w-full mt-2 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)]"
+              >
+                Skip for now
+              </button>
+              
+              {/* Testnet funding note */}
+              <div className="mt-3 p-3 bg-[var(--surface)] border border-[var(--border)] rounded-xl">
+                <p className="text-xs text-[var(--text-secondary)] text-center">
+                  <span className="font-semibold text-[var(--foreground)]">Need testnet funds?</span>
+                  <br />
+                  Get Base Sepolia ETH from{' '}
+                  <a 
+                    href="https://www.alchemy.com/faucets/base-sepolia" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-[#2EE59D] hover:underline"
+                  >
+                    Alchemy Faucet
+                  </a>
+                  {' '}and USDC from{' '}
+                  <a 
+                    href="https://faucet.circle.com/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-[#2EE59D] hover:underline"
+                  >
+                    Circle Faucet
+                  </a>
+                </p>
+              </div>
             </>
           )}
         </div>
