@@ -16,13 +16,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const goal = GOALS[id] || GOALS['1']
   
   return {
-    title: `${goal.emoji} ${goal.title} | vaada`,
+    title: `${goal.emoji} ${goal.title} | Vaada`,
     description: `${goal.description}. Stake $${goal.minStake}-$${goal.maxStake} on your promise.`,
     openGraph: {
       title: `${goal.emoji} ${goal.title}`,
       description: `${goal.description}. Stake $${goal.minStake}-$${goal.maxStake} on your promise.`,
       url: `https://vaada.io/goal/${id}`,
-      siteName: 'vaada',
+      siteName: 'Vaada',
       type: 'website',
       images: [{
         url: `https://vaada.io/api/og/${id}`,
