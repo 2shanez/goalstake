@@ -34,7 +34,7 @@ function formatTimeLeft(timestamp: number): string {
 
 export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const { address, isConnected } = useAccount()
-  const { login } = usePrivy()
+  const { login, authenticated } = usePrivy()
   const { switchChain } = useSwitchChain()
   const contracts = useContracts()
   const { isWrongNetwork } = useNetworkCheck()
@@ -211,7 +211,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   }
 
   const handleJoin = async () => {
-    if (!isConnected) {
+    if (!authenticated) {
       login()
       return
     }
@@ -651,7 +651,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
                 onClick={(e) => {
                   e.stopPropagation()
                   if (goal.onChainId === undefined || !entryOpen || hasJoined) return
-                  isConnected ? setExpanded(true) : login()
+                  authenticated ? setExpanded(true) : login()
                 }}
                 disabled={goal.onChainId === undefined || !entryOpen || hasJoined}
                 className={`w-full py-3 text-sm font-bold rounded-xl transition-all duration-150 ${
