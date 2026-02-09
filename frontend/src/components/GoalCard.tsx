@@ -902,21 +902,24 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
 
   if (!hasTokenOnChain) {
     return (
-      <div className="mb-3 p-2.5 rounded-lg bg-[#FC4C02]/10 border border-[#FC4C02]/20 flex items-center gap-2">
-        <svg className="w-4 h-4 text-[#FC4C02]" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.599h4.172L10.463 0l-7 13.828h4.169" />
-        </svg>
-        <p className="text-xs text-[#FC4C02]">Strava connected — enable auto-verification</p>
+      <div className="mb-3 p-3 rounded-xl bg-[#FC4C02]/10 border border-[#FC4C02]/20">
+        <div className="flex items-center gap-2 mb-1.5">
+          <svg className="w-4 h-4 text-[#FC4C02]" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.599h4.172L10.463 0l-7 13.828h4.169" />
+          </svg>
+          <p className="text-sm font-medium text-[#FC4C02]">✓ Strava Connected</p>
+        </div>
+        <p className="text-xs text-[var(--text-secondary)] ml-6">Tap below to let us verify your runs automatically</p>
       </div>
     )
   }
 
   return (
-    <div className="mb-3 p-2.5 rounded-lg bg-[#2EE59D]/10 border border-[#2EE59D]/20 flex items-center gap-2">
+    <div className="mb-3 p-2.5 rounded-xl bg-[#2EE59D]/10 border border-[#2EE59D]/20 flex items-center gap-2">
       <svg className="w-4 h-4 text-[#2EE59D]" fill="currentColor" viewBox="0 0 20 20">
         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
       </svg>
-      <p className="text-xs text-[#2EE59D] font-medium">Auto-verification enabled</p>
+      <p className="text-xs text-[#2EE59D] font-medium">✓ Runs will be verified automatically</p>
     </div>
   )
 }
@@ -960,7 +963,7 @@ function ActionButton({ stravaConnected, hasTokenOnChain, hasBalance, isLoading,
     if (!hasTokenOnChain) {
       if (isWrongNetwork) return '⚠️ Switch to Base Sepolia'
       if (isStorePending || isStoreConfirming) return 'Verifying...'
-      return '🔗 Enable Auto-Verify'
+      return '✓ Allow Run Verification'
     }
     if (!hasBalance) return 'Insufficient USDC'
     if (isLoading) return 'Processing...'
