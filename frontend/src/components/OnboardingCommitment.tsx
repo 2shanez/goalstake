@@ -209,8 +209,11 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                 <span className="text-4xl">✓</span>
               </div>
               <h2 className="text-xl font-bold mb-2">You're in!</h2>
-              <p className="text-sm text-[var(--text-secondary)]">
-                Now join a vaada within 24h to get your ${stakeAmountFormatted} back
+              <p className="text-sm text-[var(--text-secondary)] mb-3">
+                Now join a vaada within 24h
+              </p>
+              <p className="text-xs text-[var(--text-secondary)] bg-[var(--surface)] rounded-lg px-3 py-2 inline-block">
+                💰 Your ${stakeAmountFormatted} will be returned after verification
               </p>
             </div>
           ) : (
@@ -268,10 +271,13 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                 <div>
                   <p className="text-sm font-bold">New User Challenge</p>
                   <p className="text-xs text-[var(--text-secondary)]">
-                    Stake ${stakeAmountFormatted} • Join a vaada within 24h → get it back
+                    Stake ${stakeAmountFormatted} • Join a vaada within 24h
                   </p>
                   <p className="text-[10px] text-[var(--text-secondary)]/70 mt-0.5">
-                    Don't join? You lose it.
+                    ✓ Join → ${stakeAmountFormatted} returned after verification
+                  </p>
+                  <p className="text-[10px] text-[var(--text-secondary)]/70">
+                    ✗ Don't join → ${stakeAmountFormatted} forfeited
                   </p>
                 </div>
               </div>
