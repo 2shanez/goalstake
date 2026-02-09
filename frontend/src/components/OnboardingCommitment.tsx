@@ -57,6 +57,15 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
     query: { enabled: isContractDeployed },
   })
 
+  // Check USDC balance
+  const { data: usdcBalance } = useReadContract({
+    address: contracts.usdc,
+    abi: USDC_ABI,
+    functionName: 'balanceOf',
+    args: address ? [address] : undefined,
+    query: { enabled: !!address },
+  })
+
   // Check USDC allowance
   const { data: allowance } = useReadContract({
     address: contracts.usdc,
@@ -65,6 +74,10 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
     args: address ? [address, contracts.newUserChallenge] : undefined,
     query: { enabled: !!address && isContractDeployed },
   })
+  
+  // Derived state
+  const hasEnoughBalance = usdcBalance !== undefined && stakeAmount !== undefined && 
+    (usdcBalance as bigint) >= (stakeAmount as bigint)
 
   // Contract writes
   const { writeContract: approve, data: approveTxHash } = useWriteContract()
@@ -115,6 +128,12 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
           element.scrollIntoView({ behavior: 'smooth' })
         }
       }, 100)
+      return
+    }
+
+    // Check balance first
+    if (!hasEnoughBalance) {
+      setError(`Insufficient USDC balance. You need $${stakeAmountFormatted} USDC.`)
       return
     }
 
@@ -253,11 +272,27 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                 </div>
               )}
 
+              {/* Balance display */}
+              {usdcBalance !== undefined && (
+                <div className={`mb-3 p-2.5 rounded-xl text-center text-sm ${
+                  hasEnoughBalance 
+                    ? 'bg-[#2EE59D]/10 border border-[#2EE59D]/30 text-[#2EE59D]' 
+                    : 'bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 text-orange-600 dark:text-orange-400'
+                }`}>
+                  Balance: ${formatUnits(usdcBalance as bigint, 6)} USDC
+                  {!hasEnoughBalance && <span className="block text-xs mt-0.5">Need ${stakeAmountFormatted}</span>}
+                </div>
+              )}
+
               {/* CTA */}
               <button
                 onClick={handleCommit}
-                disabled={isApproving || isJoining}
-                className="w-full py-3 bg-[#2EE59D] text-white font-bold rounded-xl hover:bg-[#26c987] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={isApproving || isJoining || !hasEnoughBalance}
+                className={`w-full py-3 font-bold rounded-xl transition-colors disabled:cursor-not-allowed ${
+                  hasEnoughBalance 
+                    ? 'bg-[#2EE59D] text-white hover:bg-[#26c987] disabled:opacity-50' 
+                    : 'bg-[var(--border)] text-[var(--text-secondary)]'
+                }`}
               >
                 {isApproving ? (
                   <span className="flex items-center justify-center gap-2">
@@ -269,6 +304,8 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     Joining Challenge...
                   </span>
+                ) : !hasEnoughBalance ? (
+                  'Insufficient USDC'
                 ) : (
                   `Stake $${stakeAmountFormatted} — I'm In`
                 )}
