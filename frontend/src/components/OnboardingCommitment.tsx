@@ -22,6 +22,11 @@ interface OnboardingCommitmentProps {
   onComplete: () => void
 }
 
+const FAUCETS = {
+  eth: 'https://www.alchemy.com/faucets/base-sepolia',
+  usdc: 'https://faucet.circle.com',
+}
+
 // Modal shown to first-time users after sign-in
 export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) {
   const { user } = usePrivy()
@@ -29,6 +34,8 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
   const contracts = useContracts()
   const [step, setStep] = useState<'intro' | 'approve' | 'join' | 'done'>('intro')
   const [error, setError] = useState<string | null>(null)
+  const [showFundModal, setShowFundModal] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   // Check if contract is deployed (address is not zero)
   const isContractDeployed = contracts.newUserChallenge !== '0x0000000000000000000000000000000000000000'
@@ -267,39 +274,92 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                 )}
               </button>
 
-              {/* Testnet funding note + bypass for unfunded users */}
-              <div className="mt-3 p-3 bg-[var(--surface)] border border-[var(--border)] rounded-xl">
-                <p className="text-xs text-[var(--text-secondary)] text-center">
-                  <span className="font-semibold text-[var(--foreground)]">Need testnet funds?</span>
-                  <br />
-                  Get Base Sepolia ETH from{' '}
-                  <a 
-                    href="https://www.alchemy.com/faucets/base-sepolia" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-[#2EE59D] hover:underline"
-                  >
-                    Alchemy Faucet
-                  </a>
-                  {' '}and USDC from{' '}
-                  <a 
-                    href="https://faucet.circle.com/" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-[#2EE59D] hover:underline"
-                  >
-                    Circle Faucet
-                  </a>
-                </p>
-                <button
-                  onClick={() => {
-                    onComplete()
-                  }}
-                  className="w-full mt-3 py-2 text-xs text-[var(--text-secondary)] hover:text-[var(--foreground)] border border-[var(--border)] rounded-lg hover:bg-[var(--background)] transition-colors"
-                >
-                  I need to fund my wallet first →
-                </button>
-              </div>
+              {/* Fund wallet button */}
+              <button
+                onClick={() => setShowFundModal(true)}
+                className="w-full mt-3 py-2.5 text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)] border border-[var(--border)] rounded-xl hover:bg-[var(--surface)] transition-colors"
+              >
+                💰 I need to fund my wallet first
+              </button>
+
+              {/* Fund Modal */}
+              {showFundModal && (
+                <div className="fixed inset-0 z-[60] flex flex-col justify-end sm:justify-center sm:items-center">
+                  <div 
+                    className="absolute inset-0 bg-black/50"
+                    onClick={() => setShowFundModal(false)}
+                  />
+                  <div className="relative bg-[var(--background)] rounded-t-2xl p-4 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:rounded-2xl sm:max-w-sm sm:w-full sm:mx-4 sm:pb-4 animate-in slide-in-from-bottom duration-200">
+                    <p className="text-base font-semibold mb-4 text-center">Get Testnet Tokens</p>
+                    
+                    <a
+                      href={FAUCETS.usdc}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 px-4 py-4 rounded-xl bg-[var(--surface)] border border-[var(--border)] mb-2 active:scale-[0.98] transition-transform"
+                    >
+                      <span className="text-2xl">💵</span>
+                      <div>
+                        <p className="font-medium">Get USDC</p>
+                        <p className="text-sm text-[var(--text-secondary)]">Circle Faucet</p>
+                      </div>
+                      <svg className="w-5 h-5 ml-auto text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                    
+                    <a
+                      href={FAUCETS.eth}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-3 px-4 py-4 rounded-xl bg-[var(--surface)] border border-[var(--border)] mb-2 active:scale-[0.98] transition-transform"
+                    >
+                      <span className="text-2xl">⛽</span>
+                      <div>
+                        <p className="font-medium">Get ETH (gas)</p>
+                        <p className="text-sm text-[var(--text-secondary)]">Alchemy Faucet</p>
+                      </div>
+                      <svg className="w-5 h-5 ml-auto text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                    
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (address) {
+                          navigator.clipboard.writeText(address)
+                          setCopied(true)
+                          setTimeout(() => setCopied(false), 2000)
+                        }
+                      }}
+                      className={`flex items-center gap-3 px-4 py-4 rounded-xl border w-full active:scale-[0.98] transition-all ${
+                        copied 
+                          ? 'bg-[#2EE59D]/10 border-[#2EE59D]' 
+                          : 'bg-[var(--surface)] border-[var(--border)]'
+                      }`}
+                    >
+                      <span className="text-2xl">{copied ? '✅' : '📋'}</span>
+                      <div className="text-left">
+                        <p className={`font-medium ${copied ? 'text-[#2EE59D]' : ''}`}>
+                          {copied ? 'Copied!' : 'Copy Wallet Address'}
+                        </p>
+                        {address && (
+                          <p className="text-sm text-[var(--text-secondary)] font-mono">{address.slice(0, 10)}...{address.slice(-6)}</p>
+                        )}
+                      </div>
+                    </button>
+                    
+                    <button
+                      type="button"
+                      onClick={() => setShowFundModal(false)}
+                      className="w-full mt-4 px-4 py-3 bg-[#2EE59D] text-white font-bold rounded-xl active:scale-[0.98] transition-transform"
+                    >
+                      Done — Back to Challenge
+                    </button>
+                  </div>
+                </div>
+              )}
             </>
           )}
         </div>
