@@ -1,16 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSwitchChain, useReadContracts } from 'wagmi'
+import { useAccount, useWriteContract, useWaitForTransactionReceipt, useSwitchChain, useReadContracts, useReadContract } from 'wagmi'
 import { usePrivy } from '@privy-io/react-auth'
 import { parseUnits, formatUnits } from 'viem'
 import { baseSepolia } from 'wagmi/chains'
 import { isStravaConnected, getStravaAuthUrl } from '@/lib/strava'
 import { useContracts, useNetworkCheck, useUSDC, useGoalState, useGoalDetails, useParticipant, useStravaToken } from '@/lib/hooks'
-import { USDC_ABI, GOALSTAKE_ABI, AUTOMATION_ABI, PHASE_LABELS, CATEGORY_STYLES, GoalPhase, type Goal } from '@/lib/abis'
+import { USDC_ABI, GOALSTAKE_ABI, AUTOMATION_ABI, NEW_USER_CHALLENGE_ABI, PHASE_LABELS, CATEGORY_STYLES, GoalPhase, type Goal } from '@/lib/abis'
 import { DuolingoConnect, useDuolingoConnection } from './DuolingoConnect'
 import { WithingsConnect, useWithingsConnection } from './WithingsConnect'
 import { RescueTimeConnect, useRescueTimeConnection } from './RescueTimeConnect'
+import { OnboardingCommitment } from './OnboardingCommitment'
 // Re-export Goal type for other components
 export type { Goal }
 
@@ -45,6 +46,16 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const { hasTokenOnChain, refetch: refetchToken } = useStravaToken()
   const goalDetails = useGoalDetails(goal.onChainId)
   
+  // Check if user has completed the new user challenge (required before joining any goal)
+  const isNewUserChallengeDeployed = contracts.newUserChallenge !== '0x0000000000000000000000000000000000000000'
+  const { data: hasCompletedNewUserChallenge, refetch: refetchChallengeStatus } = useReadContract({
+    address: contracts.newUserChallenge,
+    abi: NEW_USER_CHALLENGE_ABI,
+    functionName: 'hasJoinedChallenge',
+    args: address ? [address] : undefined,
+    query: { enabled: !!address && isNewUserChallengeDeployed },
+  })
+  
   // Tick every second to update countdowns live
   const [, setTick] = useState(0)
   useEffect(() => {
@@ -58,6 +69,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const [showShare, setShowShare] = useState(false)
   const [linkCopied, setLinkCopied] = useState(false)
   const [stakeAmount, setStakeAmount] = useState(goal.minStake.toString())
+  const [showOnboarding, setShowOnboarding] = useState(false)
   const [step, setStep] = useState<Step>('idle')
   const [showClaimCelebration, setShowClaimCelebration] = useState(false)
   const stravaConnected = isStravaConnected()
@@ -204,6 +216,12 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
       return
     }
 
+    // Gate: Must complete new user challenge first (unless contract not deployed)
+    if (isNewUserChallengeDeployed && !hasCompletedNewUserChallenge) {
+      setShowOnboarding(true)
+      return
+    }
+
     if (!stravaConnected) {
       handleStravaConnect()
       return
@@ -339,6 +357,12 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
     )
   }
 
+  // New User Challenge onboarding modal
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false)
+    refetchChallengeStatus()
+  }
+
   // Claim celebration overlay
   if (showClaimCelebration) {
     return (
@@ -372,14 +396,20 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   }
 
   return (
-    <div className={`group bg-[var(--surface)] border rounded-2xl transition-all duration-200 relative overflow-hidden
-      ${showPlayers ? 'z-40' : 'z-0'}
-      ${expanded 
-        ? 'border-[#2EE59D] shadow-lg shadow-[#2EE59D]/10' 
-        : 'border-[var(--border)] hover:border-[var(--text-secondary)]/30 hover:shadow-lg'
-      }`}
-    >
-      {/* Hero Section */}
+    <>
+      {/* New User Challenge Modal */}
+      {showOnboarding && (
+        <OnboardingCommitment onComplete={handleOnboardingComplete} />
+      )}
+      
+      <div className={`group bg-[var(--surface)] border rounded-2xl transition-all duration-200 relative overflow-hidden
+        ${showPlayers ? 'z-40' : 'z-0'}
+        ${expanded 
+          ? 'border-[#2EE59D] shadow-lg shadow-[#2EE59D]/10' 
+          : 'border-[var(--border)] hover:border-[var(--text-secondary)]/30 hover:shadow-lg'
+        }`}
+      >
+        {/* Hero Section */}
       <div className="relative bg-gradient-to-br from-[var(--background)] to-[var(--surface)] px-5 pt-6 pb-5 rounded-t-2xl">
         <div className="flex items-center justify-between gap-2 mb-4">
           <div className="flex items-center gap-2 flex-wrap min-w-0">
@@ -692,7 +722,8 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   )
 }
 

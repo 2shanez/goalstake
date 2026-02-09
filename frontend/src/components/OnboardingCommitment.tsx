@@ -264,18 +264,7 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                 )}
               </button>
 
-              {/* Skip option - always available for users who need to fund first */}
-              <button
-                onClick={() => {
-                  markOnboarded()
-                  onComplete()
-                }}
-                className="w-full mt-2 py-2 text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)]"
-              >
-                Skip for now
-              </button>
-              
-              {/* Testnet funding note */}
+              {/* Testnet funding note + bypass for unfunded users */}
               <div className="mt-3 p-3 bg-[var(--surface)] border border-[var(--border)] rounded-xl">
                 <p className="text-xs text-[var(--text-secondary)] text-center">
                   <span className="font-semibold text-[var(--foreground)]">Need testnet funds?</span>
@@ -299,6 +288,14 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                     Circle Faucet
                   </a>
                 </p>
+                <button
+                  onClick={() => {
+                    onComplete()
+                  }}
+                  className="w-full mt-3 py-2 text-xs text-[var(--text-secondary)] hover:text-[var(--foreground)] border border-[var(--border)] rounded-lg hover:bg-[var(--background)] transition-colors"
+                >
+                  I need to fund my wallet first →
+                </button>
               </div>
             </>
           )}
