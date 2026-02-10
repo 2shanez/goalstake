@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { usePrivy } from '@privy-io/react-auth'
+import { usePrivy, useWallets } from '@privy-io/react-auth'
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract, useSwitchChain, useChainId } from 'wagmi'
 import { baseSepolia } from 'wagmi/chains'
 import { CONTRACTS } from '@/lib/wagmi'
@@ -27,8 +27,12 @@ const automationAbi = [
 ] as const
 
 export function StravaConnect() {
-  const { authenticated } = usePrivy()
-  const { address, isConnected } = useAccount()
+  const { authenticated, user } = usePrivy()
+  const { wallets } = useWallets()
+  const { address: wagmiAddress, isConnected } = useAccount()
+  
+  // Get address from wagmi OR Privy wallets (fallback for email/social login)
+  const address = wagmiAddress || wallets?.[0]?.address || user?.wallet?.address
   const chainId = useChainId()
   const { switchChain, isPending: isSwitching } = useSwitchChain()
   const [stravaConnected, setStravaConnected] = useState(false)
