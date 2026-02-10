@@ -162,9 +162,9 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   // Auto-dismiss success screen after 2 seconds
   useEffect(() => {
     if (step === 'done') {
-      const timer = setTimeout(() => {
-        // Refetch participant data again to ensure hasJoined is updated
-        refetchParticipant()
+      const timer = setTimeout(async () => {
+        // Refetch participant data and wait for it before dismissing
+        await refetchParticipant()
         setStep('idle')
       }, 2000)
       return () => clearTimeout(timer)
