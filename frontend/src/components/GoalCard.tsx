@@ -567,9 +567,19 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
                 },
                 { 
                   label: 'Compete', 
-                  desc: goalDetails.deadline 
-                    ? (formatTimeLeft(goalDetails.deadline) === 'Passed' ? 'Ended' : `${formatTimeLeft(goalDetails.deadline)} left`)
-                    : `${durationText} window`
+                  desc: (() => {
+                    if (!goalDetails.deadline) return `${durationText} window`;
+                    if (formatTimeLeft(goalDetails.deadline) === 'Passed') return 'Ended';
+                    // During entry phase, show the competition window duration (not countdown)
+                    if (currentPhaseStep === 0 && goalDetails.entryDeadline && goalDetails.deadline) {
+                      const competeDuration = goalDetails.deadline - goalDetails.entryDeadline;
+                      if (competeDuration < 3600) return `${Math.floor(competeDuration / 60)}m window`;
+                      if (competeDuration < 86400) return `${Math.floor(competeDuration / 3600)}h ${Math.floor((competeDuration % 3600) / 60)}m window`;
+                      return `${Math.floor(competeDuration / 86400)}d ${Math.floor((competeDuration % 86400) / 3600)}h window`;
+                    }
+                    // After entry closes, show countdown to deadline
+                    return `${formatTimeLeft(goalDetails.deadline)} left`;
+                  })()
                 },
                 { 
                   label: 'Verify', 
