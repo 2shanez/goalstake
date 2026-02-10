@@ -148,7 +148,7 @@ export default function Home() {
                 How it works
               </a>
               <a href="#promises" onClick={(e) => scrollToSection(e, 'promises')} className="hidden sm:flex items-center px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] text-sm hover:border-[#2EE59D]/50 transition-all cursor-pointer">
-                Promises
+                Vaadas
               </a>
               {authenticated && <FundWalletButton />}
               <PrivyConnectButton />
