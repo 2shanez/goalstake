@@ -723,6 +723,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
             isConnected={isConnected}
             subdomain={goal.subdomain}
             goalId={goal.id}
+            address={address}
           />
           
           {isLoading && (
@@ -814,12 +815,13 @@ function StakeSelector({ goal, stakeAmount, setStakeAmount, balanceNum }: {
   )
 }
 
-function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdomain, goalId }: {
+function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdomain, goalId, address }: {
   stravaConnected: boolean
   hasTokenOnChain: boolean | undefined
   isConnected: boolean
   subdomain?: string
   goalId?: string
+  address?: `0x${string}`
 }) {
   const duolingo = useDuolingoConnection()
   const withings = useWithingsConnection()
