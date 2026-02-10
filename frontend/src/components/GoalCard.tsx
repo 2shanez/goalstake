@@ -947,6 +947,17 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
     window.location.href = getStravaAuthUrl(callbackUrl, address)
   }
 
+  // Helper to force reconnect Fitbit
+  const handleReconnectFitbit = async () => {
+    try {
+      await fetch('/api/fitbit/disconnect', { method: 'POST' })
+    } catch (e) {
+      console.error('Fitbit disconnect failed:', e)
+    }
+    // Redirect to fresh Fitbit OAuth with wallet in state
+    window.location.href = address ? `/api/fitbit/auth?wallet=${address}` : '/api/fitbit/auth'
+  }
+
   // Running/Fitness goals - show data source picker
   // Step 1: Choose data source if not selected
   if (!dataSource) {
@@ -971,12 +982,20 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
             <span className="text-xs font-medium text-[#00B0B9]">Fitbit</span>
           </button>
         </div>
-        <button
-          onClick={handleReconnectStrava}
-          className="w-full mt-2 text-[10px] text-[var(--text-secondary)] hover:text-[#FC4C02] transition-colors"
-        >
-          🔄 Reconnect Strava (new wallet)
-        </button>
+        <div className="flex gap-2 mt-2">
+          <button
+            onClick={handleReconnectStrava}
+            className="flex-1 text-[10px] text-[var(--text-secondary)] hover:text-[#FC4C02] transition-colors"
+          >
+            🔄 Reconnect Strava
+          </button>
+          <button
+            onClick={handleReconnectFitbit}
+            className="flex-1 text-[10px] text-[var(--text-secondary)] hover:text-[#00B0B9] transition-colors"
+          >
+            🔄 Reconnect Fitbit
+          </button>
+        </div>
       </div>
     )
   }
@@ -995,6 +1014,12 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
               Switch
             </button>
           </div>
+          <button
+            onClick={handleReconnectFitbit}
+            className="w-full mt-2 text-[10px] text-[var(--text-secondary)] hover:text-[#00B0B9] transition-colors"
+          >
+            🔄 Reconnect Fitbit (new wallet)
+          </button>
         </div>
       )
     }
