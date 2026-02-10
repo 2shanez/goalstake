@@ -12,13 +12,13 @@ interface IGoalStakeV3 {
         uint256 targetMiles;
         uint256 minStake;
         uint256 maxStake;
-        uint256 entryDeadline;
-        uint256 deadline;
-        uint256 settlementDeadline;
-        uint256 participantCount;
+        uint256 startTime;        // When goal starts
+        uint256 entryDeadline;    // When entry closes
+        uint256 deadline;         // When competition ends
+        bool active;
         bool settled;
         uint256 totalStaked;
-        uint256 winnerCount;
+        uint256 participantCount;
     }
     
     struct Participant {
@@ -213,7 +213,7 @@ contract GoalStakeAutomationV3 is FunctionsClient, AutomationCompatibleInterface
         // Arguments: user wallet, start time (entry deadline), end time (deadline), api url
         string[] memory args = new string[](4);
         args[0] = _addressToString(user);
-        args[1] = _uint2str(goal.entryDeadline); // Competition starts when entry closes
+        args[1] = _uint2str(goal.startTime); // Activities count from goal start
         args[2] = _uint2str(goal.deadline);
         args[3] = apiBaseUrl; // Our verification API
         req.setArgs(args);
