@@ -116,11 +116,11 @@ function NotifyModal({
 
 const FEATURED_GOALS: Goal[] = [
   // ═══════════════════════════════════════════
-  // TEST GOAL - REMOVE AFTER E2E TEST
+  // ACTIVE GOAL - Daily Mile (Goal 37)
   // ═══════════════════════════════════════════
   {
-    id: 'test-daily-mile-36',
-    onChainId: 36,
+    id: 'daily-mile-37',
+    onChainId: 37,
     title: 'Daily Mile',
     description: 'Run 0.1 miles',
     emoji: '🏃',
@@ -135,67 +135,14 @@ const FEATURED_GOALS: Goal[] = [
     domain: 'Fitness',
     subdomain: 'Running',
   },
-  {
-    id: 'test-quick-2',
-    onChainId: 35,
-    title: 'Quick Test 2',
-    description: 'Run 0.1 miles (E2E test)',
-    emoji: '🧪',
-    targetMiles: 0.1,
-    targetUnit: 'miles',
-    durationDays: 1,
-    minStake: 1,
-    maxStake: 5,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Daily',
-    domain: 'Fitness',
-    subdomain: 'Running',
-  },
-
-  // ═══════════════════════════════════════════
-  // FITNESS - RUNNING
-  // ═══════════════════════════════════════════
   
-  // Daily Running
-  {
-    id: 'fitness-running-daily-1',
-    onChainId: 33,
-    title: 'Daily Mile',
-    description: 'Run 0.1 miles today',
-    emoji: '🌅',
-    targetMiles: 0.1,
-    targetUnit: 'miles',
-    durationDays: 1,
-    minStake: 5,
-    maxStake: 50,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Daily',
-    domain: 'Fitness',
-    subdomain: 'Running',
-  },
-  {
-    id: 'fitness-running-daily-2',
-    title: 'Daily 3',
-    description: 'Run 3 miles today',
-    emoji: '☀️',
-    targetMiles: 3,
-    targetUnit: 'miles',
-    durationDays: 1,
-    minStake: 5,
-    maxStake: 50,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Daily',
-    domain: 'Fitness',
-    subdomain: 'Running',
-  },
+  // ═══════════════════════════════════════════
+  // MORE GOALS (coming soon)
+  // ═══════════════════════════════════════════
   
   // Weekly Running
   {
     id: 'fitness-running-weekly-1',
-    onChainId: 17,
     title: 'Weekend Warrior',
     description: 'Run 10 miles this weekend',
     emoji: '💪',

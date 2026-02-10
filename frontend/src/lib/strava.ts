@@ -2,7 +2,7 @@
 
 const STRAVA_CLIENT_ID = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID
 
-export function getStravaAuthUrl(redirectUri: string = 'http://localhost:3000/api/strava/callback') {
+export function getStravaAuthUrl(redirectUri: string = 'http://localhost:3000/api/strava/callback', walletAddress?: string) {
   const params = new URLSearchParams({
     client_id: STRAVA_CLIENT_ID || '',
     redirect_uri: redirectUri,
@@ -10,6 +10,11 @@ export function getStravaAuthUrl(redirectUri: string = 'http://localhost:3000/ap
     approval_prompt: 'auto',
     scope: 'read,activity:read_all',
   })
+  
+  // Pass wallet address in state for Supabase token storage
+  if (walletAddress) {
+    params.set('state', encodeURIComponent(JSON.stringify({ wallet: walletAddress })))
+  }
 
   return `https://www.strava.com/oauth/authorize?${params.toString()}`
 }

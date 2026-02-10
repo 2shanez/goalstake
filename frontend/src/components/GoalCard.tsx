@@ -181,7 +181,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
     const callbackUrl = typeof window !== 'undefined' 
       ? `${window.location.origin}/api/strava/callback`
       : 'http://localhost:3000/api/strava/callback'
-    window.location.href = getStravaAuthUrl(callbackUrl)
+    window.location.href = getStravaAuthUrl(callbackUrl, address)
   }
   
   const handleStoreToken = async () => {
@@ -930,11 +930,9 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
     } catch (e) {
       console.error('Disconnect failed:', e)
     }
-    // Redirect to fresh Strava OAuth
-    const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID
-    const redirectUri = `${window.location.origin}/api/strava/callback`
-    const scope = 'read,activity:read_all'
-    window.location.href = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}`
+    // Redirect to fresh Strava OAuth with wallet in state
+    const callbackUrl = `${window.location.origin}/api/strava/callback`
+    window.location.href = getStravaAuthUrl(callbackUrl, address)
   }
 
   // Running/Fitness goals - show data source picker
