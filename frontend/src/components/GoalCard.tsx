@@ -893,6 +893,21 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
     )
   }
 
+  // Helper to force reconnect Strava
+  const handleReconnectStrava = async () => {
+    // Clear cookies and disconnect
+    try {
+      await fetch('/api/strava/disconnect', { method: 'POST' })
+    } catch (e) {
+      console.error('Disconnect failed:', e)
+    }
+    // Redirect to fresh Strava OAuth
+    const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID
+    const redirectUri = `${window.location.origin}/api/strava/callback`
+    const scope = 'read,activity:read_all'
+    window.location.href = `https://www.strava.com/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}`
+  }
+
   // Running/Fitness goals - show data source picker
   // Step 1: Choose data source if not selected
   if (!dataSource) {
@@ -917,6 +932,12 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
             <span className="text-xs font-medium text-[#00B0B9]">Fitbit</span>
           </button>
         </div>
+        <button
+          onClick={handleReconnectStrava}
+          className="w-full mt-2 text-[10px] text-[var(--text-secondary)] hover:text-[#FC4C02] transition-colors"
+        >
+          🔄 Reconnect Strava (new wallet)
+        </button>
       </div>
     )
   }
