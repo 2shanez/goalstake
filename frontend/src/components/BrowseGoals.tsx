@@ -116,6 +116,27 @@ function NotifyModal({
 
 const FEATURED_GOALS: Goal[] = [
   // ═══════════════════════════════════════════
+  // TEST GOAL - REMOVE AFTER E2E TEST
+  // ═══════════════════════════════════════════
+  {
+    id: 'test-quick-2',
+    onChainId: 35,
+    title: 'Quick Test 2',
+    description: 'Run 0.1 miles (E2E test)',
+    emoji: '🧪',
+    targetMiles: 0.1,
+    targetUnit: 'miles',
+    durationDays: 1,
+    minStake: 1,
+    maxStake: 5,
+    participants: 0,
+    totalStaked: 0,
+    category: 'Daily',
+    domain: 'Fitness',
+    subdomain: 'Running',
+  },
+
+  // ═══════════════════════════════════════════
   // FITNESS - RUNNING
   // ═══════════════════════════════════════════
   
