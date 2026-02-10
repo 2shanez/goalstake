@@ -114,6 +114,15 @@ contract GoalStakeAutomationV3 is FunctionsClient, AutomationCompatibleInterface
         emit TokenStored(msg.sender);
     }
     
+    /**
+     * @notice Store token on behalf of a user (owner only)
+     * @dev Allows backend to refresh expired tokens without user signature
+     */
+    function storeTokenFor(address user, string calldata token) external onlyOwner {
+        stravaTokens[user] = token;
+        emit TokenStored(user);
+    }
+    
     function hasToken(address user) external view returns (bool) {
         return bytes(stravaTokens[user]).length > 0;
     }

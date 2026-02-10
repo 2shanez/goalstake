@@ -15,7 +15,7 @@ export const CONTRACTS = {
   // Base Sepolia (testnet)
   [baseSepolia.id]: {
     goalStake: '0x13b8eaEb7F7927527CE1fe7A600f05e61736d217' as `0x${string}`, // V3 - entry windows
-    oracle: '0xB10fCE97fc6eE84ff7772Bc44A651Dd076F7180D' as `0x${string}`, // AutomationV3
+    oracle: '0xc3be0E6008D3ee332cfa558De75D8Ab8074D40C2' as `0x${string}`, // AutomationV3 with storeTokenFor
     usdc: '0x036CbD53842c5426634e7929541eC2318f3dCF7e' as `0x${string}`, // Base Sepolia USDC
     newUserChallenge: '0x991000C16Ab118c51d1125FB2121D8Cb179a551D' as `0x${string}`,
   },
