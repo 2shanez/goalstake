@@ -122,7 +122,7 @@ const FEATURED_GOALS: Goal[] = [
   // Daily Running
   {
     id: 'fitness-running-daily-1',
-    onChainId: 30,
+    onChainId: 32,
     title: 'Daily Mile',
     description: 'Run 0.1 miles today',
     emoji: '🌅',
