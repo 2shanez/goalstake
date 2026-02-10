@@ -1,9 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createServerSupabase } from '@/lib/supabase'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const code = searchParams.get('code')
   const error = searchParams.get('error')
+  const state = searchParams.get('state')
+  
+  // Parse wallet address from state parameter
+  let walletAddress: string | null = null
+  if (state) {
+    try {
+      const stateData = JSON.parse(decodeURIComponent(state))
+      walletAddress = stateData.wallet?.toLowerCase() || null
+    } catch (e) {
+      console.warn('Failed to parse state parameter:', e)
+    }
+  }
 
   const host = request.headers.get('host') || 'localhost:3000'
   const protocol = request.headers.get('x-forwarded-proto') || 'http'
@@ -45,8 +58,27 @@ export async function GET(request: NextRequest) {
     // - expires_in: number (seconds)
     // - athlete: { id, firstname, lastname, ... }
 
-    // For MVP, we'll pass the token back to the frontend via URL params
-    // In production, you'd want to encrypt this and store it more securely
+    // Save refresh token to Supabase if we have wallet address
+    if (walletAddress) {
+      try {
+        const supabase = createServerSupabase()
+        await supabase
+          .from('strava_tokens')
+          .upsert({
+            wallet_address: walletAddress,
+            athlete_id: tokenData.athlete.id,
+            refresh_token: tokenData.refresh_token,
+            updated_at: new Date().toISOString(),
+          }, {
+            onConflict: 'wallet_address'
+          })
+        console.log('Saved Strava token to database for wallet:', walletAddress)
+      } catch (dbError) {
+        console.error('Failed to save token to database:', dbError)
+        // Continue anyway - cookies will still work
+      }
+    }
+
     const redirectUrl = new URL('/', baseUrl)
     redirectUrl.searchParams.set('strava', 'success')
     redirectUrl.searchParams.set('athlete_id', tokenData.athlete.id.toString())

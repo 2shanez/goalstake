@@ -119,17 +119,20 @@ export function StravaConnect() {
 
   const handleReconnect = async () => {
     await handleDisconnect()
-    // Redirect to Strava OAuth
+    // Redirect to Strava OAuth with wallet address in state
     const redirectUri = `${window.location.origin}/api/strava/callback`
     const scope = 'read,activity:read_all'
-    const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${STRAVA_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}`
+    const state = address ? encodeURIComponent(JSON.stringify({ wallet: address })) : ''
+    const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${STRAVA_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}&state=${state}`
     window.location.href = stravaAuthUrl
   }
 
   const handleConnectStrava = () => {
     const redirectUri = `${window.location.origin}/api/strava/callback`
     const scope = 'read,activity:read_all'
-    const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${STRAVA_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}`
+    // Pass wallet address in state parameter so callback can save to DB
+    const state = address ? encodeURIComponent(JSON.stringify({ wallet: address })) : ''
+    const stravaAuthUrl = `https://www.strava.com/oauth/authorize?client_id=${STRAVA_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}&state=${state}`
     window.location.href = stravaAuthUrl
   }
 

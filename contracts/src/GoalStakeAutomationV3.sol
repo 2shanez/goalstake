@@ -56,6 +56,7 @@ contract GoalStakeAutomationV3 is FunctionsClient, AutomationCompatibleInterface
     uint64 public subscriptionId;
     uint32 public gasLimit = 300000;
     bytes public functionsSource;
+    string public apiBaseUrl = "https://vaada.io"; // Verification API base URL
     
     // User Strava tokens
     mapping(address => string) public stravaTokens;
@@ -200,8 +201,8 @@ contract GoalStakeAutomationV3 is FunctionsClient, AutomationCompatibleInterface
         require(block.timestamp >= goal.deadline, "Not yet deadline");
         require(!pendingVerification[goalId][user], "Already pending");
         
-        string memory token = stravaTokens[user];
-        require(bytes(token).length > 0, "No token");
+        // Note: Token is now stored in database, not on-chain
+        // The /api/verify endpoint will return error if user hasn't connected Strava
         
         pendingVerification[goalId][user] = true;
         
@@ -209,11 +210,12 @@ contract GoalStakeAutomationV3 is FunctionsClient, AutomationCompatibleInterface
         FunctionsRequest.Request memory req;
         req.initializeRequestForInlineJavaScript(string(functionsSource));
         
-        // Arguments: token, start time (entry deadline), end time (deadline)
-        string[] memory args = new string[](3);
-        args[0] = token;
+        // Arguments: user wallet, start time (entry deadline), end time (deadline), api url
+        string[] memory args = new string[](4);
+        args[0] = _addressToString(user);
         args[1] = _uint2str(goal.entryDeadline); // Competition starts when entry closes
         args[2] = _uint2str(goal.deadline);
+        args[3] = apiBaseUrl; // Our verification API
         req.setArgs(args);
         
         bytes32 requestId = _sendRequest(
@@ -324,5 +326,22 @@ contract GoalStakeAutomationV3 is FunctionsClient, AutomationCompatibleInterface
             _i /= 10;
         }
         return string(bstr);
+    }
+    
+    function _addressToString(address _addr) internal pure returns (string memory) {
+        bytes memory alphabet = "0123456789abcdef";
+        bytes memory data = abi.encodePacked(_addr);
+        bytes memory str = new bytes(42);
+        str[0] = '0';
+        str[1] = 'x';
+        for (uint256 i = 0; i < 20; i++) {
+            str[2 + i * 2] = alphabet[uint8(data[i] >> 4)];
+            str[3 + i * 2] = alphabet[uint8(data[i] & 0x0f)];
+        }
+        return string(str);
+    }
+    
+    function setApiBaseUrl(string calldata _url) external onlyOwner {
+        apiBaseUrl = _url;
     }
 }
