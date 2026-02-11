@@ -8,7 +8,7 @@ contract DeployAutomationV3 is Script {
     function run() external {
         // Base Sepolia Chainlink config
         address router = 0xf9B8fc078197181C841c296C876945aaa425B278; // Functions Router
-        address goalStakeV3 = 0x13b8eaEb7F7927527CE1fe7A600f05e61736d217; // GoalStakeV3
+        address goalStakeV3 = 0xE570BE5EC4039e2b256ADb1e02F6E595eCE921B9; // GoalStakeV3 (with GoalType)
         bytes32 donId = 0x66756e2d626173652d7365706f6c69612d310000000000000000000000000000; // fun-base-sepolia-1
         uint64 subscriptionId = 561; // Your Chainlink Functions subscription
         

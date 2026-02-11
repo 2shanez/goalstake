@@ -7,30 +7,27 @@ import {GoalStakeV3} from "../src/GoalStakeV3.sol";
 contract DeployV3Script is Script {
     // Base Sepolia USDC
     address constant USDC = 0x036CbD53842c5426634e7929541eC2318f3dCF7e;
-    
-    // Existing automation contract (will be the oracle)
-    address constant AUTOMATION = 0x8E69bf57b08992204317584b5e906c1B6e6E609E;
 
     function run() external {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         address deployer = vm.addr(deployerPrivateKey);
         
-        console.log("Deploying from:", deployer);
+        console.log("Deploying GoalStakeV3 (with GoalType support)");
+        console.log("Deployer:", deployer);
         console.log("USDC:", USDC);
-        console.log("Oracle (Automation):", AUTOMATION);
         
         vm.startBroadcast(deployerPrivateKey);
 
-        // Deploy GoalStakeV3 with automation as oracle
-        GoalStakeV3 goalStake = new GoalStakeV3(USDC, AUTOMATION);
+        // Deploy GoalStakeV3 with deployer as initial oracle (will update later)
+        GoalStakeV3 goalStake = new GoalStakeV3(USDC, deployer);
         console.log("GoalStakeV3 deployed to:", address(goalStake));
 
         vm.stopBroadcast();
 
         console.log("\n=== Deployment Complete ===");
         console.log("GoalStakeV3:", address(goalStake));
-        console.log("Oracle:", AUTOMATION);
-        console.log("USDC:", USDC);
-        console.log("\nNext: Update automation contract to point to this new GoalStakeV3");
+        console.log("\nNext steps:");
+        console.log("1. Deploy GoalStakeAutomationV3 with this GoalStakeV3 address");
+        console.log("2. Call setOracle() on GoalStakeV3 to set automation as oracle");
     }
 }
