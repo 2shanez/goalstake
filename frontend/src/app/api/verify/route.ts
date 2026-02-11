@@ -176,15 +176,17 @@ function calculateFitbitMiles(activitiesData: any): number {
 }
 
 // Main verification endpoint - called by Chainlink Functions
-// type=miles (default) → check Strava for running distance
-// type=steps → check Fitbit for step count
+// Auto-detects goal type based on connected tracker:
+// - Strava connected → miles (running distance)
+// - Fitbit only → steps (daily step count)
+// Optional: pass type=miles or type=steps to override
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const walletAddress = searchParams.get('user')?.toLowerCase()
     const startTimestamp = searchParams.get('start')
     const endTimestamp = searchParams.get('end')
-    const goalType = searchParams.get('type') || 'miles' // 'miles' or 'steps'
+    const explicitType = searchParams.get('type') // optional override
 
     // Validate parameters
     if (!walletAddress || !startTimestamp || !endTimestamp) {
@@ -200,14 +202,34 @@ export async function GET(request: NextRequest) {
     const startDate = new Date(parseInt(startTimestamp) * 1000).toISOString().split('T')[0]
     const endDate = new Date(parseInt(endTimestamp) * 1000).toISOString().split('T')[0]
 
+    // Check which trackers are connected
+    const { data: stravaToken } = await supabase
+      .from('strava_tokens')
+      .select('refresh_token, athlete_id')
+      .eq('wallet_address', walletAddress)
+      .single()
+
+    const { data: fitbitToken } = await supabase
+      .from('fitbit_tokens')
+      .select('refresh_token, user_id')
+      .eq('wallet_address', walletAddress)
+      .single()
+
+    // Determine goal type:
+    // 1. Explicit type parameter takes priority
+    // 2. If only Fitbit connected → steps
+    // 3. If Strava connected (even with Fitbit) → miles
+    let goalType: 'miles' | 'steps'
+    if (explicitType === 'steps' || explicitType === 'miles') {
+      goalType = explicitType
+    } else if (fitbitToken && !stravaToken) {
+      goalType = 'steps' // Fitbit-only users get steps
+    } else {
+      goalType = 'miles' // Strava users (or both) get miles
+    }
+
     // ============== STEPS-BASED GOALS (Fitbit) ==============
     if (goalType === 'steps') {
-      const { data: fitbitToken } = await supabase
-        .from('fitbit_tokens')
-        .select('refresh_token, user_id')
-        .eq('wallet_address', walletAddress)
-        .single()
-
       if (!fitbitToken) {
         return NextResponse.json(
           { error: 'No Fitbit connected for steps goal. Please connect Fitbit.' },
@@ -255,13 +277,6 @@ export async function GET(request: NextRequest) {
 
     // ============== MILES-BASED GOALS (Strava preferred) ==============
     
-    // Try Strava first for miles
-    const { data: stravaToken } = await supabase
-      .from('strava_tokens')
-      .select('refresh_token, athlete_id')
-      .eq('wallet_address', walletAddress)
-      .single()
-
     if (stravaToken) {
       // Use Strava for verification
       const stravaTokens = await refreshStravaToken(stravaToken.refresh_token)
@@ -298,12 +313,6 @@ export async function GET(request: NextRequest) {
     }
 
     // Fallback to Fitbit for miles if no Strava
-    const { data: fitbitToken } = await supabase
-      .from('fitbit_tokens')
-      .select('refresh_token, user_id')
-      .eq('wallet_address', walletAddress)
-      .single()
-
     if (fitbitToken) {
       // Use Fitbit for miles verification
       const fitbitTokens = await refreshFitbitToken(fitbitToken.refresh_token)
