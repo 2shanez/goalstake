@@ -83,7 +83,7 @@ async function refreshFitbitToken(refreshToken: string) {
   return await response.json()
 }
 
-// Fetch activities from Fitbit
+// Fetch activities from Fitbit (for miles-based goals)
 async function fetchFitbitActivities(accessToken: string, afterDate: string, beforeDate: string) {
   const url = new URL('https://api.fitbit.com/1/user/-/activities/list.json')
   url.searchParams.set('afterDate', afterDate)
@@ -101,6 +101,50 @@ async function fetchFitbitActivities(accessToken: string, afterDate: string, bef
   }
 
   return await response.json()
+}
+
+// Fetch daily activity summary from Fitbit (for steps-based goals)
+async function fetchFitbitDailySummary(accessToken: string, date: string) {
+  // date format: YYYY-MM-DD
+  const url = `https://api.fitbit.com/1/user/-/activities/date/${date}.json`
+
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  })
+
+  if (!response.ok) {
+    throw new Error(`Fitbit daily summary API error: ${response.status}`)
+  }
+
+  return await response.json()
+}
+
+// Fetch steps for a date range from Fitbit
+async function fetchFitbitStepsRange(accessToken: string, startDate: string, endDate: string) {
+  // Time series endpoint for steps
+  const url = `https://api.fitbit.com/1/user/-/activities/steps/date/${startDate}/${endDate}.json`
+
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  })
+
+  if (!response.ok) {
+    throw new Error(`Fitbit steps API error: ${response.status}`)
+  }
+
+  return await response.json()
+}
+
+// Calculate total steps from Fitbit time series data
+function calculateFitbitSteps(stepsData: any): number {
+  const series = stepsData['activities-steps'] || []
+  let totalSteps = 0
+
+  for (const day of series) {
+    totalSteps += parseInt(day.value) || 0
+  }
+
+  return totalSteps
 }
 
 // Calculate total miles from Fitbit running activities (device-recorded only)
@@ -132,13 +176,15 @@ function calculateFitbitMiles(activitiesData: any): number {
 }
 
 // Main verification endpoint - called by Chainlink Functions
-// Supports both Strava and Fitbit - uses whichever the user has connected
+// type=miles (default) → check Strava for running distance
+// type=steps → check Fitbit for step count
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const walletAddress = searchParams.get('user')?.toLowerCase()
     const startTimestamp = searchParams.get('start')
     const endTimestamp = searchParams.get('end')
+    const goalType = searchParams.get('type') || 'miles' // 'miles' or 'steps'
 
     // Validate parameters
     if (!walletAddress || !startTimestamp || !endTimestamp) {
@@ -150,7 +196,66 @@ export async function GET(request: NextRequest) {
 
     const supabase = createServerSupabase()
 
-    // Try Strava first
+    // Convert timestamps to date strings for Fitbit API (YYYY-MM-DD)
+    const startDate = new Date(parseInt(startTimestamp) * 1000).toISOString().split('T')[0]
+    const endDate = new Date(parseInt(endTimestamp) * 1000).toISOString().split('T')[0]
+
+    // ============== STEPS-BASED GOALS (Fitbit) ==============
+    if (goalType === 'steps') {
+      const { data: fitbitToken } = await supabase
+        .from('fitbit_tokens')
+        .select('refresh_token, user_id')
+        .eq('wallet_address', walletAddress)
+        .single()
+
+      if (!fitbitToken) {
+        return NextResponse.json(
+          { error: 'No Fitbit connected for steps goal. Please connect Fitbit.' },
+          { status: 404 }
+        )
+      }
+
+      // Refresh Fitbit token
+      const fitbitTokens = await refreshFitbitToken(fitbitToken.refresh_token)
+
+      // Update refresh token in database
+      await supabase
+        .from('fitbit_tokens')
+        .update({
+          refresh_token: fitbitTokens.refresh_token,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('wallet_address', walletAddress)
+
+      // Fetch steps from Fitbit time series
+      const stepsData = await fetchFitbitStepsRange(
+        fitbitTokens.access_token,
+        startDate,
+        endDate
+      )
+
+      // Calculate total steps
+      const steps = calculateFitbitSteps(stepsData)
+      // Store steps in the same milesWei format (scaled by 1e18) for contract compatibility
+      const stepsWei = (BigInt(steps) * BigInt(1e18)).toString()
+
+      return NextResponse.json({
+        success: true,
+        steps: steps,
+        stepsWei: stepsWei,
+        // Also return as miles/milesWei for contract compatibility
+        miles: steps,
+        milesWei: stepsWei,
+        daysCount: stepsData['activities-steps']?.length || 0,
+        userId: fitbitToken.user_id,
+        source: 'fitbit',
+        type: 'steps',
+      })
+    }
+
+    // ============== MILES-BASED GOALS (Strava preferred) ==============
+    
+    // Try Strava first for miles
     const { data: stravaToken } = await supabase
       .from('strava_tokens')
       .select('refresh_token, athlete_id')
@@ -188,10 +293,11 @@ export async function GET(request: NextRequest) {
         activitiesCount: activities.length,
         athleteId: stravaToken.athlete_id,
         source: 'strava',
+        type: 'miles',
       })
     }
 
-    // Try Fitbit if no Strava token
+    // Fallback to Fitbit for miles if no Strava
     const { data: fitbitToken } = await supabase
       .from('fitbit_tokens')
       .select('refresh_token, user_id')
@@ -199,7 +305,7 @@ export async function GET(request: NextRequest) {
       .single()
 
     if (fitbitToken) {
-      // Use Fitbit for verification
+      // Use Fitbit for miles verification
       const fitbitTokens = await refreshFitbitToken(fitbitToken.refresh_token)
 
       // Update refresh token in database
@@ -211,15 +317,11 @@ export async function GET(request: NextRequest) {
         })
         .eq('wallet_address', walletAddress)
 
-      // Convert timestamps to date strings for Fitbit API (YYYY-MM-DD)
-      const afterDate = new Date(parseInt(startTimestamp) * 1000).toISOString().split('T')[0]
-      const beforeDate = new Date(parseInt(endTimestamp) * 1000).toISOString().split('T')[0]
-
       // Fetch activities from Fitbit
       const activitiesData = await fetchFitbitActivities(
         fitbitTokens.access_token,
-        afterDate,
-        beforeDate
+        startDate,
+        endDate
       )
 
       // Calculate total miles
@@ -233,6 +335,7 @@ export async function GET(request: NextRequest) {
         activitiesCount: activitiesData.activities?.length || 0,
         userId: fitbitToken.user_id,
         source: 'fitbit',
+        type: 'miles',
       })
     }
 
