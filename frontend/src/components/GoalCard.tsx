@@ -1128,13 +1128,13 @@ function ActionButton({ stravaConnected, fitbitConnected, trackerConnected, isSt
   const getLabel = () => {
     // Steps goal - check Fitbit
     if (isStepsGoal) {
-      if (!fitbitConnected) return '👟 Connect Fitbit'
+      if (!fitbitConnected) return 'Connect Fitbit above ☝️'
       if (!hasBalance) return 'Insufficient USDC'
       if (isLoading) return 'Processing...'
       return `Stake $${stakeAmount}`
     }
     // Miles goal - check Strava
-    if (!stravaConnected) return '🏃 Connect Strava'
+    if (!stravaConnected) return 'Connect Strava above ☝️'
     if (!hasTokenOnChain) {
       if (isWrongNetwork) return '⚠️ Switch to Base Sepolia'
       if (isStorePending || isStoreConfirming) return 'Verifying...'
@@ -1146,14 +1146,16 @@ function ActionButton({ stravaConnected, fitbitConnected, trackerConnected, isSt
   }
 
   const getStyle = () => {
-    if (disabled) return 'bg-gray-100 text-[var(--text-secondary)] cursor-not-allowed'
+    if (disabled) return 'bg-gray-100 dark:bg-gray-800 text-[var(--text-secondary)] cursor-not-allowed'
+    // Tracker not connected - disabled style
+    if (isStepsGoal && !fitbitConnected) return 'bg-gray-100 dark:bg-gray-800 text-[var(--text-secondary)] cursor-not-allowed'
+    if (!isStepsGoal && !stravaConnected) return 'bg-gray-100 dark:bg-gray-800 text-[var(--text-secondary)] cursor-not-allowed'
     // Steps goal styling
     if (isStepsGoal) {
-      if (!fitbitConnected) return 'bg-[#00B0B9] text-white hover:bg-[#00B0B9]/90 active:scale-[0.98] shadow-sm hover:shadow-md'
       return 'bg-[#2EE59D] text-white hover:bg-[#26c987] active:scale-[0.98] shadow-sm hover:shadow-md'
     }
-    // Miles goal styling
-    if (!stravaConnected || !hasTokenOnChain) return 'bg-[#FC4C02] text-white hover:bg-[#FC4C02]/90 active:scale-[0.98] shadow-sm hover:shadow-md'
+    // Miles goal - need token verification
+    if (!hasTokenOnChain) return 'bg-[#FC4C02] text-white hover:bg-[#FC4C02]/90 active:scale-[0.98] shadow-sm hover:shadow-md'
     return 'bg-[#2EE59D] text-white hover:bg-[#26c987] active:scale-[0.98] shadow-sm hover:shadow-md'
   }
 
