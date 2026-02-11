@@ -1035,7 +1035,8 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
   if (dataSource === 'fitbit') {
     if (fitbitConnected) {
       return (
-        <div className="mb-3">
+        <div className="mb-3 p-3 rounded-xl bg-[var(--surface)] border border-[var(--border)]">
+          <p className="text-xs text-[var(--text-secondary)] mb-2 text-center">Connect Fitbit to track steps</p>
           <div className="p-2.5 rounded-xl bg-[#00B0B9]/10 border border-[#00B0B9]/20 flex items-center justify-center">
             <div className="flex items-center gap-2">
               <span className="text-sm">⌚</span>
