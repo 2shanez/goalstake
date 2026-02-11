@@ -734,6 +734,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
             subdomain={goal.subdomain}
             goalId={goal.id}
             address={address}
+            targetUnit={goal.targetUnit}
           />
           
           {isLoading && (
@@ -825,13 +826,14 @@ function StakeSelector({ goal, stakeAmount, setStakeAmount, balanceNum }: {
   )
 }
 
-function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdomain, goalId, address }: {
+function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdomain, goalId, address, targetUnit }: {
   stravaConnected: boolean
   hasTokenOnChain: boolean | undefined
   isConnected: boolean
   subdomain?: string
   goalId?: string
   address?: `0x${string}`
+  targetUnit?: string
 }) {
   const duolingo = useDuolingoConnection()
   const withings = useWithingsConnection()
@@ -960,8 +962,8 @@ function StatusIndicators({ stravaConnected, hasTokenOnChain, isConnected, subdo
 
   // Running/Fitness goals - auto-select tracker based on goal type
   // Miles goals = Strava only, Steps goals = Fitbit only
-  const isStepsGoal = goal.targetUnit === 'steps'
-  const isMilesGoal = goal.targetUnit === 'miles' || !goal.targetUnit // default to miles
+  const isStepsGoal = targetUnit === 'steps'
+  const isMilesGoal = targetUnit === 'miles' || !targetUnit // default to miles
 
   // Auto-select data source based on goal type if not already selected
   if (!dataSource) {
