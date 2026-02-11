@@ -295,6 +295,17 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   }
 
   const handleActionButton = () => {
+    // Steps goal - use Fitbit
+    if (isStepsGoal) {
+      if (!fitbitConnected) {
+        // Redirect to Fitbit OAuth
+        window.location.href = address ? `/api/fitbit/auth?wallet=${address}` : '/api/fitbit/auth'
+        return
+      }
+      handleJoin()
+      return
+    }
+    // Miles goal - use Strava
     if (!stravaConnected) handleStravaConnect()
     else if (!hasTokenOnChain) handleStoreToken()
     else handleJoin()
