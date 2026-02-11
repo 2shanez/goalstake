@@ -235,33 +235,43 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
       return
     }
 
-    if (!stravaConnected) {
-      handleStravaConnect()
-      return
+    // Check tracker connection based on goal type
+    if (isStepsGoal) {
+      if (!fitbitConnected) {
+        window.location.href = address ? `/api/fitbit/auth?wallet=${address}` : '/api/fitbit/auth'
+        return
+      }
+    } else {
+      if (!stravaConnected) {
+        handleStravaConnect()
+        return
+      }
     }
 
-    // Auto-refresh Strava token before joining to ensure it's fresh
+    // Auto-refresh Strava token before joining to ensure it's fresh (for miles goals only)
     // This prevents "expired token" errors during verification
-    try {
-      const res = await fetch('/api/strava/update-onchain')
-      if (res.ok) {
-        const data = await res.json()
-        // If token was refreshed, update on-chain before joining
-        if (data.refreshed && data.token) {
-          console.log('Refreshing Strava token on-chain before join...')
-          writeStoreToken({
-            address: contracts.oracle,
-            abi: AUTOMATION_ABI,
-            functionName: 'storeToken',
-            args: [data.token],
-          })
-          // Wait a moment for the store transaction to start
-          await new Promise(resolve => setTimeout(resolve, 100))
+    if (!isStepsGoal) {
+      try {
+        const res = await fetch('/api/strava/update-onchain')
+        if (res.ok) {
+          const data = await res.json()
+          // If token was refreshed, update on-chain before joining
+          if (data.refreshed && data.token) {
+            console.log('Refreshing Strava token on-chain before join...')
+            writeStoreToken({
+              address: contracts.oracle,
+              abi: AUTOMATION_ABI,
+              functionName: 'storeToken',
+              args: [data.token],
+            })
+            // Wait a moment for the store transaction to start
+            await new Promise(resolve => setTimeout(resolve, 100))
+          }
         }
+      } catch (err) {
+        console.warn('Could not check/refresh Strava token:', err)
+        // Continue with join anyway - token might still be valid
       }
-    } catch (err) {
-      console.warn('Could not check/refresh Strava token:', err)
-      // Continue with join anyway - token might still be valid
     }
     
     const stakeNum = parseFloat(stakeAmount)
