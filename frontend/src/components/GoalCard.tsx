@@ -543,8 +543,8 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
         {/* Stats row */}
         <div className="flex gap-2 overflow-hidden">
           <div className="flex-1 min-w-0 bg-[var(--surface)] rounded-xl px-2 py-2.5 text-center border border-[var(--border)]/50">
-            <p className={`font-bold text-[var(--foreground)] truncate ${goal.targetMiles >= 10000 ? 'text-base' : 'text-xl'}`}>{goal.targetMiles.toLocaleString()}</p>
-            <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-medium truncate">{goal.targetUnit || (goal.targetMiles === 1 ? 'mile' : 'miles')}</p>
+            <p className={`font-bold text-[var(--foreground)] ${goal.targetMiles >= 10000 ? 'text-sm' : goal.targetMiles >= 1000 ? 'text-lg' : 'text-xl'}`}>{goal.targetMiles.toLocaleString()}</p>
+            <p className="text-[10px] text-[var(--text-secondary)] uppercase tracking-wider font-medium">{goal.targetUnit || (goal.targetMiles === 1 ? 'mile' : 'miles')}</p>
           </div>
           <div className="flex-1 min-w-0 bg-[var(--surface)] rounded-xl px-2 py-2.5 text-center border border-[var(--border)]/50">
             <p className="text-xl font-bold text-[#2EE59D]">${goal.minStake}</p>
@@ -612,10 +612,10 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
                       <div className={`flex-1 h-0.5 ${i < currentPhaseStep ? 'bg-[#2EE59D]' : 'bg-[var(--border)]'}`} />
                     )}
                   </div>
-                  <p className={`text-[10px] font-semibold text-center ${i <= currentPhaseStep ? 'text-[var(--foreground)]' : 'text-[var(--text-secondary)]'}`}>
+                  <p className={`text-[10px] font-semibold text-center leading-tight ${i <= currentPhaseStep ? 'text-[var(--foreground)]' : 'text-[var(--text-secondary)]'}`}>
                     {step.label}
                   </p>
-                  <p className="text-[9px] text-[var(--text-secondary)] text-center whitespace-nowrap">{step.desc}</p>
+                  <p className="text-[8px] text-[var(--text-secondary)] text-center leading-tight px-0.5">{step.desc}</p>
                 </div>
               ))}
             </div>
