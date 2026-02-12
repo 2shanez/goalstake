@@ -116,19 +116,19 @@ function NotifyModal({
 
 const FEATURED_GOALS: Goal[] = [
   // ═══════════════════════════════════════════
-  // GOAL 17 - Quick Steps Test (Fitbit)
-  // Entry: 5 min, Competition: 10 min total
-  // Created: 2026-02-12 16:39 UTC
+  // GOAL 18 - 5K Steps (Fitbit)
+  // Entry: 1 hour, Competition ends: 9pm EST
+  // Created: 2026-02-12 12:31 PM EST
   // ═══════════════════════════════════════════
   {
-    id: 'fitbit-quick-steps-test',
-    onChainId: 17,
-    title: 'Quick Steps Test',
-    description: 'Hit 1,500 steps in 10 minutes',
+    id: 'fitbit-5k-steps',
+    onChainId: 18,
+    title: '5K Steps',
+    description: 'Hit 5,000 steps by 9pm EST tonight',
     emoji: '👟',
-    targetMiles: 1500,
+    targetMiles: 5000,
     targetUnit: 'steps',
-    durationDays: 0.007, // ~10 min total
+    durationDays: 0.35, // ~8.5 hours
     minStake: 1,
     maxStake: 10,
     participants: 0,
