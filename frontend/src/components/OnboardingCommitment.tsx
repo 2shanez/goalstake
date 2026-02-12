@@ -45,13 +45,13 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
   // Check if contract is deployed (address is not zero)
   const isContractDeployed = contracts.newUserChallenge !== '0x0000000000000000000000000000000000000000'
 
-  // Check if user already joined
-  const { data: hasJoined } = useReadContract({
+  // Check if user already joined (refetch to catch state changes)
+  const { data: hasJoined, refetch: refetchHasJoined } = useReadContract({
     address: contracts.newUserChallenge,
     abi: NEW_USER_CHALLENGE_ABI,
     functionName: 'hasJoinedChallenge',
     args: address ? [address] : undefined,
-    query: { enabled: !!address && isContractDeployed },
+    query: { enabled: !!address && isContractDeployed, refetchInterval: 3000 },
   })
 
   // Get stake amount from contract
@@ -482,13 +482,13 @@ export function LiveChallengeCard() {
     query: { enabled: isContractDeployed },
   })
 
-  // Check if current user has joined
-  const { data: hasJoined } = useReadContract({
+  // Check if current user has joined (refetch every 5s to catch updates)
+  const { data: hasJoined, refetch: refetchHasJoined } = useReadContract({
     address: contracts.newUserChallenge,
     abi: NEW_USER_CHALLENGE_ABI,
     functionName: 'hasJoinedChallenge',
     args: address ? [address] : undefined,
-    query: { enabled: !!address && isContractDeployed },
+    query: { enabled: !!address && isContractDeployed, refetchInterval: 5000 },
   })
 
   // Get user's challenge details
