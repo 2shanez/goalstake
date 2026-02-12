@@ -6,7 +6,7 @@
 
 ## Abstract
 
-Vaada is a decentralized commitment protocol that allows users to stake money on personal goals. Users commit USDC to fitness challenges verified by Strava data through Chainlink oracles. Hit your goal, keep your stake plus earn from those who didn't. Miss it, your stake goes to the winners.
+Vaada is a decentralized commitment protocol that allows users to stake money on personal goals. Users commit USDC to fitness challenges verified by Strava or Fitbit data through Chainlink oracles. Hit your goal, keep your stake plus earn from those who didn't. Miss it, your stake goes to the winners.
 
 This is the "put your money where your mouth is" protocol.
 
@@ -32,9 +32,9 @@ Behavioral economics shows loss aversion is 2x stronger than gain motivation. Pe
 
 Vaada creates **financial commitment** for personal goals:
 
-1. **Stake** — Commit USDC to a fitness goal (e.g., "Run 10 miles this week")
-2. **Perform** — Complete your activity on Strava
-3. **Verify** — Chainlink Functions automatically fetch your Strava data
+1. **Stake** — Commit USDC to a fitness goal (e.g., "Run 10 miles this week" or "Walk 10K steps daily")
+2. **Perform** — Complete your activity tracked by Strava or Fitbit
+3. **Verify** — Chainlink Functions automatically fetch your fitness data
 4. **Settle** — Hit your goal = stake returned + bonus from losers. Miss = stake distributed to winners.
 
 No middleman. No refunds. No excuses.
@@ -80,18 +80,29 @@ Vaada is the first product built on this primitive. It won't be the last.
 ```
 User Stakes USDC
        ↓
-   VaadaStake.sol (holds funds, tracks challenges)
+   GoalStakeV3.sol (holds funds, tracks goals)
        ↓
    Deadline Reached
        ↓
    Chainlink Automation (triggers verification)
        ↓
-   Chainlink Functions (fetches Strava API)
+   Chainlink Functions (fetches Strava/Fitbit API)
        ↓
-   verifyChallenge(id, actualMiles)
+   verifyParticipant(goalId, participant, actualValue)
        ↓
-   Settlement (winner paid, loser slashed)
+   Settlement (winners paid, losers slashed)
 ```
+
+### Goal Types
+
+The contract supports multiple verification sources via the `GoalType` enum:
+
+| GoalType | Data Source | Metric |
+|----------|-------------|--------|
+| STRAVA_MILES | Strava API | Miles run/cycled |
+| FITBIT_STEPS | Fitbit API | Daily step count |
+
+Each goal type has its own verification logic in the Chainlink Functions source code.
 
 ### Economic Model
 
@@ -224,11 +235,13 @@ Vaada isn't competing in these markets. We're creating **The Commitment Market**
 
 ### Phase 1: Foundation (Current)
 - [x] Core staking contract (GoalStakeV3 deployed)
-- [x] Strava integration (OAuth + on-chain token storage)
+- [x] Strava integration (OAuth + miles verification)
+- [x] Fitbit integration (OAuth + steps verification)
 - [x] Chainlink Functions verification
 - [x] Chainlink Automation for triggers
 - [x] Anti-cheat filter (manual entries blocked)
 - [x] Privy wallet integration (email/Google login)
+- [x] NewUserChallenge contract (free onboarding goals)
 - [ ] First 100 users
 
 ### Phase 2: Growth
@@ -249,14 +262,16 @@ Vaada isn't competing in these markets. We're creating **The Commitment Market**
 
 Vaada starts with fitness but the model applies to any verifiable commitment:
 
-| Vertical | Verification Source |
-|----------|---------------------|
-| **Fitness** | Strava, Apple Health, Garmin |
-| **Coding** | GitHub commits, contributions |
-| **Learning** | Duolingo, course completions |
-| **Finance** | Plaid (savings goals) |
-| **Content** | YouTube uploads, Twitter posts |
-| **Location** | GPS check-ins (gym, office) |
+| Vertical | Verification Source | Status |
+|----------|---------------------|--------|
+| **Fitness (Running)** | Strava | ✅ Live |
+| **Fitness (Steps)** | Fitbit | ✅ Live |
+| **Fitness (Other)** | Apple Health, Garmin, Whoop | Planned |
+| **Coding** | GitHub commits, contributions | Planned |
+| **Learning** | Duolingo, course completions | Planned |
+| **Finance** | Plaid (savings goals) | Planned |
+| **Content** | YouTube uploads, Twitter posts | Planned |
+| **Location** | GPS check-ins (gym, office) | Planned |
 
 Same contract. Different oracles. Infinite use cases.
 
@@ -277,16 +292,19 @@ Building in public. Shipping fast. Automating everything.
 
 ### Contracts (Base Sepolia)
 
-- **GoalStakeV3**: `0x13b8eaEb7F7927527CE1fe7A600f05e61736d217`
-- **AutomationV3**: `0xB10fCE97fc6eE84ff7772Bc44A651Dd076F7180D`
+- **GoalStakeV3**: `0xE570BE5EC4039e2b256ADb1e02F6E595eCE921B9`
+- **GoalStakeAutomationV3**: `0x6e6b1834afE0E221fB965edD69A7bC82C784f906`
+- **NewUserChallenge**: `0x28D2b6Eb9AF9F0c489a20a1Df6F24b37137A2E15`
 - **USDC**: `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
+- **Chainlink Subscription**: 561
 
 ### Stack
 
 - **Chain**: Base (Coinbase L2)
 - **Oracles**: Chainlink Functions + Automation
 - **Frontend**: Next.js, Privy (embedded wallets), wagmi
-- **Verification**: Strava API via Chainlink
+- **Verification**: Strava API + Fitbit API via Chainlink Functions
+- **Token Storage**: Supabase (encrypted refresh tokens)
 
 ### Security Considerations
 
@@ -298,8 +316,9 @@ Building in public. Shipping fast. Automating everything.
 ### Known Limitations & Risks
 
 **Data Integrity:**
-- Strava data can be spoofed (GPS spoofing, fake activities)
-- Single data source creates single point of failure
+- Strava/Fitbit data can be spoofed (GPS spoofing, fake activities, phone shaking)
+- Single data source per goal type creates single point of failure
+- *Current mitigation:* Anti-cheat filters (manual activities blocked, device-recorded only)
 - *Future mitigation:* Multi-source verification (Strava + Apple Health + GPS trail analysis)
 
 **Economic Gaming:**
@@ -347,7 +366,7 @@ We're not building a fitness app. We're building **The Commitment Market**.
 ## Links
 
 - **Website**: https://vaada.io
-- **GitHub**: https://github.com/2shanez/vaada
+- **GitHub**: https://github.com/2shanez/goalstake
 - **Twitter**: [@vaaborhood](https://twitter.com/vaaborhood)
 - **Contact**: shane@vaada.io
 
