@@ -116,30 +116,7 @@ function NotifyModal({
 
 const FEATURED_GOALS: Goal[] = [
   // ═══════════════════════════════════════════
-  // GOAL 14 - Daily 3 Miles (Strava)
-  // Entry: 10 min, Compete: 15 min
-  // ═══════════════════════════════════════════
-  {
-    id: 'strava-3-miles',
-    onChainId: 14,
-    title: 'Daily 3 Miles',
-    description: 'Run 3 miles today',
-    emoji: '🏃',
-    targetMiles: 3,
-    targetUnit: 'miles',
-    durationDays: 0.017, // ~25 min total
-    minStake: 1,
-    maxStake: 100,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Daily',
-    domain: 'Fitness',
-    subdomain: 'Running',
-  },
-  
-  // ═══════════════════════════════════════════
   // GOAL 15 - 10K Steps (Fitbit)
-  // Entry: 10 min, Compete: 15 min
   // ═══════════════════════════════════════════
   {
     id: 'fitbit-10k-steps',
@@ -232,78 +209,85 @@ export function BrowseGoals({ filter = 'Active' }: BrowseGoalsProps) {
     Startup: { bg: 'bg-emerald-100 dark:bg-emerald-900/30', text: 'text-emerald-700 dark:text-emerald-400', border: 'border-emerald-300 dark:border-emerald-700' },
   }
 
+  // Hide filters when there's only 1 goal
+  const showFilters = FEATURED_GOALS.length > 1
+
   return (
     <div>
-      {/* Filter Section - Clean 2-row layout */}
-      <div className="mb-6 space-y-3">
-        {/* Row 1: Live toggle + Timeframes in single pill */}
-        <div className="flex justify-center">
-          <div className="inline-flex items-center gap-0.5 p-1 bg-[var(--surface)] rounded-2xl border border-[var(--border)]">
-            {/* Live Toggle */}
-            <button
-              onClick={() => setActiveOnly(!activeOnly)}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                activeOnly
-                  ? 'bg-[#2EE59D] text-white'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
-              }`}
-            >
-              <span className={`w-1.5 h-1.5 rounded-full ${activeOnly ? 'bg-white animate-pulse' : 'bg-gray-400'}`} />
-              Live
-            </button>
-            
-            {/* Divider */}
-            <div className="w-px h-5 bg-[var(--border)] mx-1" />
-            
-            {/* Timeframes */}
-            {TIMEFRAMES.map((tf) => (
-              <button
-                key={tf}
-                onClick={() => setSelectedTimeframe(tf)}
-                className={`px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-                  selectedTimeframe === tf
-                    ? 'bg-[var(--foreground)] text-[var(--background)]'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
-                }`}
-              >
-                {tf}
-              </button>
-            ))}
-          </div>
-        </div>
+      {/* Filter Section - only show when multiple goals */}
+      {showFilters && (
+        <>
+          <div className="mb-6 space-y-3">
+            {/* Row 1: Live toggle + Timeframes in single pill */}
+            <div className="flex justify-center">
+              <div className="inline-flex items-center gap-0.5 p-1 bg-[var(--surface)] rounded-2xl border border-[var(--border)]">
+                {/* Live Toggle */}
+                <button
+                  onClick={() => setActiveOnly(!activeOnly)}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                    activeOnly
+                      ? 'bg-[#2EE59D] text-white'
+                      : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
+                  }`}
+                >
+                  <span className={`w-1.5 h-1.5 rounded-full ${activeOnly ? 'bg-white animate-pulse' : 'bg-gray-400'}`} />
+                  Live
+                </button>
+                
+                {/* Divider */}
+                <div className="w-px h-5 bg-[var(--border)] mx-1" />
+                
+                {/* Timeframes */}
+                {TIMEFRAMES.map((tf) => (
+                  <button
+                    key={tf}
+                    onClick={() => setSelectedTimeframe(tf)}
+                    className={`px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+                      selectedTimeframe === tf
+                        ? 'bg-[var(--foreground)] text-[var(--background)]'
+                        : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
+                    }`}
+                  >
+                    {tf}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-        {/* Row 2: Domain chips */}
-        <div className="flex justify-center">
-          <div className="flex items-center gap-2">
-            {(Object.keys(DOMAINS) as DomainKey[]).map((domain) => (
-              <button
-                key={domain}
-                onClick={() => setSelectedDomain(selectedDomain === domain ? 'All' : domain)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all border ${
-                  selectedDomain === domain
-                    ? `${domainColors[domain]?.bg || 'bg-gray-100 dark:bg-gray-800'} ${domainColors[domain]?.text || 'text-gray-700'} ${domainColors[domain]?.border || 'border-transparent'}`
-                    : 'bg-[var(--surface)] border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--foreground)]/20'
-                }`}
-              >
-                <span>{DOMAINS[domain].emoji}</span>
-                <span>{domain}</span>
-              </button>
-            ))}
+            {/* Row 2: Domain chips */}
+            <div className="flex justify-center">
+              <div className="flex items-center gap-2">
+                {(Object.keys(DOMAINS) as DomainKey[]).map((domain) => (
+                  <button
+                    key={domain}
+                    onClick={() => setSelectedDomain(selectedDomain === domain ? 'All' : domain)}
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all border ${
+                      selectedDomain === domain
+                        ? `${domainColors[domain]?.bg || 'bg-gray-100 dark:bg-gray-800'} ${domainColors[domain]?.text || 'text-gray-700'} ${domainColors[domain]?.border || 'border-transparent'}`
+                        : 'bg-[var(--surface)] border-[var(--border)] text-[var(--text-secondary)] hover:border-[var(--foreground)]/20'
+                    }`}
+                  >
+                    <span>{DOMAINS[domain].emoji}</span>
+                    <span>{domain}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      {/* Active filters indicator */}
-      {(selectedDomain !== 'All' || selectedTimeframe !== 'All' || !activeOnly) && (
-        <div className="mb-4 flex items-center justify-center gap-2 text-xs text-[var(--text-secondary)]">
-          <span>Showing {filteredGoals.length} {filteredGoals.length === 1 ? 'vaada' : 'vaadas'}</span>
-          <button 
-            onClick={() => { setSelectedDomain('All'); setSelectedTimeframe('All'); setActiveOnly(true); }}
-            className="text-[#2EE59D] hover:underline"
-          >
-            Clear filters
-          </button>
-        </div>
+          {/* Active filters indicator */}
+          {(selectedDomain !== 'All' || selectedTimeframe !== 'All' || !activeOnly) && (
+            <div className="mb-4 flex items-center justify-center gap-2 text-xs text-[var(--text-secondary)]">
+              <span>Showing {filteredGoals.length} {filteredGoals.length === 1 ? 'vaada' : 'vaadas'}</span>
+              <button 
+                onClick={() => { setSelectedDomain('All'); setSelectedTimeframe('All'); setActiveOnly(true); }}
+                className="text-[#2EE59D] hover:underline"
+              >
+                Clear filters
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       {/* Goals Grid with stagger animation */}
