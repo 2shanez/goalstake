@@ -600,7 +600,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
                   desc: 'Split the pool' 
                 },
               ].map((step, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center">
+                <div key={i} className="flex-1 flex flex-col items-center min-w-0">
                   <div className="flex items-center w-full mb-2">
                     {i > 0 && (
                       <div className={`flex-1 h-0.5 ${i <= currentPhaseStep ? 'bg-[#2EE59D]' : 'bg-[var(--border)]'}`} />
@@ -612,10 +612,10 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
                       <div className={`flex-1 h-0.5 ${i < currentPhaseStep ? 'bg-[#2EE59D]' : 'bg-[var(--border)]'}`} />
                     )}
                   </div>
-                  <p className={`text-[10px] font-semibold ${i <= currentPhaseStep ? 'text-[var(--foreground)]' : 'text-[var(--text-secondary)]'}`}>
+                  <p className={`text-[10px] font-semibold text-center ${i <= currentPhaseStep ? 'text-[var(--foreground)]' : 'text-[var(--text-secondary)]'}`}>
                     {step.label}
                   </p>
-                  <p className="text-[9px] text-[var(--text-secondary)]">{step.desc}</p>
+                  <p className="text-[9px] text-[var(--text-secondary)] text-center whitespace-nowrap">{step.desc}</p>
                 </div>
               ))}
             </div>
