@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
-import { useAccount, useBalance, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
+import { useAccount, useBalance, useReadContract, useWriteContract, useWaitForTransactionReceipt, useSwitchChain, useChainId } from 'wagmi'
+import { baseSepolia } from 'wagmi/chains'
 import { formatUnits } from 'viem'
 import { NEW_USER_CHALLENGE_ABI, USDC_ABI } from '@/lib/abis'
 import { useContracts } from '@/lib/hooks'
@@ -32,10 +33,14 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
   const { user } = usePrivy()
   const { address } = useAccount()
   const contracts = useContracts()
+  const chainId = useChainId()
+  const { switchChain, isPending: isSwitching } = useSwitchChain()
   const [step, setStep] = useState<'intro' | 'approve' | 'join' | 'done'>('intro')
   const [error, setError] = useState<string | null>(null)
   const [showFundModal, setShowFundModal] = useState(false)
   const [copied, setCopied] = useState(false)
+  
+  const isWrongNetwork = chainId !== baseSepolia.id
 
   // Check if contract is deployed (address is not zero)
   const isContractDeployed = contracts.newUserChallenge !== '0x0000000000000000000000000000000000000000'
@@ -318,12 +323,30 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                 )}
               </div>
 
+              {/* Wrong Network Warning */}
+              {isWrongNetwork && (
+                <button
+                  onClick={() => switchChain({ chainId: baseSepolia.id })}
+                  disabled={isSwitching}
+                  className="w-full py-3 mb-3 font-bold rounded-xl bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-50 transition-colors"
+                >
+                  {isSwitching ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      Switching...
+                    </span>
+                  ) : (
+                    '⚠️ Switch to Base Sepolia'
+                  )}
+                </button>
+              )}
+
               {/* CTA */}
               <button
                 onClick={handleCommit}
-                disabled={isApproving || isJoining || !canStake}
+                disabled={isApproving || isJoining || !canStake || isWrongNetwork}
                 className={`w-full py-3 font-bold rounded-xl transition-colors disabled:cursor-not-allowed ${
-                  canStake 
+                  canStake && !isWrongNetwork
                     ? 'bg-[#2EE59D] text-white hover:bg-[#26c987] disabled:opacity-50' 
                     : 'bg-[var(--border)] text-[var(--text-secondary)]'
                 }`}
@@ -338,6 +361,8 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                     <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     Joining Challenge...
                   </span>
+                ) : isWrongNetwork ? (
+                  'Switch network first ↑'
                 ) : !canStake ? (
                   !hasEnoughGas ? 'Need ETH for gas' : 'Need USDC to stake'
                 ) : (
