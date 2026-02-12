@@ -438,7 +438,7 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
         <OnboardingCommitment onComplete={handleOnboardingComplete} />
       )}
       
-      <div className={`group bg-[var(--surface)] border rounded-2xl transition-all duration-200 relative overflow-hidden
+      <div className={`group bg-[var(--surface)] border rounded-2xl transition-all duration-200 relative
         ${showPlayers ? 'z-40' : 'z-0'}
         ${expanded 
           ? 'border-[#2EE59D] shadow-lg shadow-[#2EE59D]/10' 
