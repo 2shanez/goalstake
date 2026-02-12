@@ -76,7 +76,8 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
   const [justJoined, setJustJoined] = useState(false) // Local flag to show Joined state immediately
   
   // Combine on-chain state with local state for immediate UI feedback
-  const hasJoined = hasJoinedOnChain || justJoined
+  // Only show joined state if user is authenticated
+  const hasJoined = authenticated && (hasJoinedOnChain || justJoined)
   const stravaConnected = isStravaConnected()
   const { isConnected: fitbitConnected } = useFitbitConnection()
   
