@@ -94,7 +94,7 @@ export function useParticipant(goalId?: number) {
     abi: GOALSTAKE_ABI,
     functionName: 'getParticipant',
     args: goalId !== undefined && address ? [BigInt(goalId), address] : undefined,
-    query: { enabled: goalId !== undefined && !!address },
+    query: { enabled: goalId !== undefined && !!address, refetchInterval: 5000 },
   })
 
   const participant = participantData as Participant | undefined
@@ -137,7 +137,7 @@ export function useGoalDetails(goalId?: number) {
     abi: GOALSTAKE_ABI as any,
     functionName: 'getGoal',
     args: goalId !== undefined ? [BigInt(goalId)] : undefined,
-    query: { enabled: goalId !== undefined },
+    query: { enabled: goalId !== undefined, refetchInterval: 5000 },
   })
 
   const goal = goalData as any
