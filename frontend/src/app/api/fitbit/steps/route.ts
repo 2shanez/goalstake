@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
     const supabase = createServerSupabase()
     const { data: tokenData, error: dbError } = await supabase
       .from('fitbit_tokens')
-      .select('refresh_token, fitbit_user_id')
+      .select('refresh_token, user_id')
       .eq('wallet_address', wallet)
       .single()
 
@@ -103,7 +103,7 @@ export async function GET(request: NextRequest) {
       steps,
       target: targetNum || undefined,
       success,
-      fitbitUserId: tokenData.fitbit_user_id,
+      fitbitUserId: tokenData.user_id,
       source: 'fitbit',
     })
   } catch (error) {
