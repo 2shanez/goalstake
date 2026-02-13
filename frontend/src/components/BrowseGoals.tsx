@@ -116,19 +116,19 @@ function NotifyModal({
 
 const FEATURED_GOALS: Goal[] = [
   // ═══════════════════════════════════════════
-  // GOAL 18 - 5K Steps (Fitbit)
-  // Entry: 1 hour, Competition ends: 9pm EST
-  // Created: 2026-02-12 12:31 PM EST
+  // GOAL 20 - 5K Steps (Fitbit) - Friends Beta
+  // Entry: 1 hour (~11:45 AM EST), Ends: 8pm EST
+  // Created: 2026-02-13 10:45 AM EST
   // ═══════════════════════════════════════════
   {
-    id: 'fitbit-5k-steps',
-    onChainId: 18,
+    id: 'fitbit-5k-steps-20',
+    onChainId: 20,
     title: '5K Steps',
-    description: 'Hit 5,000 steps by 9pm EST tonight',
+    description: 'Hit 5,000 steps by 8pm EST tonight',
     emoji: '👟',
     targetMiles: 5000,
     targetUnit: 'steps',
-    durationDays: 0.35, // ~8.5 hours
+    durationDays: 0.3, // ~7 hours
     minStake: 1,
     maxStake: 10,
     participants: 0,
@@ -137,7 +137,7 @@ const FEATURED_GOALS: Goal[] = [
     domain: 'Fitness',
     subdomain: 'Steps',
   },
-  // Goal 19 (Strava) removed - settle after deadline passes (~10pm UTC Feb 13)
+  // Goal 18 & 19 removed - expired
 ]
 
 const COMING_SOON = [
