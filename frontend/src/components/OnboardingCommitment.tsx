@@ -539,17 +539,6 @@ export function LiveChallengeCard() {
     }
   }, [address])
 
-  // Auto-dismiss after showing result for 5 seconds
-  useEffect(() => {
-    if (isExpired && hasJoined && address && !dismissed) {
-      const timer = setTimeout(() => {
-        localStorage.setItem(`vaada_challenge_dismissed_${address}`, 'true')
-        setDismissed(true)
-      }, 5000)
-      return () => clearTimeout(timer)
-    }
-  }, [isExpired, hasJoined, address, dismissed])
-
   // Calculate time left for user's challenge
   useEffect(() => {
     if (!challenge) {
