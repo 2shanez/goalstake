@@ -74,6 +74,7 @@ export default function Home() {
   const { login, authenticated } = usePrivy()
   const [mounted, setMounted] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(false)
+  const [checkedLocalStorage, setCheckedLocalStorage] = useState(false)
 
   const statsView = useInView(0.2)
   const howView = useInView(0.1)
@@ -82,7 +83,7 @@ export default function Home() {
 
   // Check if user has completed the new user challenge (contract state)
   const isNewUserChallengeDeployed = contracts.newUserChallenge !== '0x0000000000000000000000000000000000000000'
-  const { data: hasCompletedChallenge } = useReadContract({
+  const { data: hasCompletedChallenge, isLoading: isCheckingChallenge } = useReadContract({
     address: contracts.newUserChallenge,
     abi: NEW_USER_CHALLENGE_ABI,
     functionName: 'hasJoinedChallenge',
@@ -92,16 +93,46 @@ export default function Home() {
 
   useEffect(() => {
     setMounted(true)
+    // Check localStorage immediately on mount
+    const isOnboarded = localStorage.getItem('vaada_onboarded') === 'true'
+    setCheckedLocalStorage(true)
+    if (!isOnboarded) {
+      // Will show onboarding once authenticated
+    }
   }, [])
 
   // Show onboarding modal for users who haven't completed the challenge
+  // Check localStorage first (instant), then verify with contract
   useEffect(() => {
-    if (authenticated && mounted && isNewUserChallengeDeployed && hasCompletedChallenge === false) {
-      // Small delay to let the page render first
-      const timer = setTimeout(() => setShowOnboarding(true), 500)
-      return () => clearTimeout(timer)
+    if (!authenticated || !mounted || !checkedLocalStorage) return
+    
+    const isOnboardedLocally = localStorage.getItem('vaada_onboarded') === 'true'
+    
+    // If locally marked as onboarded, don't show modal
+    if (isOnboardedLocally) {
+      setShowOnboarding(false)
+      return
     }
-  }, [authenticated, mounted, isNewUserChallengeDeployed, hasCompletedChallenge])
+    
+    // If contract check is still loading and not onboarded locally, show onboarding
+    // This prevents the flash
+    if (isNewUserChallengeDeployed && isCheckingChallenge) {
+      setShowOnboarding(true)
+      return
+    }
+    
+    // If contract says completed, mark locally and hide
+    if (hasCompletedChallenge === true) {
+      localStorage.setItem('vaada_onboarded', 'true')
+      setShowOnboarding(false)
+      return
+    }
+    
+    // If contract says not completed (or not deployed), show onboarding
+    if (hasCompletedChallenge === false || !isNewUserChallengeDeployed) {
+      setShowOnboarding(true)
+    }
+  }, [authenticated, mounted, checkedLocalStorage, isNewUserChallengeDeployed, hasCompletedChallenge, isCheckingChallenge])
 
   const scrollToSection = (e: React.MouseEvent, sectionId: string) => {
     e.preventDefault()
