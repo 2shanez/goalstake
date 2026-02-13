@@ -1,74 +1,49 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
-import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract, useSwitchChain, useChainId } from 'wagmi'
-import { baseSepolia } from 'wagmi/chains'
-import { CONTRACTS } from '@/lib/wagmi'
-
-const FITBIT_CLIENT_ID = process.env.NEXT_PUBLIC_FITBIT_CLIENT_ID
-
-// Automation contract ABI (just the functions we need)
-const automationAbi = [
-  {
-    name: 'storeToken',
-    type: 'function',
-    stateMutability: 'nonpayable',
-    inputs: [{ name: 'token', type: 'string' }],
-    outputs: [],
-  },
-  {
-    name: 'hasToken',
-    type: 'function',
-    stateMutability: 'view',
-    inputs: [{ name: 'user', type: 'address' }],
-    outputs: [{ type: 'bool' }],
-  },
-] as const
+import { useAccount } from 'wagmi'
 
 // Fitbit brand color
 const FITBIT_TEAL = '#00B0B9'
 
+// Fitbit logo SVG
+const FitbitLogo = () => (
+  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12.5 2.5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm0 5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm0 5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm0 5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm-5-10c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm0 5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm5 0c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm5-5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm0 5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5z"/>
+  </svg>
+)
+
+// Detect mobile device
+const isMobile = () => {
+  if (typeof window === 'undefined') return false
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768
+}
+
 export function FitbitConnect() {
   const { authenticated } = usePrivy()
   const { address, isConnected } = useAccount()
-  const chainId = useChainId()
-  const { switchChain, isPending: isSwitching } = useSwitchChain()
   const [fitbitConnected, setFitbitConnected] = useState(false)
   const [userName, setUserName] = useState<string | null>(null)
-  const [isStoring, setIsStoring] = useState(false)
-  const [tokenNeedsRefresh, setTokenNeedsRefresh] = useState(false)
+  const [isConnecting, setIsConnecting] = useState(false)
 
-  const isWrongNetwork = chainId !== baseSepolia.id
-
-  const { writeContract, data: hash, error: writeError } = useWriteContract()
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash })
-
-  // Check if user already has token stored on-chain
-  // Note: For multi-source support, we'd need a separate mapping per source
-  // For now, this checks the same storage as Strava (MVP limitation)
-  const { data: hasTokenOnChain, refetch: refetchHasToken } = useReadContract({
-    address: CONTRACTS[baseSepolia.id].oracle,
-    abi: automationAbi,
-    functionName: 'hasToken',
-    args: address ? [address] : undefined,
-    query: { enabled: !!address },
-  })
-
-  // Check for Fitbit connection on mount
-  useEffect(() => {
+  // Check for Fitbit connection on mount and after OAuth callback
+  const checkConnection = useCallback(() => {
+    // Check URL params (OAuth redirect callback)
     const params = new URLSearchParams(window.location.search)
     const fitbitStatus = params.get('fitbit')
     const name = params.get('fitbit_user')
     
     if (fitbitStatus === 'success') {
       setFitbitConnected(true)
+      setIsConnecting(false)
       if (name) setUserName(decodeURIComponent(name))
-      // Clean URL
-      window.history.replaceState({}, '', '/')
+      // Clean URL without refresh
+      window.history.replaceState({}, '', window.location.pathname)
+      return true
     }
     
-    // Also check cookie for user_id
+    // Check cookie for existing connection
     const userId = document.cookie
       .split('; ')
       .find(row => row.startsWith('fitbit_user_id='))
@@ -76,245 +51,146 @@ export function FitbitConnect() {
     
     if (userId) {
       setFitbitConnected(true)
+      return true
     }
+    
+    return false
   }, [])
 
-  // Check if token needs refresh (every 5 minutes)
   useEffect(() => {
-    if (!fitbitConnected) return
+    checkConnection()
+  }, [checkConnection])
 
-    const checkTokenExpiry = async () => {
-      try {
-        const res = await fetch('/api/fitbit/update-onchain')
-        if (res.ok) {
-          const data = await res.json()
-          setTokenNeedsRefresh(data.needsRefresh || false)
-        }
-      } catch (err) {
-        console.error('Failed to check Fitbit token expiry:', err)
+  // Listen for popup messages (desktop flow)
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return
+      if (event.data?.type === 'fitbit-auth-success') {
+        setFitbitConnected(true)
+        setIsConnecting(false)
+        if (event.data.userName) setUserName(event.data.userName)
       }
     }
+    window.addEventListener('message', handleMessage)
+    return () => window.removeEventListener('message', handleMessage)
+  }, [])
 
-    checkTokenExpiry()
-    const interval = setInterval(checkTokenExpiry, 5 * 60 * 1000)
-
-    return () => clearInterval(interval)
-  }, [fitbitConnected])
-
-  // Refetch on-chain status after successful store
+  // Poll for connection after initiating OAuth (fallback)
   useEffect(() => {
-    if (isSuccess) {
-      refetchHasToken()
-      setIsStoring(false)
-      setTokenNeedsRefresh(false)
+    if (!isConnecting) return
+    
+    const pollInterval = setInterval(() => {
+      const connected = checkConnection()
+      if (connected) {
+        setIsConnecting(false)
+        clearInterval(pollInterval)
+      }
+    }, 1000)
+    
+    // Stop polling after 5 minutes
+    const timeout = setTimeout(() => {
+      clearInterval(pollInterval)
+      setIsConnecting(false)
+    }, 5 * 60 * 1000)
+    
+    return () => {
+      clearInterval(pollInterval)
+      clearTimeout(timeout)
     }
-  }, [isSuccess, refetchHasToken])
+  }, [isConnecting, checkConnection])
+
+  const handleConnectFitbit = () => {
+    setIsConnecting(true)
+    
+    const authUrl = address 
+      ? `/api/fitbit/auth?wallet=${address}`
+      : '/api/fitbit/auth'
+    
+    if (isMobile()) {
+      // Mobile: full redirect (popups are unreliable)
+      window.location.href = authUrl
+    } else {
+      // Desktop: popup keeps user on page
+      const width = 500
+      const height = 700
+      const left = window.screenX + (window.outerWidth - width) / 2
+      const top = window.screenY + (window.outerHeight - height) / 2
+      
+      const popup = window.open(
+        authUrl + '&popup=true',
+        'fitbit-auth',
+        `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no,scrollbars=yes`
+      )
+      
+      // Check if popup was blocked
+      if (!popup || popup.closed) {
+        // Fallback to redirect
+        window.location.href = authUrl
+      }
+    }
+  }
 
   const handleDisconnect = async () => {
     try {
       await fetch('/api/fitbit/disconnect', { method: 'POST' })
       setFitbitConnected(false)
       setUserName(null)
-      setTokenNeedsRefresh(false)
+      // Clear cookie client-side too
+      document.cookie = 'fitbit_user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
     } catch (err) {
       console.error('Error disconnecting Fitbit:', err)
-    }
-  }
-
-  const handleConnectFitbit = () => {
-    // Use popup to keep user on vaada.io
-    const authUrl = address 
-      ? `/api/fitbit/auth?wallet=${address}&popup=true`
-      : '/api/fitbit/auth?popup=true'
-    
-    const width = 500
-    const height = 700
-    const left = window.screenX + (window.outerWidth - width) / 2
-    const top = window.screenY + (window.outerHeight - height) / 2
-    
-    const popup = window.open(
-      authUrl,
-      'fitbit-auth',
-      `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no`
-    )
-    
-    // Listen for completion message from popup
-    const handleMessage = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return
-      if (event.data?.type === 'fitbit-auth-success') {
-        setFitbitConnected(true)
-        if (event.data.userName) setUserName(event.data.userName)
-        window.removeEventListener('message', handleMessage)
-        popup?.close()
-      }
-    }
-    window.addEventListener('message', handleMessage)
-    
-    // Fallback: poll for cookie in case postMessage fails
-    const pollInterval = setInterval(() => {
-      const userId = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('fitbit_user_id='))
-        ?.split('=')[1]
-      if (userId) {
-        setFitbitConnected(true)
-        clearInterval(pollInterval)
-        popup?.close()
-      }
-    }, 1000)
-    
-    // Clean up after 5 minutes
-    setTimeout(() => {
-      clearInterval(pollInterval)
-      window.removeEventListener('message', handleMessage)
-    }, 5 * 60 * 1000)
-  }
-
-  const handleReconnect = async () => {
-    await handleDisconnect()
-    handleConnectFitbit()
-  }
-
-  const handleStoreToken = async () => {
-    setIsStoring(true)
-    try {
-      const res = await fetch('/api/fitbit/update-onchain')
-      if (!res.ok) throw new Error('Failed to get token')
-      const { token } = await res.json()
-
-      writeContract({
-        address: CONTRACTS[baseSepolia.id].oracle,
-        abi: automationAbi,
-        functionName: 'storeToken',
-        args: [token],
-      })
-    } catch (err) {
-      console.error('Error storing Fitbit token:', err)
-      setIsStoring(false)
-    }
-  }
-
-  const handleRefreshToken = async () => {
-    setIsStoring(true)
-    try {
-      const res = await fetch('/api/fitbit/update-onchain')
-      if (!res.ok) throw new Error('Failed to refresh token')
-      const { token } = await res.json()
-
-      writeContract({
-        address: CONTRACTS[baseSepolia.id].oracle,
-        abi: automationAbi,
-        functionName: 'storeToken',
-        args: [token],
-      })
-      setTokenNeedsRefresh(false)
-    } catch (err) {
-      console.error('Error refreshing Fitbit token:', err)
-      setIsStoring(false)
     }
   }
 
   // Only show if user is authenticated
   if (!authenticated || !isConnected) return null
 
-  // Fitbit logo SVG (simplified)
-  const FitbitLogo = () => (
-    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12.5 2.5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm0 5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm0 5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm0 5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm-5-10c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm0 5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm5 0c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm5-5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5zm0 5c-.8 0-1.5.7-1.5 1.5s.7 1.5 1.5 1.5 1.5-.7 1.5-1.5-.7-1.5-1.5-1.5z"/>
-    </svg>
-  )
-
-  // Already stored on-chain
-  if (hasTokenOnChain && fitbitConnected) {
-    if (tokenNeedsRefresh) {
-      if (isWrongNetwork) {
-        return (
-          <button
-            onClick={() => switchChain({ chainId: baseSepolia.id })}
-            disabled={isSwitching}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-sm font-medium hover:bg-yellow-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            <span className="text-yellow-600">
-              {isSwitching ? 'Switching...' : '⚠️ Switch to Base Sepolia'}
-            </span>
-          </button>
-        )
-      }
-
-      return (
-        <button
-          onClick={handleRefreshToken}
-          disabled={isStoring || isConfirming}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-sm font-medium hover:bg-yellow-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          <svg className="w-4 h-4 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-          <span className="text-yellow-600">
-            {isConfirming ? 'Confirming...' : isStoring ? 'Refreshing...' : 'Refresh Fitbit Token'}
-          </span>
-        </button>
-      )
-    }
-
-    // Verified badge
+  // Connected state - clean checkmark
+  if (fitbitConnected) {
     return (
       <button
-        onClick={handleReconnect}
-        className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--surface)] border border-[var(--border)] hover:border-[#00B0B9]/50 transition-all text-sm"
-        title="Fitbit connected — Click to reconnect"
+        onClick={handleDisconnect}
+        className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[var(--surface)] border border-[#2EE59D]/30 hover:border-red-500/50 hover:bg-red-500/5 transition-all text-sm group"
+        title="Click to disconnect"
       >
-        <svg className="w-4 h-4 text-[#2EE59D]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-4 h-4 text-[#2EE59D] group-hover:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+        </svg>
+        <svg className="w-4 h-4 text-red-500 hidden group-hover:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
         </svg>
         <span style={{ color: FITBIT_TEAL }}>
           <FitbitLogo />
         </span>
-        <span className="text-[var(--foreground)]">Fitbit</span>
-      </button>
-    )
-  }
-
-  // Connected but not stored on-chain
-  if (fitbitConnected) {
-    if (isWrongNetwork) {
-      return (
-        <button
-          onClick={() => switchChain({ chainId: baseSepolia.id })}
-          disabled={isSwitching}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-500/10 border border-yellow-500/30 text-sm font-medium hover:bg-yellow-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        >
-          <span className="text-yellow-600">
-            {isSwitching ? 'Switching...' : '⚠️ Switch to Base Sepolia'}
-          </span>
-        </button>
-      )
-    }
-    
-    return (
-      <button
-        onClick={handleStoreToken}
-        disabled={isStoring || isConfirming}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-        style={{ 
-          backgroundColor: `${FITBIT_TEAL}20`,
-          border: `1px solid ${FITBIT_TEAL}50`,
-          color: FITBIT_TEAL,
-        }}
-      >
-        <FitbitLogo />
-        <span>
-          {isConfirming ? 'Confirming...' : isStoring ? 'Signing...' : 'Verify Fitbit'}
+        <span className="text-[var(--foreground)] group-hover:text-red-500">
+          {userName || 'Fitbit'}
         </span>
       </button>
     )
   }
 
-  // Not connected
+  // Connecting state
+  if (isConnecting) {
+    return (
+      <button
+        disabled
+        className="flex items-center gap-2 px-4 py-2 rounded-xl text-white font-medium text-sm opacity-80 cursor-wait"
+        style={{ backgroundColor: FITBIT_TEAL }}
+      >
+        <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        </svg>
+        Connecting...
+      </button>
+    )
+  }
+
+  // Default: Connect button
   return (
     <button
       onClick={handleConnectFitbit}
-      className="flex items-center gap-2 px-4 py-2 rounded-lg text-white font-medium text-sm hover:opacity-90 transition-colors"
+      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white font-medium text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-sm"
       style={{ backgroundColor: FITBIT_TEAL }}
     >
       <FitbitLogo />
@@ -326,6 +202,7 @@ export function FitbitConnect() {
 // Hook to check Fitbit connection status
 export function useFitbitConnection() {
   const [isConnected, setIsConnected] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   
   useEffect(() => {
     const userId = document.cookie
@@ -333,7 +210,8 @@ export function useFitbitConnection() {
       .find(row => row.startsWith('fitbit_user_id='))
       ?.split('=')[1]
     setIsConnected(!!userId)
+    setIsLoading(false)
   }, [])
   
-  return { isConnected }
+  return { isConnected, isLoading }
 }
