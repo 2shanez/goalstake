@@ -3,7 +3,7 @@
 ## What is this?
 **Vaada** ("promise" in Hindi) — a decentralized commitment protocol. Users stake USDC on fitness goals, verified by Strava data via Chainlink oracles. Hit your goal = keep stake + earn from losers. Miss = lose stake.
 
-**Positioning:** "The Commitment Market"
+**Positioning:** "The Promise Market"
 **Site:** https://vaada.io (password: vaada2026)
 
 ## Tech Stack

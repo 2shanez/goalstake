@@ -2,7 +2,7 @@
 
 **Stake Your Promise.**
 
-The commitment market. Stake money on your goals, keep your promise → keep your stake + earn from those who don't.
+The promise market. Stake money on your goals, keep your promise → keep your stake + earn from those who don't.
 
 🔗 **Live:** [vaada.io](https://vaada.io) (Base Sepolia testnet)  
 📖 **Docs:** [docs/ONBOARDING.md](docs/ONBOARDING.md)

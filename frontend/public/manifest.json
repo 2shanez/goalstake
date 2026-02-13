@@ -1,7 +1,7 @@
 {
   "name": "vaada",
   "short_name": "vaada",
-  "description": "The Commitment Market - Stake money on your goals",
+  "description": "The Promise Market - Stake money on your goals",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#09090b",

@@ -4,7 +4,7 @@
 
 ## What is Vaada?
 
-A "commitment market" — users stake money on fitness goals. Hit your goal = keep your stake + split the losers' pool. Miss it = lose your stake to winners.
+A "promise market" — users stake money on fitness goals. Hit your goal = keep your stake + split the losers' pool. Miss it = lose your stake to winners.
 
 **Example:** 5 people stake $10 each on "Run 3 miles today." 3 succeed, 2 fail. Winners split the $50 pool = $16.67 each.
 

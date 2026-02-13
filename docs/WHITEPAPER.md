@@ -1,4 +1,4 @@
-# Vaada: The Commitment Market
+# Vaada: The Promise Market
 
 **Version 1.0 — February 2026**
 
@@ -197,7 +197,7 @@ Crypto enables:
 
 ## Market Opportunity
 
-### The Commitment Market
+### The Promise Market
 
 Commitment isn't a feature — it's a **market**.
 
@@ -215,7 +215,7 @@ Every coach, gym buddy, AA sponsor, and accountability partner proves demand exi
 - Habit/productivity apps: **$12B**
 - Corporate wellness: **$56B**
 
-Vaada isn't competing in these markets. We're creating **The Commitment Market** — a new category where commitment meets capital.
+Vaada isn't competing in these markets. We're creating **The Promise Market** — a new category where commitment meets capital.
 
 ### Competitive Landscape
 
@@ -359,7 +359,7 @@ Vaada becomes the **commitment layer for the internet**.
 
 Every commitment — fitness, learning, work, habits — can have financial stakes attached. Not as punishment, but as **commitment devices** that help people become who they want to be.
 
-We're not building a fitness app. We're building **The Commitment Market**.
+We're not building a fitness app. We're building **The Promise Market**.
 
 ---
 

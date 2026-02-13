@@ -393,7 +393,7 @@ export default function Home() {
             Ready to bet on yourself?
           </h2>
           <p className="text-[var(--text-secondary)] mb-6 sm:mb-8 text-base sm:text-lg">
-            Join the commitment market.
+            Join the promise market.
           </p>
           <button 
             onClick={handleGetStarted}
@@ -418,7 +418,7 @@ export default function Home() {
               <span className="text-white font-black text-sm leading-none">v</span>
             </div>
             <span className="font-bold text-[#2EE59D] text-lg">vaada</span>
-            <span className="text-sm text-[var(--text-secondary)]">The Commitment Market</span>
+            <span className="text-sm text-[var(--text-secondary)]">The Promise Market</span>
           </div>
           
           <div className="text-sm text-[var(--text-secondary)]">

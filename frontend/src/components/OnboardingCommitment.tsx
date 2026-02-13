@@ -233,7 +233,7 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                 </div>
                 <h2 className="text-xl font-bold mb-1">Welcome to Vaada</h2>
                 <p className="text-sm text-[var(--text-secondary)] mb-2">
-                  The commitment market
+                  The promise market
                 </p>
                 <p className="text-xs text-[var(--text-secondary)] inline-flex items-center gap-1.5 px-3 py-1 bg-[var(--surface)] rounded-full border border-[var(--border)]">
                   <span className="font-semibold text-[#2EE59D]">vaada</span>
