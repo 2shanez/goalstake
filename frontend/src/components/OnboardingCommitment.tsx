@@ -7,6 +7,7 @@ import { baseSepolia } from 'wagmi/chains'
 import { formatUnits } from 'viem'
 import { NEW_USER_CHALLENGE_ABI, USDC_ABI } from '@/lib/abis'
 import { useContracts } from '@/lib/hooks'
+import { FaucetButton } from './FaucetButton'
 
 // Check if this is a first-time user (never completed onboarding)
 export function isFirstTimeUser(): boolean {
@@ -388,18 +389,35 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                   <div className="relative bg-[var(--background)] rounded-t-2xl p-4 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:rounded-2xl sm:max-w-sm sm:w-full sm:mx-4 sm:pb-4 animate-in slide-in-from-bottom duration-200">
                     <p className="text-base font-semibold mb-4 text-center">Get Testnet Tokens</p>
                     
+                    {/* Auto-faucet button */}
+                    <FaucetButton 
+                      onSuccess={() => {
+                        // Close modal after short delay so user sees success
+                        setTimeout(() => setShowFundModal(false), 2000)
+                      }}
+                      className="mb-4"
+                    />
+                    
+                    <div className="relative my-4">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-[var(--border)]" />
+                      </div>
+                      <div className="relative flex justify-center text-xs">
+                        <span className="px-2 bg-[var(--background)] text-[var(--text-secondary)]">or use external faucets</span>
+                      </div>
+                    </div>
+                    
                     <a
                       href={FAUCETS.usdc}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 px-4 py-4 rounded-xl bg-[var(--surface)] border border-[var(--border)] mb-2 active:scale-[0.98] transition-transform"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--surface)] border border-[var(--border)] mb-2 active:scale-[0.98] transition-transform text-sm"
                     >
-                      <span className="text-2xl">💵</span>
+                      <span className="text-xl">💵</span>
                       <div>
-                        <p className="font-medium">Get USDC</p>
-                        <p className="text-sm text-[var(--text-secondary)]">Circle Faucet</p>
+                        <p className="font-medium">Circle USDC Faucet</p>
                       </div>
-                      <svg className="w-5 h-5 ml-auto text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 ml-auto text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                       </svg>
                     </a>
@@ -408,14 +426,13 @@ export function OnboardingCommitment({ onComplete }: OnboardingCommitmentProps) 
                       href={FAUCETS.eth}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-3 px-4 py-4 rounded-xl bg-[var(--surface)] border border-[var(--border)] mb-2 active:scale-[0.98] transition-transform"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[var(--surface)] border border-[var(--border)] mb-2 active:scale-[0.98] transition-transform text-sm"
                     >
-                      <span className="text-2xl">⛽</span>
+                      <span className="text-xl">⛽</span>
                       <div>
-                        <p className="font-medium">Get ETH (gas)</p>
-                        <p className="text-sm text-[var(--text-secondary)]">Coinbase Faucet</p>
+                        <p className="font-medium">Coinbase ETH Faucet</p>
                       </div>
-                      <svg className="w-5 h-5 ml-auto text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-4 h-4 ml-auto text-[var(--text-secondary)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                       </svg>
                     </a>
