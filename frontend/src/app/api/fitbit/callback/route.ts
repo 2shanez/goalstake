@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
       userName = profileData.user?.displayName || profileData.user?.fullName || 'Fitbit User'
     }
 
-    // Save refresh token to Supabase if we have wallet address
+    // Save tokens to Supabase if we have wallet address
     if (walletAddress) {
       try {
         const supabase = createServerSupabase()
@@ -108,8 +108,10 @@ export async function GET(request: NextRequest) {
           .from('fitbit_tokens')
           .upsert({
             wallet_address: walletAddress,
-            user_id: tokenData.user_id,
+            fitbit_user_id: tokenData.user_id,
+            access_token: tokenData.access_token,
             refresh_token: tokenData.refresh_token,
+            expires_at: expiresAt,
             updated_at: new Date().toISOString(),
           }, {
             onConflict: 'wallet_address'
