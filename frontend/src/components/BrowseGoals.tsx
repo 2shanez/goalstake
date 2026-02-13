@@ -115,29 +115,7 @@ function NotifyModal({
 }
 
 const FEATURED_GOALS: Goal[] = [
-  // ═══════════════════════════════════════════
-  // GOAL 20 - 5K Steps (Fitbit) - Friends Beta
-  // Entry: 1 hour (~11:45 AM EST), Ends: 8pm EST
-  // Created: 2026-02-13 10:45 AM EST
-  // ═══════════════════════════════════════════
-  {
-    id: 'fitbit-5k-steps-20',
-    onChainId: 20,
-    title: '5K Steps',
-    description: 'Hit 5,000 steps by 8pm EST tonight',
-    emoji: '👟',
-    targetMiles: 5000,
-    targetUnit: 'steps',
-    durationDays: 0.3, // ~7 hours
-    minStake: 1,
-    maxStake: 10,
-    participants: 0,
-    totalStaked: 0,
-    category: 'Daily',
-    domain: 'Fitness',
-    subdomain: 'Steps',
-  },
-  // Goal 18 & 19 removed - expired
+  // No active goals - create new one when ready
 ]
 
 const COMING_SOON = [
