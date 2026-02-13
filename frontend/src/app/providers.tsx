@@ -4,12 +4,18 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { PrivyProvider } from '@privy-io/react-auth'
 import { WagmiProvider } from '@privy-io/wagmi'
 import { privyConfig } from '@/lib/wagmi'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { baseSepolia, base } from 'viem/chains'
 import { PasswordGate } from '@/components/PasswordGate'
+import { initAnalytics } from '@/lib/analytics'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient())
+
+  // Initialize Mixpanel
+  useEffect(() => {
+    initAnalytics()
+  }, [])
 
   return (
     <PasswordGate>
