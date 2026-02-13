@@ -186,16 +186,30 @@ export function FitbitConnect() {
     )
   }
 
-  // Default: Connect button
+  // Default: Connect button with Apple Health tip
   return (
-    <button
-      onClick={handleConnectFitbit}
-      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white font-medium text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-sm"
-      style={{ backgroundColor: FITBIT_TEAL }}
-    >
-      <FitbitLogo />
-      Connect Fitbit
-    </button>
+    <div className="flex flex-col items-center gap-2">
+      <button
+        onClick={handleConnectFitbit}
+        className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white font-medium text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-sm"
+        style={{ backgroundColor: FITBIT_TEAL }}
+      >
+        <FitbitLogo />
+        Connect Fitbit
+      </button>
+      <p className="text-[10px] text-[var(--text-secondary)] text-center max-w-[200px]">
+        📱 Use Apple Health? Install the{' '}
+        <a 
+          href="https://apps.apple.com/app/fitbit-health-fitness/id462638897" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-[#00B0B9] hover:underline"
+        >
+          free Fitbit app
+        </a>
+        {' '}to sync your steps.
+      </p>
+    </div>
   )
 }
 
