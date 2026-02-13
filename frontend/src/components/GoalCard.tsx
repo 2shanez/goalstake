@@ -287,11 +287,13 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
 
     if (!hasAllowance) {
       setStep('approving')
+      // Approve 1000 USDC once — no repeated approvals for future goals
+      const approveAmount = parseUnits('1000', 6)
       writeApprove({
         address: contracts.usdc,
         abi: USDC_ABI,
         functionName: 'approve',
-        args: [contracts.goalStake, stakeAmountWei],
+        args: [contracts.goalStake, approveAmount],
       })
     } else if (goal.onChainId !== undefined) {
       setStep('joining')
@@ -304,12 +306,36 @@ export function GoalCard({ goal, onJoined }: GoalCardProps) {
     }
   }
 
+  const handleFitbitPopup = () => {
+    const authUrl = address 
+      ? `/api/fitbit/auth?wallet=${address}&popup=true`
+      : '/api/fitbit/auth?popup=true'
+    
+    const width = 500, height = 700
+    const left = window.screenX + (window.outerWidth - width) / 2
+    const top = window.screenY + (window.outerHeight - height) / 2
+    
+    const popup = window.open(authUrl, 'fitbit-auth',
+      `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no`)
+    
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return
+      if (event.data?.type === 'fitbit-auth-success') {
+        // Reload page to pick up new cookie state
+        window.location.reload()
+        window.removeEventListener('message', handleMessage)
+        popup?.close()
+      }
+    }
+    window.addEventListener('message', handleMessage)
+    setTimeout(() => window.removeEventListener('message', handleMessage), 5 * 60 * 1000)
+  }
+
   const handleActionButton = () => {
     // Steps goal - use Fitbit
     if (isStepsGoal) {
       if (!fitbitConnected) {
-        // Redirect to Fitbit OAuth
-        window.location.href = address ? `/api/fitbit/auth?wallet=${address}` : '/api/fitbit/auth'
+        handleFitbitPopup()
         return
       }
       handleJoin()

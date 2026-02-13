@@ -11,14 +11,16 @@ export async function GET(request: NextRequest) {
   const protocol = request.headers.get('x-forwarded-proto') || 'http'
   const baseUrl = `${protocol}://${host}`
 
-  // Parse state to get CSRF token and wallet address
+  // Parse state to get CSRF token, wallet address, and popup flag
   let walletAddress: string | null = null
   let csrfToken: string | null = null
+  let isPopup = false
   if (state) {
     try {
       const stateData = JSON.parse(decodeURIComponent(state))
       csrfToken = stateData.csrf
       walletAddress = stateData.wallet?.toLowerCase() || null
+      isPopup = stateData.popup === true
     } catch (e) {
       console.warn('Failed to parse state parameter:', e)
     }
@@ -117,6 +119,58 @@ export async function GET(request: NextRequest) {
         console.error('Failed to save Fitbit token to database:', dbError)
         // Continue anyway - cookies will still work
       }
+    }
+
+    // For popup mode: send postMessage to parent and close
+    if (isPopup) {
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <head><title>Fitbit Connected</title></head>
+        <body>
+          <p>Fitbit connected! This window will close automatically...</p>
+          <script>
+            if (window.opener) {
+              window.opener.postMessage({
+                type: 'fitbit-auth-success',
+                userName: ${JSON.stringify(userName)}
+              }, window.location.origin);
+            }
+            setTimeout(() => window.close(), 1000);
+          </script>
+        </body>
+        </html>
+      `
+      const response = new NextResponse(html, {
+        headers: { 'Content-Type': 'text/html' },
+      })
+      // Still set cookies for the popup window
+      response.cookies.set('fitbit_access_token', tokenData.access_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: tokenData.expires_in || 28800,
+      })
+      response.cookies.set('fitbit_refresh_token', tokenData.refresh_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 365,
+      })
+      response.cookies.set('fitbit_expires_at', expiresAt.toString(), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: tokenData.expires_in || 28800,
+      })
+      response.cookies.set('fitbit_user_id', tokenData.user_id, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 365,
+      })
+      response.cookies.delete('fitbit_oauth_state')
+      return response
     }
 
     const redirectUrl = new URL('/', baseUrl)

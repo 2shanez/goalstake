@@ -122,12 +122,52 @@ export function FitbitConnect() {
   }
 
   const handleConnectFitbit = () => {
-    // Use the auth route which handles OAuth initiation
-    // Pass wallet address to save token to database
+    // Use popup to keep user on vaada.io
     const authUrl = address 
-      ? `/api/fitbit/auth?wallet=${address}`
-      : '/api/fitbit/auth'
-    window.location.href = authUrl
+      ? `/api/fitbit/auth?wallet=${address}&popup=true`
+      : '/api/fitbit/auth?popup=true'
+    
+    const width = 500
+    const height = 700
+    const left = window.screenX + (window.outerWidth - width) / 2
+    const top = window.screenY + (window.outerHeight - height) / 2
+    
+    const popup = window.open(
+      authUrl,
+      'fitbit-auth',
+      `width=${width},height=${height},left=${left},top=${top},toolbar=no,menubar=no`
+    )
+    
+    // Listen for completion message from popup
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return
+      if (event.data?.type === 'fitbit-auth-success') {
+        setFitbitConnected(true)
+        if (event.data.userName) setUserName(event.data.userName)
+        window.removeEventListener('message', handleMessage)
+        popup?.close()
+      }
+    }
+    window.addEventListener('message', handleMessage)
+    
+    // Fallback: poll for cookie in case postMessage fails
+    const pollInterval = setInterval(() => {
+      const userId = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('fitbit_user_id='))
+        ?.split('=')[1]
+      if (userId) {
+        setFitbitConnected(true)
+        clearInterval(pollInterval)
+        popup?.close()
+      }
+    }, 1000)
+    
+    // Clean up after 5 minutes
+    setTimeout(() => {
+      clearInterval(pollInterval)
+      window.removeEventListener('message', handleMessage)
+    }, 5 * 60 * 1000)
   }
 
   const handleReconnect = async () => {
